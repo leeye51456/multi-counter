@@ -90,7 +90,7 @@ class Counter extends React.Component {
     return (
       <div>
         <label>
-          {this.props.label}
+          {this.props.name}
         </label>
 
         <div
@@ -151,7 +151,7 @@ Counter.propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
   step: PropTypes.number,
-  label: PropTypes.string,
+  name: PropTypes.string,
   onChange: PropTypes.func,
 }
 
@@ -160,7 +160,7 @@ Counter.defaultProps = {
   min: 0,
   max: Number.MAX_SAFE_INTEGER,
   step: 1,
-  label: '',
+  name: '',
   onChange: () => {},
 };
 
