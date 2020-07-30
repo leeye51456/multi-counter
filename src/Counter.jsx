@@ -23,16 +23,14 @@ class Counter extends React.Component {
     const newCount = this.state.count - this.props.step;
     this.setState({
       count: (newCount < this.props.min) ? this.props.min : newCount,
-    });
-    setTimeout(this.onChange, 0);
+    }, this.onChange);
   }
 
   handleCountUpClick = () => {
     const newCount = this.state.count + this.props.step;
     this.setState({
       count: (newCount > this.props.max) ? this.props.max : newCount,
-    });
-    setTimeout(this.onChange, 0);
+    }, this.onChange);
   }
 
   handleCountInputChange = (event) => {
@@ -62,9 +60,7 @@ class Counter extends React.Component {
     this.setState({
       count: newCount,
       editable: false,
-    });
-
-    setTimeout(this.onChange, 0);
+    }, this.onChange);
   }
 
   render = () => {
