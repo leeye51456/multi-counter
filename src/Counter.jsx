@@ -6,31 +6,45 @@ class Counter extends React.Component {
     super(props);
 
     this.state = {
-      count: 0,
+      count: this.props.value,
       editable: false,
-      newCount: 0,
+      newCount: '',
+      oldCount: this.props.value,
     };
   }
 
+  callOnChange = () => {
+    const {count, oldCount} = this.state;
+    if (count !== oldCount) {
+      this.props.onChange(count);
+    }
+  }
+
   handleEditClick = () => {
-    this.setState({
+    this.setState((state) => ({
       editable: true,
-      newCount: this.state.count,
-    });
+      newCount: state.count,
+    }));
   }
 
   handleCountDownClick = () => {
-    const newCount = this.state.count - this.props.step;
-    this.setState({
-      count: (newCount < this.props.min) ? this.props.min : newCount,
-    }, this.onChange);
+    this.setState((state, props) => {
+      const newCount = state.count - props.step;
+      return {
+        count: (newCount < props.min) ? props.min : newCount,
+        oldCount: state.count,
+      };
+    }, this.callOnChange);
   }
 
   handleCountUpClick = () => {
-    const newCount = this.state.count + this.props.step;
-    this.setState({
-      count: (newCount > this.props.max) ? this.props.max : newCount,
-    }, this.onChange);
+    this.setState((state, props) => {
+      const newCount = state.count + props.step;
+      return {
+        count: (newCount > props.max) ? props.max : newCount,
+        oldCount: state.count,
+      };
+    }, this.callOnChange);
   }
 
   handleCountInputChange = (event) => {
@@ -42,25 +56,34 @@ class Counter extends React.Component {
   handleCancelClick = () => {
     this.setState({
       editable: false,
+      newCount: '',
     });
   }
 
   handleApplyClick = () => {
-    let newCount = this.state.newCount;
-    if (isNaN(newCount)) {
-      return;
-    }
+    this.setState((state, props) => {
+      const newState = {
+        editable: false,
+        newCount: '',
+        oldCount: state.count,
+      };
 
-    if (newCount < this.props.min) {
-      newCount = this.props.min;
-    } else if (newCount > this.props.max) {
-      newCount = this.props.max;
-    }
+      let newCount = Number.parseInt(state.newCount);
+      if (isNaN(newCount)) {
+        return newState;
+      }
 
-    this.setState({
-      count: newCount,
-      editable: false,
-    }, this.onChange);
+      if (newCount < props.min) {
+        newCount = props.min;
+      } else if (newCount > props.max) {
+        newCount = props.max;
+      }
+
+      if (newCount !== state.count) {
+        newState.count = newCount;
+      }
+      return newState;
+    }, this.callOnChange);
   }
 
   render = () => {
@@ -133,6 +156,7 @@ Counter.propTypes = {
 }
 
 Counter.defaultProps = {
+  value: 0,
   min: 0,
   max: Number.MAX_SAFE_INTEGER,
   step: 1,
