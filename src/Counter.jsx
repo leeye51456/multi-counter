@@ -87,6 +87,15 @@ class Counter extends React.Component {
     }, this.callOnChange);
   }
 
+  handleResetClick = () => {
+    this.setState((state, props) => ({
+      count: props.initial,
+      editable: false,
+      newCount: '',
+      oldCount: state.count,
+    }), this.callOnChange);
+  }
+
   render = () => {
     return (
       <div>
@@ -120,6 +129,12 @@ class Counter extends React.Component {
           >
             +
           </button>
+          <button
+            type="button"
+            onClick={this.handleResetClick}
+          >
+            Reset
+          </button>
         </div>
 
         <div
@@ -149,6 +164,7 @@ class Counter extends React.Component {
 }
 
 Counter.propTypes = {
+  initial: PropTypes.number,
   min: PropTypes.number,
   max: PropTypes.number,
   step: PropTypes.number,
@@ -157,6 +173,7 @@ Counter.propTypes = {
 }
 
 Counter.defaultProps = {
+  initial: 0,
   value: 0,
   min: 0,
   max: Number.MAX_SAFE_INTEGER,

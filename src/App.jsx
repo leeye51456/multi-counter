@@ -17,7 +17,8 @@ class App extends React.Component {
     this.appendCounter({name: 'Counter'});
   }
 
-  appendCounter = ({value, min, max, step, name}) => {
+  appendCounter = ({value, initial, min, max, step, name}) => {
+    // TODO - Validate user input (check safe integer)
     const counterComopnents = this.state.counter.components.slice();
     const counterData = {...this.state.counter.data};
     const handleCounterChange = (newValue) => {
@@ -27,6 +28,7 @@ class App extends React.Component {
       <Counter
         key={name}
         value={value}
+        initial={initial}
         min={min}
         max={max}
         step={step}
@@ -36,6 +38,7 @@ class App extends React.Component {
     );
     counterData[name] = {
       value: newCounter.props.value,
+      initial: newCounter.props.initial,
       min: newCounter.props.min,
       max: newCounter.props.max,
       step: newCounter.props.step,
@@ -64,6 +67,7 @@ class App extends React.Component {
       <Counter
         key={name}
         value={counterDatum.value}
+        initial={counterDatum.initial}
         min={counterDatum.min}
         max={counterDatum.max}
         step={counterDatum.step}
