@@ -14,7 +14,7 @@ class App extends React.Component {
   }
 
   componentDidMount = () => {
-    this.appendCounter({name: 'Counter'});
+    this.appendCounter({name: 'Sample Counter'});
   }
 
   appendCounter = ({value, initial, min, max, step, name}) => {
