@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import Counter from './Counter';
+import AddNewCounterModal from './AddNewCounterModal';
 
 ReactModal.setAppElement('#root');
 
@@ -13,6 +14,9 @@ class App extends React.Component {
         components: [],
         data: {},
       },
+      modals: {
+        isNewCounterOpen: false,
+      },
     };
   }
 
@@ -21,7 +25,7 @@ class App extends React.Component {
   }
 
   appendCounter = ({value, initial, min, max, step, name}) => {
-    // TODO - Validate user input (check safe integer)
+    // TODO - if `value` is not a number, assign `initial` to `value`
     const counterComopnents = this.state.counter.components.slice();
     const counterData = {...this.state.counter.data};
     const handleCounterChange = (newValue) => {
@@ -94,6 +98,32 @@ class App extends React.Component {
     });
   }
 
+  handleNewCounterClick = () => {
+    const newModalState = {...this.state.modals};
+    newModalState.isNewCounterOpen = true;
+    this.setState({
+      modals: newModalState,
+    });
+  }
+
+  handleNewCounterModalSubmit = (param) => {
+    const {name, initial, min, max, step} = param;
+    this.appendCounter({
+      initial, min, max, step, name,
+      value: initial,
+    });
+
+    this.closeNewCounterModal();
+  }
+
+  closeNewCounterModal = () => {
+    const newModalState = {...this.state.modals};
+    newModalState.isNewCounterOpen = false;
+    this.setState({
+      modals: newModalState,
+    });
+  }
+
   render = () => {
     return (
       <div className="App">
@@ -116,6 +146,13 @@ class App extends React.Component {
             </li>
           </ul>
         </aside>
+
+        <AddNewCounterModal
+          names={Object.keys(this.state.counter.data)}
+          isOpen={this.state.modals.isNewCounterOpen}
+          onSubmit={this.handleNewCounterModalSubmit}
+          onCancel={this.closeNewCounterModal}
+        />
       </div>
     );
   }
