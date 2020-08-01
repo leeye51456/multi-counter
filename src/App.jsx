@@ -106,7 +106,15 @@ class App extends React.Component {
         </section>
 
         <aside>
-          {/* TODO - Add sidebar (menu for small devices) */}
+          <ul>
+            <li>
+              <button
+                type="button"
+              >
+                Add New Counter
+              </button>
+            </li>
+          </ul>
         </aside>
       </div>
     );
