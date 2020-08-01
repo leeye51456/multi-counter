@@ -77,7 +77,7 @@ class Counter extends React.Component {
         oldCount: state.count,
       };
 
-      let newCount = Number.parseInt(state.newCount);
+      let newCount = Number.parseInt(state.newCount, 10);
       if (isNaN(newCount)) {
         return newState;
       }
