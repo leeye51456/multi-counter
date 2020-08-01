@@ -1,5 +1,8 @@
 import React from 'react';
+import ReactModal from 'react-modal';
 import Counter from './Counter';
+
+ReactModal.setAppElement('#root');
 
 class App extends React.Component {
   constructor(props) {
