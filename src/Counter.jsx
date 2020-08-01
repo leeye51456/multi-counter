@@ -6,66 +6,66 @@ class Counter extends React.Component {
     super(props);
 
     this.state = {
-      count: this.props.value,
+      value: this.props.value,
       editable: false,
-      newCount: '',
-      oldCount: this.props.value,
+      newValue: '',
+      oldValue: this.props.value,
     };
   }
 
-  getCorrectCount = (newCount) => {
-    if (newCount < this.props.min) {
-      newCount = this.props.min;
-    } else if (newCount > this.props.max) {
-      newCount = this.props.max;
+  getCorrectValue = (newValue) => {
+    if (newValue < this.props.min) {
+      newValue = this.props.min;
+    } else if (newValue > this.props.max) {
+      newValue = this.props.max;
     }
-    return newCount;
+    return newValue;
   }
 
   callOnChange = () => {
-    const {count, oldCount} = this.state;
-    if (count !== oldCount) {
-      this.props.onChange(count);
+    const {value, oldValue} = this.state;
+    if (value !== oldValue) {
+      this.props.onChange(value);
     }
   }
 
   handleEditClick = () => {
     this.setState((state) => ({
       editable: true,
-      newCount: state.count,
+      newValue: state.value,
     }));
   }
 
   handleCountDownClick = () => {
     this.setState((state, props) => {
-      const newCount = state.count - props.step;
+      const newValue = state.value - props.step;
       return {
-        count: this.getCorrectCount(newCount),
-        oldCount: state.count,
+        value: this.getCorrectValue(newValue),
+        oldValue: state.value,
       };
     }, this.callOnChange);
   }
 
   handleCountUpClick = () => {
     this.setState((state, props) => {
-      const newCount = state.count + props.step;
+      const newValue = state.value + props.step;
       return {
-        count: this.getCorrectCount(newCount),
-        oldCount: state.count,
+        value: this.getCorrectValue(newValue),
+        oldValue: state.value,
       };
     }, this.callOnChange);
   }
 
-  handleCountInputChange = (event) => {
+  handleValueInputChange = (event) => {
     this.setState({
-      newCount: event.target.value,
+      newValue: event.target.value,
     });
   }
 
   handleCancelClick = () => {
     this.setState({
       editable: false,
-      newCount: '',
+      newValue: '',
     });
   }
 
@@ -73,26 +73,26 @@ class Counter extends React.Component {
     this.setState((state, props) => {
       const newState = {
         editable: false,
-        newCount: '',
-        oldCount: state.count,
+        newValue: '',
+        oldValue: state.value,
       };
 
-      let newCount = Number.parseInt(state.newCount, 10);
-      if (isNaN(newCount)) {
+      let newValue = Number.parseInt(state.newValue, 10);
+      if (isNaN(newValue)) {
         return newState;
       }
 
-      newState.count = this.getCorrectCount(newCount);
+      newState.value = this.getCorrectValue(newValue);
       return newState;
     }, this.callOnChange);
   }
 
   handleResetClick = () => {
     this.setState((state, props) => ({
-      count: props.initial,
+      value: props.initial,
       editable: false,
-      newCount: '',
-      oldCount: state.count,
+      newValue: '',
+      oldValue: state.value,
     }), this.callOnChange);
   }
 
@@ -108,7 +108,7 @@ class Counter extends React.Component {
         >{/* editable === false */}
           <input
             type="text"
-            value={this.state.count}
+            value={this.state.value}
             readOnly={true}
           />
           <button
@@ -142,8 +142,8 @@ class Counter extends React.Component {
         >{/* editable === true */}
           <input
             type="text"
-            value={this.state.newCount}
-            onChange={this.handleCountInputChange}
+            value={this.state.newValue}
+            onChange={this.handleValueInputChange}
           />
           <button
             type="button"
