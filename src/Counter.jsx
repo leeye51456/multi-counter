@@ -13,6 +13,15 @@ class Counter extends React.Component {
     };
   }
 
+  getCorrectCount = (newCount) => {
+    if (newCount < this.props.min) {
+      newCount = this.props.min;
+    } else if (newCount > this.props.max) {
+      newCount = this.props.max;
+    }
+    return newCount;
+  }
+
   callOnChange = () => {
     const {count, oldCount} = this.state;
     if (count !== oldCount) {
@@ -31,7 +40,7 @@ class Counter extends React.Component {
     this.setState((state, props) => {
       const newCount = state.count - props.step;
       return {
-        count: (newCount < props.min) ? props.min : newCount,
+        count: this.getCorrectCount(newCount),
         oldCount: state.count,
       };
     }, this.callOnChange);
@@ -41,7 +50,7 @@ class Counter extends React.Component {
     this.setState((state, props) => {
       const newCount = state.count + props.step;
       return {
-        count: (newCount > props.max) ? props.max : newCount,
+        count: this.getCorrectCount(newCount),
         oldCount: state.count,
       };
     }, this.callOnChange);
@@ -73,15 +82,7 @@ class Counter extends React.Component {
         return newState;
       }
 
-      if (newCount < props.min) {
-        newCount = props.min;
-      } else if (newCount > props.max) {
-        newCount = props.max;
-      }
-
-      if (newCount !== state.count) {
-        newState.count = newCount;
-      }
+      newState.count = this.getCorrectCount(newCount);
       return newState;
     }, this.callOnChange);
   }
