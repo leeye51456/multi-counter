@@ -140,6 +140,7 @@ class App extends React.Component {
             <li>
               <button
                 type="button"
+                onClick={this.handleNewCounterClick}
               >
                 Add New Counter
               </button>
