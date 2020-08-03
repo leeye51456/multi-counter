@@ -145,11 +145,24 @@ class App extends React.Component {
                 Add New Counter
               </button>
             </li>
+            <li>
+              <button
+                type="button"
+                onClick={this.handleEditCounterListClick}
+              >
+                Edit Counter List
+              </button>
+            </li>
+            <li>
+              <button type="button">
+                Bind Shortcuts
+              </button>
+            </li>
           </ul>
         </aside>
 
         <AddNewCounterModal
-          names={Object.keys(this.state.counter.data)}
+          existingNames={Object.keys(this.state.counter.data)}
           isOpen={this.state.modals.isNewCounterOpen}
           onSubmit={this.handleNewCounterModalSubmit}
           onCancel={this.closeNewCounterModal}

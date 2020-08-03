@@ -64,7 +64,7 @@ class AddNewCounterModal extends React.Component {
       return;
     } else if (min > max) {
       return;
-    } else if (this.props.names.includes(name)) {
+    } else if (this.props.existingNames.includes(name)) {
       return;
     }
 
