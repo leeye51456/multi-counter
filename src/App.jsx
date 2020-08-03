@@ -145,19 +145,6 @@ class App extends React.Component {
                 Add New Counter
               </button>
             </li>
-            <li>
-              <button
-                type="button"
-                onClick={this.handleEditCounterListClick}
-              >
-                Edit Counter List
-              </button>
-            </li>
-            <li>
-              <button type="button">
-                Bind Shortcuts
-              </button>
-            </li>
           </ul>
         </aside>
 
