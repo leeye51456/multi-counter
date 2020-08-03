@@ -17,6 +17,7 @@ class App extends React.Component {
       modals: {
         isNewCounterOpen: false,
       },
+      isEditModeEnabled: false,
     };
   }
 
@@ -124,6 +125,14 @@ class App extends React.Component {
     });
   }
 
+  handleEditCounterListClick = () => {
+    this.setState({isEditModeEnabled: true});
+  }
+
+  handleExitEditModeClick = () => {
+    this.setState({isEditModeEnabled: false});
+  }
+
   render = () => {
     return (
       <div className="App">
@@ -136,13 +145,32 @@ class App extends React.Component {
         </section>
 
         <aside>
-          <ul>
+          <ul style={{display: this.state.isEditModeEnabled ? 'none' : 'block'}}>
             <li>
               <button
                 type="button"
                 onClick={this.handleNewCounterClick}
               >
                 Add New Counter
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                onClick={this.handleEditCounterListClick}
+              >
+                Edit Counter List
+              </button>
+            </li>
+          </ul>
+
+          <ul style={{display: this.state.isEditModeEnabled ? 'block' : 'none'}}>
+            <li>
+              <button
+                type="button"
+                onClick={this.handleExitEditModeClick}
+              >
+                Exit Edit Mode
               </button>
             </li>
           </ul>
