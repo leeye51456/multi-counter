@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
-import Counter from './Counter';
-import AddNewCounterModal from './AddNewCounterModal';
+import Counter from './counter';
+import AddNewCounterModal from './add-new-counter-modal';
 
 ReactModal.setAppElement('#root');
 
