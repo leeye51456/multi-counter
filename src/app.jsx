@@ -10,10 +10,8 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      counter: {
-        components: [],
-        data: {},
-      },
+      counterComponents: [],
+      counterData: {},
       modals: {
         isNewCounterOpen: false,
       },
@@ -27,8 +25,8 @@ class App extends React.Component {
 
   appendCounter = ({value, initial, min, max, step, name}) => {
     // TODO - if `value` is not a number, assign `initial` to `value`
-    const counterComopnents = this.state.counter.components.slice();
-    const counterData = {...this.state.counter.data};
+    const counterComponents = this.state.counterComponents.slice();
+    const counterData = {...this.state.counterData};
     const handleCounterChange = (newValue) => {
       this.updateCounter(name, newValue);
     };
@@ -52,19 +50,17 @@ class App extends React.Component {
       step: newCounter.props.step,
       name: newCounter.props.name,
     };
-    counterComopnents.push(newCounter);
+    counterComponents.push(newCounter);
     this.setState({
-      counter: {
-        components: counterComopnents,
-        data: counterData,
-      },
+      counterComponents,
+      counterData,
     });
   }
 
   updateCounter = (name, newCounterValue) => {
-    const oldCounterComopnents = this.state.counter.components;
-    const counterDatum = {...this.state.counter.data[name]};
-    const counterComponentIndex = oldCounterComopnents.findIndex((component) => component.props.name === name);
+    const counterComponents = this.state.counterComponents.slice();
+    const counterDatum = {...this.state.counterData[name]};
+    const counterComponentIndex = counterComponents.findIndex((component) => component.props.name === name);
     if (counterComponentIndex < 0) {
       return;
     }
@@ -80,22 +76,17 @@ class App extends React.Component {
         max={counterDatum.max}
         step={counterDatum.step}
         name={counterDatum.name}
-        onChange={oldCounterComopnents[counterComponentIndex].props.onChange}
+        onChange={counterComponents[counterComponentIndex].props.onChange}
       />
     );
+    counterComponents[counterComponentIndex] = newCounter;
 
-    const counterData = {...this.state.counter.data};
+    const counterData = {...this.state.counterData};
     counterData[name] = counterDatum;
 
     this.setState({
-      counter: {
-        components: [
-          ...oldCounterComopnents.slice(0, counterComponentIndex),
-          newCounter,
-          ...oldCounterComopnents.slice(counterComponentIndex + 1)
-        ],
-        data: counterData,
-      },
+      counterComponents,
+      counterData,
     });
   }
 
@@ -141,7 +132,7 @@ class App extends React.Component {
         </header>
 
         <section>
-          {this.state.counter.components}
+          {this.state.counterComponents}
         </section>
 
         <aside>
@@ -173,11 +164,26 @@ class App extends React.Component {
                 Exit Edit Mode
               </button>
             </li>
+            <li>
+              <button type="button">
+                Select All
+              </button>
+            </li>
+            <li>
+              <button type="button">
+                Reset Selected Counters
+              </button>
+            </li>
+            <li>
+              <button type="button">
+                Remove Selected Counters
+              </button>
+            </li>
           </ul>
         </aside>
 
         <AddNewCounterModal
-          existingNames={Object.keys(this.state.counter.data)}
+          existingNames={Object.keys(this.state.counterData)}
           isOpen={this.state.modals.isNewCounterOpen}
           onSubmit={this.handleNewCounterModalSubmit}
           onCancel={this.closeNewCounterModal}
