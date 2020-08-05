@@ -11,6 +11,7 @@ class App extends React.Component {
 
     this.state = {
       counterComponents: [],
+      counterComponentIndexesByName: {},
       counterData: {},
       modals: {
         isNewCounterOpen: false,
@@ -26,6 +27,7 @@ class App extends React.Component {
   appendCounter = ({value, initial, min, max, step, name}) => {
     // TODO - if `value` is not a number, assign `initial` to `value`
     const counterComponents = this.state.counterComponents.slice();
+    const counterComponentIndexesByName = {...this.state.counterComponentIndexesByName};
     const counterData = {...this.state.counterData};
     const handleCounterChange = (newValue) => {
       this.updateCounter(name, newValue);
@@ -50,9 +52,11 @@ class App extends React.Component {
       step: newCounter.props.step,
       name: newCounter.props.name,
     };
+    counterComponentIndexesByName[name] = counterComponents.length;
     counterComponents.push(newCounter);
     this.setState({
       counterComponents,
+      counterComponentIndexesByName,
       counterData,
     });
   }
@@ -60,8 +64,8 @@ class App extends React.Component {
   updateCounter = (name, newCounterValue) => {
     const counterComponents = this.state.counterComponents.slice();
     const counterDatum = {...this.state.counterData[name]};
-    const counterComponentIndex = counterComponents.findIndex((component) => component.props.name === name);
-    if (counterComponentIndex < 0) {
+    const targetComponentIndex = this.state.counterComponentIndexesByName[name];
+    if (typeof targetComponentIndex !== 'number') {
       return;
     }
 
@@ -76,10 +80,10 @@ class App extends React.Component {
         max={counterDatum.max}
         step={counterDatum.step}
         name={counterDatum.name}
-        onChange={counterComponents[counterComponentIndex].props.onChange}
+        onChange={counterComponents[targetComponentIndex].props.onChange}
       />
     );
-    counterComponents[counterComponentIndex] = newCounter;
+    counterComponents[targetComponentIndex] = newCounter;
 
     const counterData = {...this.state.counterData};
     counterData[name] = counterDatum;
