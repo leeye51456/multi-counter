@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { EditModeContext } from './contexts';
 
 class Counter extends React.Component {
   constructor(props) {
@@ -10,6 +11,8 @@ class Counter extends React.Component {
       editable: false,
       newValue: '',
       oldValue: this.props.value,
+      isGlobalEditModeEnabled: false,
+      checked: this.props.checked,
     };
   }
 
@@ -22,11 +25,22 @@ class Counter extends React.Component {
     return newValue;
   }
 
-  callOnChange = () => {
-    const {value, oldValue} = this.state;
+  callOnChangeByValue = () => {
+    const { value, oldValue, checked } = this.state;
     if (value !== oldValue) {
-      this.props.onChange(value);
+      this.props.onChange({ value, checked });
     }
+  }
+
+  callOnChangeByChecked = () => {
+    const { value, checked } = this.state;
+    this.props.onChange({ value, checked });
+  }
+
+  handleCheckboxChange = (event) => {
+    this.setState({
+      checked: event.target.checked,
+    }, this.callOnChangeByChecked);
   }
 
   handleEditClick = () => {
@@ -43,7 +57,7 @@ class Counter extends React.Component {
         value: this.getCorrectValue(newValue),
         oldValue: state.value,
       };
-    }, this.callOnChange);
+    }, this.callOnChangeByValue);
   }
 
   handleCountUpClick = () => {
@@ -53,7 +67,7 @@ class Counter extends React.Component {
         value: this.getCorrectValue(newValue),
         oldValue: state.value,
       };
-    }, this.callOnChange);
+    }, this.callOnChangeByValue);
   }
 
   handleValueInputChange = (event) => {
@@ -84,84 +98,103 @@ class Counter extends React.Component {
 
       newState.value = this.getCorrectValue(newValue);
       return newState;
-    }, this.callOnChange);
-  }
-
-  handleResetClick = () => {
-    this.setState((state, props) => ({
-      value: props.initial,
-      editable: false,
-      newValue: '',
-      oldValue: state.value,
-    }), this.callOnChange);
+    }, this.callOnChangeByValue);
   }
 
   render = () => {
+    const isThisEditable = this.state.editable;
+    const isGlobalEditModeEnabled = this.context;
+
+    const always = 'inline-block';
+    const normalOnly = isThisEditable || isGlobalEditModeEnabled ? 'none' : 'inline-block';
+    const globalEditModeOnly = isGlobalEditModeEnabled ? 'inline-block' : 'none';
+    const editableOnly = isThisEditable ? 'inline-block' : 'none';
+    const nonEditableOnly = isThisEditable ? 'none' : 'inline-block';
+
     return (
       <div>
-        <label>
-          {this.props.name}
-        </label>
+        <ul>
+          <li style={{display: globalEditModeOnly}}>
+            <input
+              type="checkbox"
+              checked={this.state.checked}
+              onChange={this.handleCheckboxChange}
+            />
+          </li>
 
-        <div
-          style={{display: this.state.editable ? 'none' : 'inline-block'}}
-        >{/* editable === false */}
-          <input
-            type="text"
-            value={this.state.value}
-            readOnly={true}
-          />
-          <button
-            type="button"
-            onClick={this.handleEditClick}
-          >
-            Edit
-          </button>
-          <button
-            type="button"
-            onClick={this.handleCountDownClick}
-          >
-            -
-          </button>
-          <button
-            type="button"
-            onClick={this.handleCountUpClick}
-          >
-            +
-          </button>
-          <button
-            type="button"
-            onClick={this.handleResetClick}
-          >
-            Reset
-          </button>
-        </div>
+          <li style={{display: always}}>
+            <label>
+              {this.props.name}
+            </label>
+          </li>
 
-        <div
-          style={{display: this.state.editable ? 'inline-block' : 'none'}}
-        >{/* editable === true */}
-          <input
-            type="text"
-            value={this.state.newValue}
-            onChange={this.handleValueInputChange}
-          />
-          <button
-            type="button"
-            onClick={this.handleCancelClick}
-          >
-            X
-          </button>
-          <button
-            type="button"
-            onClick={this.handleApplyClick}
-          >
-            OK
-          </button>
-        </div>
+          <li style={{display: nonEditableOnly}}>
+            <input
+              type="text"
+              value={this.state.value}
+              readOnly={true}
+            />
+          </li>
+
+          <li style={{display: normalOnly}}>
+            <button
+              type="button"
+              onClick={this.handleEditClick}
+            >
+              Edit
+            </button>
+          </li>
+
+          <li style={{display: normalOnly}}>
+            <button
+              type="button"
+              onClick={this.handleCountDownClick}
+            >
+              -
+            </button>
+          </li>
+
+          <li style={{display: normalOnly}}>
+            <button
+              type="button"
+              onClick={this.handleCountUpClick}
+            >
+              +
+            </button>
+          </li>
+
+          <li style={{display: editableOnly}}>
+            <input
+              type="text"
+              value={this.state.newValue}
+              onChange={this.handleValueInputChange}
+            />
+          </li>
+
+          <li style={{display: editableOnly}}>
+            <button
+              type="button"
+              onClick={this.handleCancelClick}
+            >
+              X
+            </button>
+          </li>
+
+          <li style={{display: editableOnly}}>
+            <button
+              type="button"
+              onClick={this.handleApplyClick}
+            >
+              OK
+            </button>
+          </li>
+        </ul>
       </div>
     );
   }
 }
+
+Counter.contextType = EditModeContext;
 
 Counter.propTypes = {
   initial: PropTypes.number,
@@ -169,6 +202,7 @@ Counter.propTypes = {
   max: PropTypes.number,
   step: PropTypes.number,
   name: PropTypes.string,
+  checked: PropTypes.bool,
   onChange: PropTypes.func,
 }
 
@@ -179,6 +213,7 @@ Counter.defaultProps = {
   max: Number.MAX_SAFE_INTEGER,
   step: 1,
   name: '',
+  checked: false,
   onChange: () => {},
 };
 

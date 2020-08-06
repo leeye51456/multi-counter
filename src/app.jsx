@@ -2,6 +2,7 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import Counter from './counter';
 import AddNewCounterModal from './add-new-counter-modal';
+import { EditModeContext } from './contexts';
 
 ReactModal.setAppElement('#root');
 
@@ -24,26 +25,34 @@ class App extends React.Component {
     this.appendCounter({name: 'Sample Counter'});
   }
 
-  appendCounter = ({value, initial, min, max, step, name}) => {
+  getNewCounter = (name, counterData) => {
+    return (
+      <Counter
+        key={name}
+        value={counterData.value}
+        initial={counterData.initial}
+        min={counterData.min}
+        max={counterData.max}
+        step={counterData.step}
+        name={name}
+        checked={counterData.checked}
+        onChange={counterData.onChange}
+      />
+    );
+  }
+
+  appendCounter = (param) => {
     // TODO - if `value` is not a number, assign `initial` to `value`
+    const name = param.name;
+    const handleCounterChange = (newData) => {
+      this.updateCounter(name, newData);
+    };
+
     const counterComponents = this.state.counterComponents.slice();
     const counterComponentIndexesByName = {...this.state.counterComponentIndexesByName};
     const counterData = {...this.state.counterData};
-    const handleCounterChange = (newValue) => {
-      this.updateCounter(name, newValue);
-    };
-    const newCounter = (
-      <Counter
-        key={name}
-        value={value}
-        initial={initial}
-        min={min}
-        max={max}
-        step={step}
-        name={name}
-        onChange={handleCounterChange}
-      />
-    );
+
+    const newCounter = this.getNewCounter(name, param);
     counterData[name] = {
       value: newCounter.props.value,
       initial: newCounter.props.initial,
@@ -51,6 +60,8 @@ class App extends React.Component {
       max: newCounter.props.max,
       step: newCounter.props.step,
       name: newCounter.props.name,
+      checked: newCounter.props.checked,
+      onChange: handleCounterChange,
     };
     counterComponentIndexesByName[name] = counterComponents.length;
     counterComponents.push(newCounter);
@@ -61,7 +72,7 @@ class App extends React.Component {
     });
   }
 
-  updateCounter = (name, newCounterValue) => {
+  updateCounter = (name, newCounterDatum) => {
     const counterComponents = this.state.counterComponents.slice();
     const counterDatum = {...this.state.counterData[name]};
     const targetComponentIndex = this.state.counterComponentIndexesByName[name];
@@ -69,21 +80,10 @@ class App extends React.Component {
       return;
     }
 
-    counterDatum.value = newCounterValue;
+    counterDatum.value = newCounterDatum.value;
+    counterDatum.checked = newCounterDatum.checked;
 
-    const newCounter = (
-      <Counter
-        key={name}
-        value={counterDatum.value}
-        initial={counterDatum.initial}
-        min={counterDatum.min}
-        max={counterDatum.max}
-        step={counterDatum.step}
-        name={counterDatum.name}
-        onChange={counterComponents[targetComponentIndex].props.onChange}
-      />
-    );
-    counterComponents[targetComponentIndex] = newCounter;
+    counterComponents[targetComponentIndex] = this.getNewCounter(name, counterDatum);
 
     const counterData = {...this.state.counterData};
     counterData[name] = counterDatum;
@@ -129,6 +129,8 @@ class App extends React.Component {
   }
 
   render = () => {
+    const isEditModeEnabled = this.state.isEditModeEnabled;
+
     return (
       <div className="App">
         <header>
@@ -136,11 +138,15 @@ class App extends React.Component {
         </header>
 
         <section>
-          {this.state.counterComponents}
+          <EditModeContext.Provider
+            value={this.state.isEditModeEnabled}
+          >
+            {this.state.counterComponents}
+          </EditModeContext.Provider>
         </section>
 
         <aside>
-          <ul style={{display: this.state.isEditModeEnabled ? 'none' : 'block'}}>
+          <ul style={{display: isEditModeEnabled ? 'none' : 'block'}}>
             <li>
               <button
                 type="button"
@@ -159,7 +165,7 @@ class App extends React.Component {
             </li>
           </ul>
 
-          <ul style={{display: this.state.isEditModeEnabled ? 'block' : 'none'}}>
+          <ul style={{display: isEditModeEnabled ? 'block' : 'none'}}>
             <li>
               <button
                 type="button"
