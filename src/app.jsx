@@ -44,7 +44,7 @@ class App extends React.Component {
   appendCounter = (param) => {
     // TODO - if `value` is not a number, assign `initial` to `value`
     const name = param.name;
-    const handleCounterChange = (newData) => {
+    param.onChange = (newData) => {
       this.updateCounter(name, newData);
     };
 
@@ -61,7 +61,7 @@ class App extends React.Component {
       step: newCounter.props.step,
       name: newCounter.props.name,
       checked: newCounter.props.checked,
-      onChange: handleCounterChange,
+      onChange: newCounter.props.onChange,
     };
     counterComponentIndexesByName[name] = counterComponents.length;
     counterComponents.push(newCounter);
