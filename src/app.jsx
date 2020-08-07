@@ -94,6 +94,33 @@ class App extends React.Component {
     });
   }
 
+  handleRemoveClick = () => {
+    const oldCounterComponents = this.state.counterComponents.slice();
+    const newCounterComponents = [];
+    const counterComponentIndexesByName = {...this.state.counterComponentIndexesByName};
+    const counterData = {...this.state.counterData};
+
+    let jump = 0;
+    for (let index = 0; index < oldCounterComponents.length; index += 1) {
+      const { name, checked } = oldCounterComponents[index].props;
+      if (checked) {
+        jump += 1;
+        delete counterComponentIndexesByName[name];
+        delete counterData[name];
+      } else {
+        counterComponentIndexesByName[name] -= jump;
+        newCounterComponents.push(oldCounterComponents[index]);
+      }
+    }
+
+    this.setState({
+      counterComponents: newCounterComponents,
+      counterComponentIndexesByName,
+      counterData,
+      isEditModeEnabled: false,
+    });
+  }
+
   handleNewCounterClick = () => {
     const newModalState = {...this.state.modals};
     newModalState.isNewCounterOpen = true;
@@ -185,7 +212,10 @@ class App extends React.Component {
               </button>
             </li>
             <li>
-              <button type="button">
+              <button
+                type="button"
+                onClick={this.handleRemoveClick}
+              >
                 Remove Selected Counters
               </button>
             </li>
