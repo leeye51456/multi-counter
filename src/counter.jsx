@@ -7,12 +7,7 @@ class Counter extends React.Component {
     super(props);
 
     this.state = {
-      value: this.props.value,
-      editable: false,
-      newValue: '',
-      oldValue: this.props.value,
-      isGlobalEditModeEnabled: false,
-      checked: this.props.checked,
+      tempValue: '',
     };
   }
 
@@ -25,84 +20,72 @@ class Counter extends React.Component {
     return newValue;
   }
 
-  callOnChangeByValue = () => {
-    const { value, oldValue, checked } = this.state;
-    if (value !== oldValue) {
-      this.props.onChange({ value, checked });
+  callOnChangeByValue = (oldValue, newValue, defaults) => {
+    newValue = this.getCorrectValue(newValue);
+    if (oldValue !== newValue) {
+      this.props.onChange({
+        ...defaults,
+        value: newValue,
+        name: this.props.name,
+      });
     }
   }
 
-  callOnChangeByChecked = () => {
-    const { value, checked } = this.state;
-    this.props.onChange({ value, checked });
-  }
-
   handleCheckboxChange = (event) => {
-    this.setState({
+    this.props.onChange({
       checked: event.target.checked,
-    }, this.callOnChangeByChecked);
+      name: this.props.name,
+    });
   }
 
   handleEditClick = () => {
-    this.setState((state) => ({
-      editable: true,
-      newValue: state.value,
-    }));
+    this.setState((state, props) => {
+      props.onChange({
+        editable: true,
+        name: props.name,
+      });
+      return { tempValue: props.value };
+    });
   }
 
   handleCountDownClick = () => {
-    this.setState((state, props) => {
-      const newValue = state.value - props.step;
-      return {
-        value: this.getCorrectValue(newValue),
-        oldValue: state.value,
-      };
-    }, this.callOnChangeByValue);
+    const oldValue = this.props.value;
+    const newValue = oldValue - this.props.step;
+    this.callOnChangeByValue(oldValue, newValue);
   }
 
   handleCountUpClick = () => {
-    this.setState((state, props) => {
-      const newValue = state.value + props.step;
-      return {
-        value: this.getCorrectValue(newValue),
-        oldValue: state.value,
-      };
-    }, this.callOnChangeByValue);
+    const oldValue = this.props.value;
+    const newValue = oldValue + this.props.step;
+    this.callOnChangeByValue(oldValue, newValue);
   }
 
   handleValueInputChange = (event) => {
-    this.setState({
-      newValue: event.target.value,
-    });
+    this.setState({ tempValue: event.target.value });
   }
 
   handleCancelClick = () => {
-    this.setState({
-      editable: false,
-      newValue: '',
-    });
+    this.setState((state, props) => {
+      props.onChange({
+        editable: false,
+        name: props.name,
+      });
+      return { tempValue: '' };
+    })
   }
 
   handleApplyClick = () => {
     this.setState((state, props) => {
-      const newState = {
-        editable: false,
-        newValue: '',
-        oldValue: state.value,
-      };
-
-      let newValue = Number.parseInt(state.newValue, 10);
-      if (isNaN(newValue)) {
-        return newState;
+      const newValue = Number.parseInt(state.tempValue, 10);
+      if (!isNaN(newValue)) {
+        this.callOnChangeByValue(props.value, newValue, { editable: false });
       }
-
-      newState.value = this.getCorrectValue(newValue);
-      return newState;
-    }, this.callOnChangeByValue);
+      return { tempValue: '' };
+    });
   }
 
   render = () => {
-    const isThisEditable = this.state.editable;
+    const isThisEditable = this.props.editable;
     const isGlobalEditModeEnabled = this.context;
 
     const always = 'inline-block';
@@ -117,7 +100,7 @@ class Counter extends React.Component {
           <li style={{display: globalEditModeOnly}}>
             <input
               type="checkbox"
-              checked={this.state.checked}
+              checked={this.props.checked}
               onChange={this.handleCheckboxChange}
             />
           </li>
@@ -131,7 +114,7 @@ class Counter extends React.Component {
           <li style={{display: nonEditableOnly}}>
             <input
               type="text"
-              value={this.state.value}
+              value={this.props.value}
               readOnly={true}
             />
           </li>
@@ -166,7 +149,7 @@ class Counter extends React.Component {
           <li style={{display: editableOnly}}>
             <input
               type="text"
-              value={this.state.newValue}
+              value={this.state.tempValue}
               onChange={this.handleValueInputChange}
             />
           </li>
@@ -198,11 +181,13 @@ Counter.contextType = EditModeContext;
 
 Counter.propTypes = {
   initial: PropTypes.number,
+  value: PropTypes.number,
   min: PropTypes.number,
   max: PropTypes.number,
   step: PropTypes.number,
   name: PropTypes.string,
   checked: PropTypes.bool,
+  editable: PropTypes.bool,
   onChange: PropTypes.func,
 }
 
@@ -214,6 +199,7 @@ Counter.defaultProps = {
   step: 1,
   name: '',
   checked: false,
+  editable: false,
   onChange: () => {},
 };
 

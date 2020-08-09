@@ -11,9 +11,9 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      counterComponents: [],
-      counterComponentIndexesByName: {},
-      counterData: {},
+      counterOrder: [],
+      counterIndexesByName: {},
+      counters: {},
       modals: {
         isNewCounterOpen: false,
       },
@@ -22,141 +22,152 @@ class App extends React.Component {
   }
 
   componentDidMount = () => {
-    this.appendCounter({name: 'Sample Counter'});
+    this.appendCounter({ name: 'Sample Counter' });
   }
 
-  getNewCounter = (name, counterData) => {
+  getNewCounter = (counterData) => {
     return (
       <Counter
-        key={name}
-        value={counterData.value}
-        initial={counterData.initial}
-        min={counterData.min}
-        max={counterData.max}
-        step={counterData.step}
-        name={name}
-        checked={counterData.checked}
-        onChange={counterData.onChange}
+        {...counterData}
+        key={counterData.name}
       />
     );
   }
 
-  appendCounter = (param) => {
-    // TODO - if `value` is not a number, assign `initial` to `value`
-    const name = param.name;
-    param.onChange = (newData) => {
-      this.updateCounter(name, newData);
-    };
+  appendCounter = (counterData) => {
+    this.setState((state) => {
+      const { name } = counterData;
+      counterData.onChange = (newCounterData) => {
+        this.updateCounter(newCounterData);
+      };
 
-    const counterComponents = this.state.counterComponents.slice();
-    const counterComponentIndexesByName = {...this.state.counterComponentIndexesByName};
-    const counterData = {...this.state.counterData};
+      const newCounter = this.getNewCounter(counterData);
+      const { value, initial, min, max, step, checked, onChange } = newCounter.props;
+      const actualCounterData = { value, initial, min, max, step, name, checked, onChange };
 
-    const newCounter = this.getNewCounter(name, param);
-    counterData[name] = {
-      value: newCounter.props.value,
-      initial: newCounter.props.initial,
-      min: newCounter.props.min,
-      max: newCounter.props.max,
-      step: newCounter.props.step,
-      name: newCounter.props.name,
-      checked: newCounter.props.checked,
-      onChange: newCounter.props.onChange,
-    };
-    counterComponentIndexesByName[name] = counterComponents.length;
-    counterComponents.push(newCounter);
-    this.setState({
-      counterComponents,
-      counterComponentIndexesByName,
-      counterData,
+      const counters = {
+        ...state.counters,
+        [name]: actualCounterData,
+      };
+
+      const counterOrder = state.counterOrder.slice();
+      const counterIndexesByName = {
+        ...state.counterIndexesByName,
+        [name]: counterOrder.length,
+      };
+      counterOrder.push(name);
+
+      return {
+        counterOrder,
+        counterIndexesByName,
+        counters,
+      };
     });
   }
 
-  updateCounter = (name, newCounterDatum) => {
-    const counterComponents = this.state.counterComponents.slice();
-    const counterDatum = {...this.state.counterData[name]};
-    const targetComponentIndex = this.state.counterComponentIndexesByName[name];
-    if (typeof targetComponentIndex !== 'number') {
-      return;
-    }
+  updateCounter = (newCounterData) => {
+    this.setState((state) => {
+      const { name } = newCounterData;
+      const targetComponentIndex = state.counterIndexesByName[name];
+      if (typeof targetComponentIndex !== 'number') {
+        return;
+      }
 
-    counterDatum.value = newCounterDatum.value;
-    counterDatum.checked = newCounterDatum.checked;
+      const counterData = {
+        ...state.counters[name],
+        ...newCounterData,
+      };
 
-    counterComponents[targetComponentIndex] = this.getNewCounter(name, counterDatum);
+      const counters = {
+        ...state.counters,
+        [name]: counterData,
+      };
 
-    const counterData = {...this.state.counterData};
-    counterData[name] = counterDatum;
+      return { counters };
+    });
+  }
 
+  checkOrUncheckAll = (checked) => {
+    this.setState((state) => {
+      const counters = { ...state.counters };
+
+      for (const name of state.counterOrder) {
+        if (counters[name].checked !== checked) {
+          counters[name] = {
+            ...counters[name],
+            checked,
+          };
+        }
+      }
+
+      return { counters };
+    });
+  }
+
+  openOrCloseNewCounterModal = (isOpen) => {
+    const newModalState = {...this.state.modals};
+    newModalState.isNewCounterOpen = isOpen;
     this.setState({
-      counterComponents,
-      counterData,
+      modals: newModalState,
     });
   }
 
   handleRemoveClick = () => {
-    const oldCounterComponents = this.state.counterComponents.slice();
-    const newCounterComponents = [];
-    const counterComponentIndexesByName = {...this.state.counterComponentIndexesByName};
-    const counterData = {...this.state.counterData};
+    this.setState((state) => {
+      const counterIndexesByName = { ...state.counterIndexesByName };
+      const counters = { ...state.counters };
 
-    let jump = 0;
-    for (let index = 0; index < oldCounterComponents.length; index += 1) {
-      const { name, checked } = oldCounterComponents[index].props;
-      if (checked) {
-        jump += 1;
-        delete counterComponentIndexesByName[name];
-        delete counterData[name];
-      } else {
-        counterComponentIndexesByName[name] -= jump;
-        newCounterComponents.push(oldCounterComponents[index]);
+      const counterOrder = state.counterOrder.filter((name) => {
+        const checked = counters[name].checked;
+        if (checked) {
+          delete counterIndexesByName[name];
+          delete counters[name];
+        }
+        return !checked;
+      });
+
+      return {
+        counterOrder,
+        counterIndexesByName,
+        counters,
+        isEditModeEnabled: false,
       }
-    }
-
-    this.setState({
-      counterComponents: newCounterComponents,
-      counterComponentIndexesByName,
-      counterData,
-      isEditModeEnabled: false,
     });
   }
 
   handleNewCounterClick = () => {
-    const newModalState = {...this.state.modals};
-    newModalState.isNewCounterOpen = true;
-    this.setState({
-      modals: newModalState,
-    });
+    this.openOrCloseNewCounterModal(true);
   }
 
   handleNewCounterModalSubmit = (param) => {
-    const {name, initial, min, max, step} = param;
+    // TODO - Validate param
+    // TODO - if `value` is not a number, assign `initial` to `value`
     this.appendCounter({
-      initial, min, max, step, name,
-      value: initial,
+      ...param,
+      value: param.initial,
     });
 
-    this.closeNewCounterModal();
+    this.openOrCloseNewCounterModal(false);
   }
 
-  closeNewCounterModal = () => {
-    const newModalState = {...this.state.modals};
-    newModalState.isNewCounterOpen = false;
-    this.setState({
-      modals: newModalState,
-    });
+  handleNewCounterModalCancel = () => {
+    this.openOrCloseNewCounterModal(false);
   }
 
   handleEditCounterListClick = () => {
-    this.setState({isEditModeEnabled: true});
+    this.setState({ isEditModeEnabled: true });
   }
 
   handleExitEditModeClick = () => {
-    this.setState({isEditModeEnabled: false});
+    this.checkOrUncheckAll(false);
+    this.setState({ isEditModeEnabled: false });
   }
 
   render = () => {
     const isEditModeEnabled = this.state.isEditModeEnabled;
+    const counterComponents = this.state.counterOrder.slice().map((name) => {
+      return this.getNewCounter(this.state.counters[name]);
+    });
 
     return (
       <div className="App">
@@ -168,7 +179,7 @@ class App extends React.Component {
           <EditModeContext.Provider
             value={this.state.isEditModeEnabled}
           >
-            {this.state.counterComponents}
+            {counterComponents}
           </EditModeContext.Provider>
         </section>
 
@@ -223,10 +234,10 @@ class App extends React.Component {
         </aside>
 
         <AddNewCounterModal
-          existingNames={Object.keys(this.state.counterData)}
+          existingNames={Object.keys(this.state.counters)}
           isOpen={this.state.modals.isNewCounterOpen}
           onSubmit={this.handleNewCounterModalSubmit}
-          onCancel={this.closeNewCounterModal}
+          onCancel={this.handleNewCounterModalCancel}
         />
       </div>
     );
