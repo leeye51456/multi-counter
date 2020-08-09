@@ -112,6 +112,16 @@ class App extends React.Component {
     });
   }
 
+  isEveryCounterChecked = () => {
+    const { counters } = this.state;
+    for (const name of this.state.counterOrder) {
+      if (!counters[name].checked) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   handleRemoveClick = () => {
     this.setState((state) => {
       const counterIndexesByName = { ...state.counterIndexesByName };
@@ -163,11 +173,16 @@ class App extends React.Component {
     this.setState({ isEditModeEnabled: false });
   }
 
+  handleSelectAllClick = () => {
+    this.checkOrUncheckAll(!this.isEveryCounterChecked());
+  }
+
   render = () => {
     const isEditModeEnabled = this.state.isEditModeEnabled;
     const counterComponents = this.state.counterOrder.slice().map((name) => {
       return this.getNewCounter(this.state.counters[name]);
     });
+    const selectAllLabel = this.isEveryCounterChecked() ? 'Unselect All' : 'Select All';
 
     return (
       <div className="App">
@@ -213,8 +228,11 @@ class App extends React.Component {
               </button>
             </li>
             <li>
-              <button type="button">
-                Select All
+              <button
+                type="button"
+                onClick={this.handleSelectAllClick}
+              >
+                {selectAllLabel}
               </button>
             </li>
             <li>
