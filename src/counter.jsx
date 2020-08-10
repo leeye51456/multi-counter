@@ -20,9 +20,9 @@ class Counter extends React.Component {
     return newValue;
   }
 
-  callOnChangeByValue = (oldValue, newValue, defaults) => {
+  callOnChangeByValue = (newValue, defaults) => {
     newValue = this.getCorrectValue(newValue);
-    if (oldValue !== newValue) {
+    if (this.props.value !== newValue) {
       this.props.onChange({
         ...defaults,
         value: newValue,
@@ -49,15 +49,13 @@ class Counter extends React.Component {
   }
 
   handleCountDownClick = () => {
-    const oldValue = this.props.value;
-    const newValue = oldValue - this.props.step;
-    this.callOnChangeByValue(oldValue, newValue);
+    const newValue = this.props.value - this.props.step;
+    this.callOnChangeByValue(newValue);
   }
 
   handleCountUpClick = () => {
-    const oldValue = this.props.value;
-    const newValue = oldValue + this.props.step;
-    this.callOnChangeByValue(oldValue, newValue);
+    const newValue = this.props.value + this.props.step;
+    this.callOnChangeByValue(newValue);
   }
 
   handleValueInputChange = (event) => {
@@ -75,10 +73,10 @@ class Counter extends React.Component {
   }
 
   handleApplyClick = () => {
-    this.setState((state, props) => {
+    this.setState((state) => {
       const newValue = Number.parseInt(state.tempValue, 10);
       if (!isNaN(newValue)) {
-        this.callOnChangeByValue(props.value, newValue, { editable: false });
+        this.callOnChangeByValue(newValue, { editable: false });
       }
       return { tempValue: '' };
     });
