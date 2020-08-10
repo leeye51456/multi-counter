@@ -82,6 +82,10 @@ class Counter extends React.Component {
     });
   }
 
+  handleResetClick = () => {
+    this.callOnChangeByValue(this.props.initial);
+  }
+
   render = () => {
     const isThisEditable = this.props.editable;
     const isGlobalEditModeEnabled = this.context;
@@ -167,6 +171,15 @@ class Counter extends React.Component {
               onClick={this.handleApplyClick}
             >
               OK
+            </button>
+          </li>
+
+          <li style={{display: globalEditModeOnly}}>
+            <button
+              type="button"
+              onClick={this.handleResetClick}
+            >
+              Reset
             </button>
           </li>
         </ul>
