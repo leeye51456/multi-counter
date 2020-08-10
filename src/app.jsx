@@ -121,6 +121,21 @@ class App extends React.Component {
     return true;
   }
 
+  handleResetClick = () => {
+    const countersToUpdate = [];
+    for (const name of this.state.counterOrder) {
+      const counterData = this.state.counters[name];
+      if (counterData.checked) {
+        countersToUpdate.push({
+          name,
+          checked: false,
+          value: counterData.initial,
+        });
+      }
+    }
+    this.updateCounter(countersToUpdate);
+  }
+
   handleRemoveClick = () => {
     this.setState((state) => {
       const counterIndexesByName = { ...state.counterIndexesByName };
@@ -235,7 +250,10 @@ class App extends React.Component {
               </button>
             </li>
             <li>
-              <button type="button">
+              <button
+                type="button"
+                onClick={this.handleResetClick}
+              >
                 Reset Selected Counters
               </button>
             </li>
