@@ -2,6 +2,7 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import Counter from './counter';
 import AddNewCounterModal from './add-new-counter-modal';
+import EditCountersModal from './edit-counters-modal';
 import { EditModeContext } from './contexts';
 
 ReactModal.setAppElement('#root');
@@ -14,6 +15,7 @@ class App extends React.Component {
       counterOrder: [],
       counterIndexesByName: {},
       counters: {},
+      checkedCounters: [],
       modal: '',
       isEditModeEnabled: false,
     };
@@ -36,7 +38,7 @@ class App extends React.Component {
     this.setState((state) => {
       const { name } = counterData;
       counterData.onChange = (newCounterData) => {
-        this.updateCounter([newCounterData]);
+        this.updateCounters([newCounterData]);
       };
 
       const newCounter = this.getNewCounter(counterData);
@@ -63,7 +65,7 @@ class App extends React.Component {
     });
   }
 
-  updateCounter = (updatedCounters) => {
+  updateCounters = (updatedCounters) => {
     this.setState((state) => {
       const counters = { ...state.counters };
 
@@ -81,6 +83,13 @@ class App extends React.Component {
       }
 
       return { counters };
+    }, this.updateCheckedCounters);
+  }
+
+  updateCheckedCounters = () => {
+    this.setState((state) => {
+      const checkedCounters = state.counterOrder.filter((name) => state.counters[name].checked);
+      return { checkedCounters };
     });
   }
 
@@ -98,7 +107,7 @@ class App extends React.Component {
       }
 
       return { counters };
-    });
+    }, this.updateCheckedCounters);
   }
 
   openOrCloseModal = (willOpen, modal) => {
@@ -106,13 +115,7 @@ class App extends React.Component {
   }
 
   isEveryCounterChecked = () => {
-    const { counters } = this.state;
-    for (const name of this.state.counterOrder) {
-      if (!counters[name].checked) {
-        return false;
-      }
-    }
-    return true;
+    return this.state.checkedCounters.length === this.state.counterOrder.length;
   }
 
   handleResetClick = () => {
@@ -127,7 +130,8 @@ class App extends React.Component {
         });
       }
     }
-    this.updateCounter(countersToUpdate);
+    this.updateCounters(countersToUpdate);
+    this.setState({ isEditModeEnabled: false });
   }
 
   handleRemoveClick = () => {
@@ -150,7 +154,7 @@ class App extends React.Component {
         counters,
         isEditModeEnabled: false,
       }
-    });
+    }, this.updateCheckedCounters);
   }
 
   handleNewCounterClick = () => {
@@ -168,7 +172,24 @@ class App extends React.Component {
     this.openOrCloseModal(false);
   }
 
-  handleNewCounterModalCancel = () => {
+  handleEditCountersClick = () => {
+    if (this.state.checkedCounters.length > 0) {
+      this.openOrCloseModal(true, 'EditCountersModal');
+    }
+  }
+
+  handleEditCountersModalSubmit = (param) => {
+    // TODO - Validate param
+    // TODO - if `value` is not a number, assign `initial` to `value`
+    const { initial, min, max, step } = param;
+    const counters = param.names.map((name) => ({ name, initial, min, max, step }));
+    this.updateCounters(counters);
+    this.openOrCloseModal(false);
+    this.checkOrUncheckAll(false);
+    this.setState({ isEditModeEnabled: false });
+  }
+
+  handleModalCancel = () => {
     this.openOrCloseModal(false);
   }
 
@@ -246,6 +267,14 @@ class App extends React.Component {
             <li>
               <button
                 type="button"
+                onClick={this.handleEditCountersClick}
+              >
+                Edit Selected Counters
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
                 onClick={this.handleResetClick}
               >
                 Reset Selected Counters
@@ -263,10 +292,18 @@ class App extends React.Component {
         </aside>
 
         <AddNewCounterModal
-          existingNames={Object.keys(this.state.counters)}
+          existingNames={this.state.counterOrder}
           isOpen={this.state.modal === 'AddNewCounterModal'}
           onSubmit={this.handleNewCounterModalSubmit}
-          onCancel={this.handleNewCounterModalCancel}
+          onCancel={this.handleModalCancel}
+        />
+
+        <EditCountersModal
+          counters={this.state.counters}
+          names={this.state.checkedCounters}
+          isOpen={this.state.modal === 'EditCountersModal'}
+          onSubmit={this.handleEditCountersModalSubmit}
+          onCancel={this.handleModalCancel}
         />
       </div>
     );
