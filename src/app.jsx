@@ -38,7 +38,7 @@ class App extends React.Component {
     this.setState((state) => {
       const { name } = counterData;
       counterData.onChange = (newCounterData) => {
-        this.updateCounter(newCounterData);
+        this.updateCounter([newCounterData]);
       };
 
       const newCounter = this.getNewCounter(counterData);
@@ -65,23 +65,22 @@ class App extends React.Component {
     });
   }
 
-  updateCounter = (newCounterData) => {
+  updateCounter = (updatedCounters) => {
     this.setState((state) => {
-      const { name } = newCounterData;
-      const targetComponentIndex = state.counterIndexesByName[name];
-      if (typeof targetComponentIndex !== 'number') {
-        return;
+      const counters = { ...state.counters };
+
+      for (const newCounterData of updatedCounters) {
+        const { name } = newCounterData;
+        const targetComponentIndex = state.counterIndexesByName[name];
+        if (typeof targetComponentIndex !== 'number') {
+          return;
+        }
+
+        counters[name] = {
+          ...counters[name],
+          ...newCounterData,
+        };
       }
-
-      const counterData = {
-        ...state.counters[name],
-        ...newCounterData,
-      };
-
-      const counters = {
-        ...state.counters,
-        [name]: counterData,
-      };
 
       return { counters };
     });
