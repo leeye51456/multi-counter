@@ -14,9 +14,7 @@ class App extends React.Component {
       counterOrder: [],
       counterIndexesByName: {},
       counters: {},
-      modals: {
-        isNewCounterOpen: false,
-      },
+      modal: '',
       isEditModeEnabled: false,
     };
   }
@@ -103,12 +101,8 @@ class App extends React.Component {
     });
   }
 
-  openOrCloseNewCounterModal = (isOpen) => {
-    const newModalState = {...this.state.modals};
-    newModalState.isNewCounterOpen = isOpen;
-    this.setState({
-      modals: newModalState,
-    });
+  openOrCloseModal = (willOpen, modal) => {
+    this.setState({ modal: willOpen ? modal : '' });
   }
 
   isEveryCounterChecked = () => {
@@ -160,7 +154,7 @@ class App extends React.Component {
   }
 
   handleNewCounterClick = () => {
-    this.openOrCloseNewCounterModal(true);
+    this.openOrCloseModal(true, 'AddNewCounterModal');
   }
 
   handleNewCounterModalSubmit = (param) => {
@@ -171,11 +165,11 @@ class App extends React.Component {
       value: param.initial,
     });
 
-    this.openOrCloseNewCounterModal(false);
+    this.openOrCloseModal(false);
   }
 
   handleNewCounterModalCancel = () => {
-    this.openOrCloseNewCounterModal(false);
+    this.openOrCloseModal(false);
   }
 
   handleEditCounterListClick = () => {
@@ -270,7 +264,7 @@ class App extends React.Component {
 
         <AddNewCounterModal
           existingNames={Object.keys(this.state.counters)}
-          isOpen={this.state.modals.isNewCounterOpen}
+          isOpen={this.state.modal === 'AddNewCounterModal'}
           onSubmit={this.handleNewCounterModalSubmit}
           onCancel={this.handleNewCounterModalCancel}
         />
