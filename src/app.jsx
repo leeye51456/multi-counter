@@ -119,17 +119,11 @@ class App extends React.Component {
   }
 
   handleResetClick = () => {
-    const countersToUpdate = [];
-    for (const name of this.state.counterOrder) {
-      const counterData = this.state.counters[name];
-      if (counterData.checked) {
-        countersToUpdate.push({
-          name,
-          checked: false,
-          value: counterData.initial,
-        });
-      }
-    }
+    const countersToUpdate = this.state.checkedCounters.map((name) => ({
+      name,
+      checked: false,
+      value: this.state.counters[name].initial,
+    }));
     this.updateCounters(countersToUpdate);
     this.setState({ isEditModeEnabled: false });
   }
