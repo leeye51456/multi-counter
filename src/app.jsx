@@ -119,6 +119,10 @@ class App extends React.Component {
   }
 
   handleResetClick = () => {
+    if (this.state.checkedCounters.length === 0) {
+      return;
+    }
+
     const countersToUpdate = this.state.checkedCounters.map((name) => ({
       name,
       checked: false,
@@ -129,6 +133,10 @@ class App extends React.Component {
   }
 
   handleRemoveClick = () => {
+    if (this.state.checkedCounters.length === 0) {
+      return;
+    }
+
     this.setState((state) => {
       const counterIndexesByName = { ...state.counterIndexesByName };
       const counters = { ...state.counters };
