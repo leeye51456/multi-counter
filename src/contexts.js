@@ -1,3 +1,3 @@
 import React from 'react';
 
-export const EditModeContext = React.createContext(false);
+export const GlobalEditModeContext = React.createContext(false);

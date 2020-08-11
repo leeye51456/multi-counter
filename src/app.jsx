@@ -3,7 +3,7 @@ import ReactModal from 'react-modal';
 import Counter from './counter';
 import AddNewCounterModal from './add-new-counter-modal';
 import EditCountersModal from './edit-counters-modal';
-import { EditModeContext } from './contexts';
+import { GlobalEditModeContext } from './contexts';
 
 ReactModal.setAppElement('#root');
 
@@ -222,11 +222,11 @@ class App extends React.Component {
         </header>
 
         <section>
-          <EditModeContext.Provider
+          <GlobalEditModeContext.Provider
             value={this.state.isEditModeEnabled}
           >
             {counterComponents}
-          </EditModeContext.Provider>
+          </GlobalEditModeContext.Provider>
         </section>
 
         <aside>

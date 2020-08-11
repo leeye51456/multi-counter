@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EditModeContext } from './contexts';
+import { GlobalEditModeContext } from './contexts';
 
 class Counter extends React.Component {
   constructor(props) {
@@ -41,7 +41,7 @@ class Counter extends React.Component {
   handleEditClick = () => {
     this.setState((state, props) => {
       props.onChange({
-        editable: true,
+        editMode: true,
         name: props.name,
       });
       return { tempValue: props.value };
@@ -65,7 +65,7 @@ class Counter extends React.Component {
   handleCancelClick = () => {
     this.setState((state, props) => {
       props.onChange({
-        editable: false,
+        editMode: false,
         name: props.name,
       });
       return { tempValue: '' };
@@ -76,7 +76,7 @@ class Counter extends React.Component {
     this.setState((state) => {
       const newValue = Number.parseInt(state.tempValue, 10);
       if (!isNaN(newValue)) {
-        this.callOnChangeByValue(newValue, { editable: false });
+        this.callOnChangeByValue(newValue, { editMode: false });
       }
       return { tempValue: '' };
     });
@@ -87,7 +87,7 @@ class Counter extends React.Component {
   }
 
   render = () => {
-    const isThisEditable = this.props.editable;
+    const isThisEditable = this.props.editMode;
     const isGlobalEditModeEnabled = this.context;
 
     const always = 'inline-block';
@@ -188,7 +188,7 @@ class Counter extends React.Component {
   }
 }
 
-Counter.contextType = EditModeContext;
+Counter.contextType = GlobalEditModeContext;
 
 Counter.propTypes = {
   initial: PropTypes.number,
@@ -198,7 +198,7 @@ Counter.propTypes = {
   step: PropTypes.number,
   name: PropTypes.string,
   checked: PropTypes.bool,
-  editable: PropTypes.bool,
+  editMode: PropTypes.bool,
   onChange: PropTypes.func,
 }
 
@@ -210,7 +210,7 @@ Counter.defaultProps = {
   step: 1,
   name: '',
   checked: false,
-  editable: false,
+  editMode: false,
   onChange: () => {},
 };
 
