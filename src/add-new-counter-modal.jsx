@@ -1,27 +1,27 @@
 import React from 'react';
 import ReactModal from 'react-modal';
+import ShortcutCaptureForm from './shortcut-capture-form';
+import { noShortcut } from './utils';
+
+const defaultState = {
+  name: '',
+  initial: '0',
+  min: '0',
+  max: `${Number.MAX_SAFE_INTEGER}`,
+  step: '1',
+  countUp: noShortcut,
+  countDown: noShortcut,
+};
 
 class AddNewCounterModal extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      name: '',
-      initial: '0',
-      min: '0',
-      max: `${Number.MAX_SAFE_INTEGER}`,
-      step: '1',
-    };
+    this.state = defaultState;
   }
 
   handleModalAfterOpen = () => {
-    this.setState({
-      name: '',
-      initial: '0',
-      min: '0',
-      max: `${Number.MAX_SAFE_INTEGER}`,
-      step: '1',
-    });
+    this.setState(defaultState);
   }
 
   handleNameChange = (event) => {
@@ -54,6 +54,18 @@ class AddNewCounterModal extends React.Component {
     });
   }
 
+  handleCountUpShortcutChange = (data) => {
+    this.setState({
+      countUp: { ...noShortcut, ...data },
+    });
+  }
+
+  handleCountDownShortcutChange = (data) => {
+    this.setState({
+      countDown: { ...noShortcut, ...data },
+    });
+  }
+
   handleSubmitClick = () => {
     let {name, initial, min, max, step} = this.state;
     [initial, min, max, step] = [initial, min, max, step].map((value) => Number.parseInt(value, 10));
@@ -64,11 +76,13 @@ class AddNewCounterModal extends React.Component {
       return;
     } else if (min > max) {
       return;
-    } else if (this.props.existingNames.includes(name)) {
+    } else if (name === '' || this.props.existingNames.includes(name)) {
       return;
     }
 
-    this.props.onSubmit({name, initial, min, max, step});
+    const { countUp, countDown } = this.state;
+
+    this.props.onSubmit({ name, initial, min, max, step, countUp, countDown });
   }
 
   handleCancelClick = () => {
@@ -149,6 +163,36 @@ class AddNewCounterModal extends React.Component {
             />
           </li>
         </ul>
+
+        <hr />
+
+        <h2>Shortcuts</h2>
+        <ul>
+          <li>
+            <label>
+              Count Up
+            </label>
+            <ShortcutCaptureForm
+              keyName={this.state.countUp.key}
+              code={this.state.countUp.code}
+              shiftKey={this.state.countUp.shiftKey}
+              onChange={this.handleCountUpShortcutChange}
+            />
+          </li>
+          <li>
+            <label>
+              Count Down
+            </label>
+            <ShortcutCaptureForm
+              keyName={this.state.countDown.key}
+              code={this.state.countDown.code}
+              shiftKey={this.state.countDown.shiftKey}
+              onChange={this.handleCountDownShortcutChange}
+            />
+          </li>
+        </ul>
+
+        <hr />
 
         <ul>
           <li>
