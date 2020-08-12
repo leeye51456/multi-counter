@@ -1,7 +1,5 @@
 import React from 'react';
-import { isMacOs, getKeyForDisplaying } from './utils';
-
-const no_op = () => {};
+import utils from './utils';
 
 class ShortcutCaptureForm extends React.Component {
   constructor(props) {
@@ -9,28 +7,40 @@ class ShortcutCaptureForm extends React.Component {
 
     this.state = {
       key: '',
+      code: '',
       shiftKey: false,
     };
   }
 
   handleKeyDown = (event) => {
     const { key, shiftKey } = event;
-    if (!/^[0-9A-Za-z`~!@#$%^&*(),./<>?;':"[\]\\{}|+_=-]$/.test(key)) {
+    const { code } = event.nativeEvent;
+
+    if (!code) {
+      if (utils.isValidKey(key)) {
+        this.setState({ key, shiftKey });
+      }
       return;
     }
-    this.setState({ key, shiftKey });
+
+    if (utils.isValidCode(code)) {
+      this.setState({ code, shiftKey });
+    }
   }
 
-  getKeyString = () => {
-    const { key, shiftKey } = this.state;
+  getShortcutString = () => {
+    const { key, code, shiftKey } = this.state;
     let shift;
-    if (isMacOs) {
+    if (utils.isMacOs) {
       shift = shiftKey ? '⇧' : '';
     } else {
       shift = shiftKey ? 'Shift+' : '';
     }
 
-    return `${shift}${getKeyForDisplaying(key)}`;
+    if (code) {
+      return `${shift}${utils.getNotShiftedFromCode(code)}`;
+    }
+    return `${shift}${utils.getNotShiftedFromKey(key)}`;
   }
 
   render = () => {
@@ -39,9 +49,10 @@ class ShortcutCaptureForm extends React.Component {
         <li>
           <input
             type="text"
-            value={this.getKeyString()}
-            onChange={no_op}
+            value={this.getShortcutString()}
+            onChange={utils.no_op}
             onKeyDown={this.handleKeyDown}
+            style={{ textAlign: 'right' }}
           />
         </li>
       </ul>
