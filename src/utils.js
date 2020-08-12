@@ -3,7 +3,7 @@ const userAgentLower = navigator.userAgent.toLowerCase();
 const appVersionLower = navigator.appVersion.toLowerCase();
 
 
-export const no_op = () => {};
+export const noOp = () => {};
 
 export const isMacOs = (
   platformLower.indexOf('mac') !== -1
@@ -57,7 +57,7 @@ export const getNotShiftedFromKey = (key) => {
 };
 
 const utils = {
-  no_op,
+  noOp,
   isMacOs,
   isValidCode, getNotShiftedFromCode,
   isValidKey, getNotShiftedFromKey,

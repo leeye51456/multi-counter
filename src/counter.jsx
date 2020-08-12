@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { GlobalEditModeContext } from './contexts';
+import { noOp } from './utils';
 
 class Counter extends React.Component {
   constructor(props) {
@@ -211,7 +212,7 @@ Counter.defaultProps = {
   name: '',
   checked: false,
   editMode: false,
-  onChange: () => {},
+  onChange: noOp,
 };
 
 export default Counter;
