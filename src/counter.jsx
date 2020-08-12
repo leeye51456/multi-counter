@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { GlobalEditModeContext } from './contexts';
-import { noOp } from './utils';
+import { noOp, noShortcut } from './utils';
 
 class Counter extends React.Component {
   constructor(props) {
@@ -10,6 +10,32 @@ class Counter extends React.Component {
     this.state = {
       tempValue: '',
     };
+  }
+
+  componentDidMount = () => {
+    document.addEventListener('keydown', this.handleKeyDown);
+  }
+  componentWillUnmount = () => {
+    document.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  handleKeyDown = (nativeEvent) => {
+    const { key, code, shiftKey } = nativeEvent;
+    const { countUp, countDown } = this.props;
+
+    if (code) {
+      if (code === countUp.code && shiftKey === countUp.shiftKey) {
+        this.countUp();
+      } else if (code === countDown.code && shiftKey === countDown.shiftKey) {
+        this.countDown();
+      }
+    } else {
+      if (key === countUp.keyName && shiftKey === countUp.shiftKey) {
+        this.countUp();
+      } else if (key === countDown.keyName && shiftKey === countDown.shiftKey) {
+        this.countDown();
+      }
+    }
   }
 
   getCorrectValue = (newValue) => {
@@ -32,6 +58,16 @@ class Counter extends React.Component {
     }
   }
 
+  countDown = () => {
+    const newValue = this.props.value - this.props.step;
+    this.callOnChangeByValue(newValue);
+  }
+
+  countUp = () => {
+    const newValue = this.props.value + this.props.step;
+    this.callOnChangeByValue(newValue);
+  }
+
   handleCheckboxChange = (event) => {
     this.props.onChange({
       checked: event.target.checked,
@@ -50,13 +86,11 @@ class Counter extends React.Component {
   }
 
   handleCountDownClick = () => {
-    const newValue = this.props.value - this.props.step;
-    this.callOnChangeByValue(newValue);
+    this.countDown();
   }
 
   handleCountUpClick = () => {
-    const newValue = this.props.value + this.props.step;
-    this.callOnChangeByValue(newValue);
+    this.countUp();
   }
 
   handleValueInputChange = (event) => {
@@ -212,6 +246,8 @@ Counter.defaultProps = {
   name: '',
   checked: false,
   editMode: false,
+  countUp: noShortcut,
+  countDown: noShortcut,
   onChange: noOp,
 };
 

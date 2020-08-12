@@ -4,6 +4,7 @@ const appVersionLower = navigator.appVersion.toLowerCase();
 
 
 export const noOp = () => {};
+export const noShortcut = { keyName: '', code: '', shiftKey: false };
 
 export const isMacOs = (
   platformLower.indexOf('mac') !== -1
