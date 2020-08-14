@@ -3,13 +3,24 @@ const userAgentLower = navigator.userAgent.toLowerCase();
 const appVersionLower = navigator.appVersion.toLowerCase();
 
 
+export const includes = (obj, target) => {
+  if (target === 'indexOf') {
+    return !!obj.indexOf;
+  }
+  if (obj.indexOf) {
+    return obj.indexOf(target) !== -1;
+  }
+  return !!obj[target];
+};
+
+
 export const noOp = () => {};
 export const noShortcut = { keyName: '', code: '', shiftKey: false };
 
 export const isMacOs = (
-  platformLower.indexOf('mac') !== -1
-  || userAgentLower.indexOf('mac') !== -1
-  || appVersionLower.indexOf('mac') !== -1
+  includes(platformLower, 'mac')
+  || includes(userAgentLower, 'mac')
+  || includes(appVersionLower, 'mac')
 );
 
 
@@ -26,8 +37,8 @@ const notShiftedKeysFromCode = {
 const validCodes = Object.keys(notShiftedKeysFromCode);
 
 export const isValidCode = (code) => {
-  return validCodes.indexOf(code) !== -1;
-}
+  return includes(validCodes, code);
+};
 
 export const getNotShiftedFromCode = (code) => {
   const notShifted = notShiftedKeysFromCode[code];
@@ -45,8 +56,8 @@ const notShiftedKeys = {
 const validKeys = Object.keys(notShiftedKeys);
 
 export const isValidKey = (key) => {
-  return /^[A-Za-z]$/.test(key) || validKeys.indexOf(key) !== -1;
-}
+  return /^[A-Za-z]$/.test(key) || includes(validKeys, key);
+};
 
 export const getNotShiftedFromKey = (key) => {
   if (/[A-Za-z]/.test(key)) {
@@ -58,6 +69,7 @@ export const getNotShiftedFromKey = (key) => {
 };
 
 const utils = {
+  includes,
   noOp,
   isMacOs,
   isValidCode, getNotShiftedFromCode,
