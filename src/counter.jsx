@@ -1,9 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { GlobalEditModeContext } from './contexts';
-import { noOp, noShortcut } from './utils';
+import { noOp } from './utils';
 
-class Counter extends React.Component {
+export const getCorrectCounterValue = (counterData) => {
+  const { value, min, max } = counterData;
+  if (value < min) {
+    return min;
+  } else if (value > max) {
+    return max;
+  }
+  return value;
+}
+
+export class Counter extends React.Component {
   constructor(props) {
     super(props);
 
@@ -12,30 +22,8 @@ class Counter extends React.Component {
     };
   }
 
-  componentDidMount = () => {
-    document.addEventListener('keydown', this.handleKeyDown);
-  }
-  componentWillUnmount = () => {
-    document.removeEventListener('keydown', this.handleKeyDown);
-  }
-
-  handleKeyDown = (nativeEvent) => {
-    const { key, code, shiftKey } = nativeEvent;
-    const { countUp, countDown } = this.props;
-
-    if (code) {
-      if (code === countUp.code && shiftKey === countUp.shiftKey) {
-        this.countUp();
-      } else if (code === countDown.code && shiftKey === countDown.shiftKey) {
-        this.countDown();
-      }
-    } else {
-      if (key === countUp.keyName && shiftKey === countUp.shiftKey) {
-        this.countUp();
-      } else if (key === countDown.keyName && shiftKey === countDown.shiftKey) {
-        this.countDown();
-      }
-    }
+  componentDidUpdate = () => {
+    this.callOnChangeByValue(this.props.value);
   }
 
   getCorrectValue = (newValue) => {
@@ -246,8 +234,6 @@ Counter.defaultProps = {
   name: '',
   checked: false,
   editMode: false,
-  countUp: noShortcut,
-  countDown: noShortcut,
   onChange: noOp,
 };
 

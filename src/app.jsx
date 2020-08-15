@@ -4,6 +4,8 @@ import Counter from './counter';
 import AddNewCounterModal from './add-new-counter-modal';
 import EditCountersModal from './edit-counters-modal';
 import { GlobalEditModeContext } from './contexts';
+import { CounterAction, actionPresets } from './counter-action';
+import utils from './utils';
 
 ReactModal.setAppElement('#root');
 
@@ -15,6 +17,7 @@ class App extends React.Component {
       counterOrder: [],
       counterIndexesByName: {},
       counters: {},
+      counterActionsByShortcutId: {},
       checkedCounters: [],
       modal: '',
       isEditModeEnabled: false,
@@ -22,7 +25,37 @@ class App extends React.Component {
   }
 
   componentDidMount = () => {
+    document.addEventListener('keydown', this.handleDocumentKeyDown);
+
     this.appendCounter({ name: 'Sample Counter' });
+  }
+
+  componentWillUnmount = () => {
+    document.removeEventListener('keydown', this.handleDocumentKeyDown);
+  }
+
+  handleDocumentKeyDown = (nativeEvent) => {
+    if (utils.isTextForm(nativeEvent.target) || this.state.modal) {
+      return;
+    }
+
+    const { key, code, shiftKey, ctrlKey, altKey, metaKey } = nativeEvent;
+    const isInvalidKey = (
+      ctrlKey || altKey || metaKey
+      || (code && utils.includes(code.toLowerCase(), 'shift'))
+      || utils.includes(key.toLowerCase(), 'shift')
+    );
+    if (isInvalidKey) {
+      return;
+    }
+
+    const counterActions = this.state.counterActionsByShortcutId[utils.getShortcutId({ key, code, shiftKey })];
+    if (!counterActions || !counterActions.length) {
+      return;
+    }
+
+    const counters = counterActions.map((action) => action.execute({ ...this.state.counters[action.target] }));
+    this.updateCounters(counters);
   }
 
   getNewCounter = (counterData) => {
@@ -43,7 +76,7 @@ class App extends React.Component {
 
       const newCounter = this.getNewCounter(counterData);
       const { value, initial, min, max, step, checked, onChange } = newCounter.props;
-      const actualCounterData = { value, initial, min, max, step, name, checked, onChange };
+      const actualCounterData = { ...counterData, value, initial, min, max, step, name, checked, onChange };
 
       const counters = {
         ...state.counters,
@@ -57,10 +90,36 @@ class App extends React.Component {
       };
       counterOrder.push(name);
 
+      const shortcuts = actualCounterData.shortcuts;
+      let counterActionsByShortcutId = state.counterActionsByShortcutId;
+      if (shortcuts) {
+        counterActionsByShortcutId = { ...state.counterActionsByShortcutId };
+        // FIXME - Remove duplicated code and improve readability
+        if (shortcuts.countUp) {
+          const shortcutId = utils.getShortcutId(shortcuts.countUp);
+          if (shortcutId) {
+            const counterActionsForShortcut =
+              utils.initializeOrGetArrayProperty(counterActionsByShortcutId, shortcutId).slice();
+            counterActionsForShortcut.push(new CounterAction(name, actionPresets.getCountedUp));
+            counterActionsByShortcutId[shortcutId] = counterActionsForShortcut;
+          }
+        }
+        if (shortcuts.countDown) {
+          const shortcutId = utils.getShortcutId(shortcuts.countDown);
+          if (shortcutId) {
+            const counterActionsForShortcut =
+              utils.initializeOrGetArrayProperty(counterActionsByShortcutId, shortcutId).slice();
+            counterActionsForShortcut.push(new CounterAction(name, actionPresets.getCountedDown));
+            counterActionsByShortcutId[shortcutId] = counterActionsForShortcut;
+          }
+        }
+      }
+
       return {
         counterOrder,
         counterIndexesByName,
         counters,
+        counterActionsByShortcutId,
       };
     });
   }

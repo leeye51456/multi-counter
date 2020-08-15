@@ -9,8 +9,8 @@ const defaultState = {
   min: '0',
   max: `${Number.MAX_SAFE_INTEGER}`,
   step: '1',
-  countUp: noShortcut,
-  countDown: noShortcut,
+  countUpShortcut: noShortcut,
+  countDownShortcut: noShortcut,
 };
 
 class AddNewCounterModal extends React.Component {
@@ -56,13 +56,13 @@ class AddNewCounterModal extends React.Component {
 
   handleCountUpShortcutChange = (data) => {
     this.setState({
-      countUp: { ...noShortcut, ...data },
+      countUpShortcut: { ...noShortcut, ...data },
     });
   }
 
   handleCountDownShortcutChange = (data) => {
     this.setState({
-      countDown: { ...noShortcut, ...data },
+      countDownShortcut: { ...noShortcut, ...data },
     });
   }
 
@@ -80,9 +80,10 @@ class AddNewCounterModal extends React.Component {
       return;
     }
 
-    const { countUp, countDown } = this.state;
+    const { countUpShortcut, countDownShortcut } = this.state;
+    const shortcuts = { countUp: countUpShortcut, countDown: countDownShortcut };
 
-    this.props.onSubmit({ name, initial, min, max, step, countUp, countDown });
+    this.props.onSubmit({ name, initial, min, max, step, shortcuts });
   }
 
   handleCancelClick = () => {
@@ -173,9 +174,9 @@ class AddNewCounterModal extends React.Component {
               Count Up
             </label>
             <ShortcutCaptureForm
-              keyName={this.state.countUp.key}
-              code={this.state.countUp.code}
-              shiftKey={this.state.countUp.shiftKey}
+              keyName={this.state.countUpShortcut.keyName}
+              code={this.state.countUpShortcut.code}
+              shiftKey={this.state.countUpShortcut.shiftKey}
               onChange={this.handleCountUpShortcutChange}
             />
           </li>
@@ -184,9 +185,9 @@ class AddNewCounterModal extends React.Component {
               Count Down
             </label>
             <ShortcutCaptureForm
-              keyName={this.state.countDown.key}
-              code={this.state.countDown.code}
-              shiftKey={this.state.countDown.shiftKey}
+              keyName={this.state.countDownShortcut.keyName}
+              code={this.state.countDownShortcut.code}
+              shiftKey={this.state.countDownShortcut.shiftKey}
               onChange={this.handleCountDownShortcutChange}
             />
           </li>
