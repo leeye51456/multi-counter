@@ -76,6 +76,25 @@ export const getNotShiftedFromKey = (key) => {
   return notShiftedKeys[key];
 };
 
+const textInputTypes = [
+  'date', 'datetime-local', 'email', 'month', 'number', 'password', 'search', 'tel', 'text', 'time', 'url', 'week'
+];
+
+export const isTextForm = (element) => {
+  const tagName = element.tagName.toUpperCase();
+  return (
+    (tagName === 'INPUT' && includes(textInputTypes, element.type.toLowerCase()))
+    || tagName === 'TEXTAREA'
+  );
+};
+
+export const getShortcutId = (shortcut) => {
+  const { key, code, shiftKey } = shortcut;
+  const prefix = shiftKey ? 'Shift' : '';
+  return `${prefix}${code || key}`;
+};
+
+
 const utils = {
   includes,
   initializeOrGetArrayProperty,
@@ -83,5 +102,6 @@ const utils = {
   isMacOs,
   isValidCode, getNotShiftedFromCode,
   isValidKey, getNotShiftedFromKey,
+  isTextForm, getShortcutId,
 };
 export default utils;
