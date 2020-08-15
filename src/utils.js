@@ -9,6 +9,14 @@ export const includes = (obj, target) => {
 };
 
 
+export const initializeOrGetArrayProperty = (obj, key) => {
+  if (!obj[key]) {
+    obj[key] = [];
+  }
+  return obj[key];
+};
+
+
 export const noOp = () => {};
 export const noShortcut = { keyName: '', code: '', shiftKey: false };
 
@@ -70,6 +78,7 @@ export const getNotShiftedFromKey = (key) => {
 
 const utils = {
   includes,
+  initializeOrGetArrayProperty,
   noOp,
   isMacOs,
   isValidCode, getNotShiftedFromCode,
