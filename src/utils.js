@@ -1,8 +1,3 @@
-const platformLower = navigator.platform.toLowerCase();
-const userAgentLower = navigator.userAgent.toLowerCase();
-const appVersionLower = navigator.appVersion.toLowerCase();
-
-
 export const includes = (obj, target) => {
   if (target === 'indexOf') {
     return !!obj.indexOf;
@@ -16,6 +11,11 @@ export const includes = (obj, target) => {
 
 export const noOp = () => {};
 export const noShortcut = { keyName: '', code: '', shiftKey: false };
+
+
+const platformLower = navigator.platform.toLowerCase();
+const userAgentLower = navigator.userAgent.toLowerCase();
+const appVersionLower = navigator.appVersion.toLowerCase();
 
 export const isMacOs = (
   includes(platformLower, 'mac')
