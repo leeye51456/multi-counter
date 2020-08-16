@@ -105,81 +105,82 @@ class EditCountersModal extends React.Component {
         <h1>
           Edit Counters
         </h1>
-        <form>
-          <ul>
-            <li>
-              <label>
-                Counters: {this.props.names.join(', ')}
-              </label>
-            </li>
-            <li>
-              <label>
-                Initial value (Integer)
-              </label>
-              <input
-                type="number"
-                inputMode="numeric"
-                pattern="-?\\d*"
-                value={this.state.initial}
-                onChange={this.handleInitialChange}
-              />
-            </li>
-            <li>
-              <label>
-                Minimum value (Integer)
-              </label>
-              <input
-                type="number"
-                inputMode="numeric"
-                pattern="-?\\d*"
-                value={this.state.min}
-                onChange={this.handleMinChange}
-              />
-            </li>
-            <li>
-              <label>
-                Maximum value (Integer)
-              </label>
-              <input
-                type="number"
-                inputMode="numeric"
-                pattern="-?\\d*"
-                value={this.state.max}
-                onChange={this.handleMaxChange}
-              />
-            </li>
-            <li>
-              <label>
-                Count step (Positive integer)
-              </label>
-              <input
-                type="number"
-                inputMode="numeric"
-                pattern="[1-9]\\d*"
-                value={this.state.step}
-                onChange={this.handleStepChange}
-              />
-            </li>
-          </ul>
-          <ul>
-            <li>
-              <button
-                type="button"
-                onClick={this.handleSubmitClick}
-              >
-                Apply
-              </button>
-            </li>
-            <li>
-              <button
-                type="reset"
-                onClick={this.handleCancelClick}
-              >
-                Cancel
-              </button>
-            </li>
-          </ul>
-        </form>
+
+        <ul>
+          <li>
+            <label>
+              Counters: {this.props.names.join(', ')}
+            </label>
+          </li>
+          <li>
+            <label>
+              Initial value (Integer)
+            </label>
+            <input
+              type="number"
+              inputMode="numeric"
+              pattern="-?\\d*"
+              value={this.state.initial}
+              onChange={this.handleInitialChange}
+            />
+          </li>
+          <li>
+            <label>
+              Minimum value (Integer)
+            </label>
+            <input
+              type="number"
+              inputMode="numeric"
+              pattern="-?\\d*"
+              value={this.state.min}
+              onChange={this.handleMinChange}
+            />
+          </li>
+          <li>
+            <label>
+              Maximum value (Integer)
+            </label>
+            <input
+              type="number"
+              inputMode="numeric"
+              pattern="-?\\d*"
+              value={this.state.max}
+              onChange={this.handleMaxChange}
+            />
+          </li>
+          <li>
+            <label>
+              Count step (Positive integer)
+            </label>
+            <input
+              type="number"
+              inputMode="numeric"
+              pattern="[1-9]\\d*"
+              value={this.state.step}
+              onChange={this.handleStepChange}
+            />
+          </li>
+        </ul>
+
+        <ul>
+          <li>
+            <button
+              type="button"
+              onClick={this.handleSubmitClick}
+            >
+              Apply
+            </button>
+          </li>
+          <li>
+            <button
+              type="reset"
+              onClick={this.handleCancelClick}
+            >
+              Cancel
+            </button>
+          </li>
+        </ul>
+
       </ReactModal>
     );
   }
