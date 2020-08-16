@@ -48,7 +48,7 @@ class EditCountersModal extends React.Component {
     let { initial, min, max, step } = this.state;
     [initial, min, max, step] = [initial, min, max, step].map((value) => Number.parseInt(value, 10));
 
-    if ([initial, min, max, step].filter((value) => Number.isSafeInteger(value)).includes(false)) {
+    if ([initial, min, max, step].map((value) => Number.isSafeInteger(value)).includes(false)) {
       return;
     } else if (step <= 0) {
       return;
