@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 
+const counterProps = ['initial', 'min', 'max', 'step'];
+
 class EditCountersModal extends React.Component {
   constructor(props) {
     super(props);
@@ -20,7 +22,23 @@ class EditCountersModal extends React.Component {
     }
 
     this.setState((state, props) => {
-      const { initial, min, max, step } = props.counters[props.names[0]];
+      const checkedCount = props.names.length;
+      const firstCounter = { ...props.counters[props.names[0]] };
+      const differentProps = [];
+      const counterPropsCount = counterProps.length;
+      for (let index = 1; index < checkedCount; index += 1) {
+        const currentCounter = props.counters[props.names[index]];
+        for (const counterProp of counterProps) {
+          if (firstCounter[counterProp] !== currentCounter[counterProp]) {
+            firstCounter[counterProp] = '';
+            differentProps.push(counterProp);
+          }
+        }
+        if (differentProps.length === counterPropsCount) {
+          break;
+        }
+      }
+      const { initial, min, max, step } = firstCounter;
       return { initial, min, max, step };
     });
   }
