@@ -14,6 +14,11 @@ class EditCountersModal extends React.Component {
   }
 
   handleModalAfterOpen = () => {
+    if (!this.props.names || !this.props.names.length) {
+      this.props.onCancel();
+      return;
+    }
+
     this.setState((state, props) => {
       const { initial, min, max, step } = props.counters[props.names[0]];
       return { initial, min, max, step };
