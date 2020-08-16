@@ -242,9 +242,18 @@ class App extends React.Component {
   handleEditCountersModalSubmit = (param) => {
     // TODO - Validate param
     // TODO - if `value` is not a number, assign `initial` to `value`
-    const { initial, min, max, step } = param;
-    const counters = param.names.map((name) => ({ name, initial, min, max, step }));
-    this.updateCounters(counters);
+    const { counters } = this.state;
+    const newCounters = param.names.map((name) => {
+      const {
+        initial = counters[name].initial,
+        min = counters[name].min,
+        max = counters[name].max,
+        step = counters[name].step,
+      } = param;
+      return { name, initial, min, max, step };
+    });
+    this.updateCounters(newCounters);
+
     this.openOrCloseModal(false);
     this.checkOrUncheckAll(false);
     this.setState({ isEditModeEnabled: false });

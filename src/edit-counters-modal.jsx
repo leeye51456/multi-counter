@@ -68,18 +68,24 @@ class EditCountersModal extends React.Component {
   }
 
   handleSubmitClick = () => {
-    let { initial, min, max, step } = this.state;
-    [initial, min, max, step] = [initial, min, max, step].map((value) => Number.parseInt(value, 10));
-
-    if ([initial, min, max, step].map((value) => Number.isSafeInteger(value)).includes(false)) {
-      return;
-    } else if (step <= 0) {
-      return;
-    } else if (min > max) {
-      return;
+    const { initial, min, max, step } = this.state;
+    const submitArgument = { initial, min, max, step };
+    for (const counterProp of counterProps) {
+      if (submitArgument[counterProp] === '') {
+        delete submitArgument[counterProp];
+      } else {
+        submitArgument[counterProp] = Number.parseInt(submitArgument[counterProp], 10);
+      }
     }
 
-    this.props.onSubmit({ names: this.props.names, initial, min, max, step });
+    if (Object.values(submitArgument).map((value) => Number.isSafeInteger(value)).includes(false)) {
+      return;
+    } else if (submitArgument.step === 0 || (submitArgument.step && submitArgument.step < 0)) {
+      return;
+    }
+    // TODO - re-implement min/max validation check (be careful of empty values)
+
+    this.props.onSubmit({ names: this.props.names, ...submitArgument });
   }
 
   handleCancelClick = () => {
