@@ -58,6 +58,30 @@ class App extends React.Component {
     this.updateCounters(counters);
   }
 
+  getUpdatedCounterActions = (counterActionsByShortcutId, actualCounterData) => {
+    const shortcuts = actualCounterData.shortcuts;
+    if (!shortcuts || typeof shortcuts !== 'object' || Object.keys(shortcuts).length === 0) {
+      return counterActionsByShortcutId;
+    }
+
+    const shortcutActions = {
+      countUp: actionPresets.getCountedUp,
+      countDown: actionPresets.getCountedDown,
+    };
+
+    counterActionsByShortcutId = { ...counterActionsByShortcutId };
+    for (const shortcutName of Object.keys(shortcuts)) {
+      const shortcutId = utils.getShortcutId(shortcuts[shortcutName]);
+      if (shortcutId) {
+        const counterActionsForShortcut =
+        utils.initializeOrGetArrayProperty(counterActionsByShortcutId, shortcutId).slice();
+        counterActionsForShortcut.push(new CounterAction(actualCounterData.name, shortcutActions[shortcutName]));
+        counterActionsByShortcutId[shortcutId] = counterActionsForShortcut;
+      }
+    }
+    return counterActionsByShortcutId;
+  }
+
   getNewCounter = (counterData) => {
     return (
       <Counter
@@ -90,30 +114,8 @@ class App extends React.Component {
       };
       counterOrder.push(name);
 
-      const shortcuts = actualCounterData.shortcuts;
-      let counterActionsByShortcutId = state.counterActionsByShortcutId;
-      if (shortcuts) {
-        counterActionsByShortcutId = { ...state.counterActionsByShortcutId };
-        // FIXME - Remove duplicated code and improve readability
-        if (shortcuts.countUp) {
-          const shortcutId = utils.getShortcutId(shortcuts.countUp);
-          if (shortcutId) {
-            const counterActionsForShortcut =
-              utils.initializeOrGetArrayProperty(counterActionsByShortcutId, shortcutId).slice();
-            counterActionsForShortcut.push(new CounterAction(name, actionPresets.getCountedUp));
-            counterActionsByShortcutId[shortcutId] = counterActionsForShortcut;
-          }
-        }
-        if (shortcuts.countDown) {
-          const shortcutId = utils.getShortcutId(shortcuts.countDown);
-          if (shortcutId) {
-            const counterActionsForShortcut =
-              utils.initializeOrGetArrayProperty(counterActionsByShortcutId, shortcutId).slice();
-            counterActionsForShortcut.push(new CounterAction(name, actionPresets.getCountedDown));
-            counterActionsByShortcutId[shortcutId] = counterActionsForShortcut;
-          }
-        }
-      }
+      const counterActionsByShortcutId =
+        this.getUpdatedCounterActions(state.counterActionsByShortcutId, actualCounterData);
 
       return {
         counterOrder,
