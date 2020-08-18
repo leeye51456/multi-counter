@@ -1,3 +1,5 @@
+// FIXME - Implement classes for frequent objects and refactor overall codes
+
 import React from 'react';
 import ReactModal from 'react-modal';
 import Counter from './counter';
