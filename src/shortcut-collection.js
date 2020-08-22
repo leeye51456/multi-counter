@@ -1,18 +1,18 @@
 import Shortcut from './shortcut';
 
-const shortcutNames = ['countUp', 'countDown'];
-
 export class ShortcutCollection {
   constructor(initialShortcutCollection) {
-    if (typeof initialShortcutCollection === 'object') {
-      for (const field of shortcutNames) {
-        if (initialShortcutCollection[field]) {
-          this[field] = initialShortcutCollection[field];
-        } else {
-          this[field] = Shortcut.noShortcut;
-        }
+    for (const field of shortcutNames) {
+      if (initialShortcutCollection && initialShortcutCollection[field]) {
+        this[field] = initialShortcutCollection[field];
+      } else {
+        this[field] = Shortcut.noShortcut;
       }
     }
+  }
+
+  static get emptyShortcutCollection() {
+    return emptyShortcutCollection;
   }
 
   static get shortcutNames() {
@@ -36,5 +36,8 @@ export class ShortcutCollection {
     );
   }
 }
+
+const shortcutNames = ['countUp', 'countDown'];
+const emptyShortcutCollection = new ShortcutCollection();
 
 export default ShortcutCollection;

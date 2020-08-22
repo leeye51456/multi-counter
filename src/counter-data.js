@@ -1,9 +1,12 @@
-import Counter from "./counter";
-
-const propsForComparison = ['initial', 'min', 'max', 'step'];
+import Counter from './counter';
+import ShortcutCollection from './shortcut-collection';
 
 export class CounterData {
-  constructor({ name, value, initial, min, max, step, checked, onChange, shortcuts }) {
+  constructor(param) {
+    const { name, value, initial, min, max, step, checked, onChange, shortcuts } = {
+      ...Counter.defaultProps,
+      ...param,
+    };
     this.name = name;
     this.value = value;
     this.initial = initial;
@@ -12,7 +15,7 @@ export class CounterData {
     this.step = step;
     this.checked = checked;
     this.onChange = onChange;
-    this.shortcuts = shortcuts;
+    this.shortcuts = shortcuts ? shortcuts : ShortcutCollection.emptyShortcutCollection;
   }
 
   static get propsForComparison() {
@@ -24,7 +27,7 @@ export class CounterData {
     for (const prop of propsForComparison) {
       resultBase[prop] = this[prop];
     }
-    return new Counter(resultBase);
+    return new CounterData(resultBase);
   }
 
   getJumbledIfDiffersFrom = (other) => {
@@ -37,5 +40,7 @@ export class CounterData {
     return result;
   }
 }
+
+const propsForComparison = ['initial', 'min', 'max', 'step'];
 
 export default CounterData;

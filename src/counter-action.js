@@ -1,5 +1,12 @@
-import { getCorrectCounterValue } from './counter';
-
+const getCorrectCounterValue = (counterData) => {
+  const { value, min, max } = counterData;
+  if (value < min) {
+    return min;
+  } else if (value > max) {
+    return max;
+  }
+  return value;
+}
 
 const getNewCounterDataWithValue = (counterData, newValue) => {
   const newCounterData = {
@@ -10,7 +17,8 @@ const getNewCounterDataWithValue = (counterData, newValue) => {
   return newCounterData;
 }
 
-export const actionPresets = {
+const actionPresets = {
+  noOp: () => {},
   getCountedUp: (counterData) => getNewCounterDataWithValue(counterData, counterData.value + counterData.step),
   getCountedDown: (counterData) => getNewCounterDataWithValue(counterData, counterData.value - counterData.step),
 };
@@ -19,6 +27,10 @@ export class CounterAction {
   constructor(target, action) {
     this.target = target;
     this.execute = action;
+  }
+
+  static get actionPresets() {
+    return actionPresets;
   }
 }
 
