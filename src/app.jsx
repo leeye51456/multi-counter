@@ -6,7 +6,10 @@ import Counter from './counter';
 import AddNewCounterModal from './add-new-counter-modal';
 import EditCountersModal from './edit-counters-modal';
 import { GlobalEditModeContext } from './contexts';
-import { CounterAction, actionPresets } from './counter-action';
+import CounterAction from './counter-action';
+import CounterData from './counter-data';
+import Shortcut from './shortcut';
+import ShortcutCollection from './shortcut-collection';
 import utils from './utils';
 
 ReactModal.setAppElement('#root');
@@ -29,7 +32,7 @@ class App extends React.Component {
   componentDidMount = () => {
     document.addEventListener('keydown', this.handleDocumentKeyDown);
 
-    this.appendCounter({ name: 'Sample Counter' });
+    this.appendCounter(new CounterData({ name: 'Sample Counter' }));
   }
 
   componentWillUnmount = () => {
@@ -51,7 +54,8 @@ class App extends React.Component {
       return;
     }
 
-    const counterActions = this.state.counterActionsByShortcutId[utils.getShortcutId({ key, code, shiftKey })];
+    const shortcutId = String(new Shortcut({ code, shiftKey, keyName: key }));
+    const counterActions = this.state.counterActionsByShortcutId[shortcutId];
     if (!counterActions || !counterActions.length) {
       return;
     }
@@ -60,24 +64,21 @@ class App extends React.Component {
     this.updateCounters(counters);
   }
 
-  getUpdatedCounterActions = (counterActionsByShortcutId, actualCounterData) => {
-    const shortcuts = actualCounterData.shortcuts;
-    if (!shortcuts || typeof shortcuts !== 'object' || Object.keys(shortcuts).length === 0) {
-      return counterActionsByShortcutId;
-    }
-
+  getUpdatedCounterActions = (counterActionsByShortcutId, counterData) => {
+    const shortcuts = counterData.shortcuts;
     const shortcutActions = {
-      countUp: actionPresets.getCountedUp,
-      countDown: actionPresets.getCountedDown,
+      countUp: CounterAction.actionPresets.getCountedUp,
+      countDown: CounterAction.actionPresets.getCountedDown,
     };
 
     counterActionsByShortcutId = { ...counterActionsByShortcutId };
-    for (const shortcutName of Object.keys(shortcuts)) {
-      const shortcutId = utils.getShortcutId(shortcuts[shortcutName]);
+    for (const shortcutName of ShortcutCollection.shortcutNames) {
+      const shortcutId = String(shortcuts[shortcutName]);
       if (shortcutId) {
         const counterActionsForShortcut =
-        utils.initializeOrGetArrayProperty(counterActionsByShortcutId, shortcutId).slice();
-        counterActionsForShortcut.push(new CounterAction(actualCounterData.name, shortcutActions[shortcutName]));
+          utils.initializeOrGetArrayProperty(counterActionsByShortcutId, shortcutId).slice();
+        // FIXME - Existing CounterAction's should be replaced with new CounterAction's.
+        counterActionsForShortcut.push(new CounterAction(counterData.name, shortcutActions[shortcutName]));
         counterActionsByShortcutId[shortcutId] = counterActionsForShortcut;
       }
     }
@@ -96,17 +97,14 @@ class App extends React.Component {
   appendCounter = (counterData) => {
     this.setState((state) => {
       const { name } = counterData;
-      counterData.onChange = (newCounterData) => {
+      const onChange = (newCounterData) => {
         this.updateCounters([newCounterData]);
       };
-
-      const newCounter = this.getNewCounter(counterData);
-      const { value, initial, min, max, step, checked, onChange } = newCounter.props;
-      const actualCounterData = { ...counterData, value, initial, min, max, step, name, checked, onChange };
+      counterData = new CounterData({ ...counterData, onChange });
 
       const counters = {
         ...state.counters,
-        [name]: actualCounterData,
+        [name]: counterData,
       };
 
       const counterOrder = state.counterOrder.slice();
@@ -116,8 +114,7 @@ class App extends React.Component {
       };
       counterOrder.push(name);
 
-      const counterActionsByShortcutId =
-        this.getUpdatedCounterActions(state.counterActionsByShortcutId, actualCounterData);
+      const counterActionsByShortcutId = this.getUpdatedCounterActions(state.counterActionsByShortcutId, counterData);
 
       return {
         counterOrder,
@@ -146,10 +143,10 @@ class App extends React.Component {
       }
 
       return { counters };
-    }, this.updateCheckedCounters);
+    }, this.updateCheckedCountersState);
   }
 
-  updateCheckedCounters = () => {
+  updateCheckedCountersState = () => {
     this.setState((state) => {
       const checkedCounters = state.counterOrder.filter((name) => state.counters[name].checked);
       return { checkedCounters };
@@ -170,7 +167,7 @@ class App extends React.Component {
       }
 
       return { counters };
-    }, this.updateCheckedCounters);
+    }, this.updateCheckedCountersState);
   }
 
   openOrCloseModal = (willOpen, modal) => {
@@ -207,7 +204,7 @@ class App extends React.Component {
       const counterOrder = state.counterOrder.filter((name) => {
         const checked = counters[name].checked;
         if (checked) {
-          delete counterIndexesByName[name];
+          delete counterIndexesByName[name]; // FIXME - Other indexes should be updated.
           delete counters[name];
         }
         return !checked;
@@ -219,7 +216,7 @@ class App extends React.Component {
         counters,
         isEditModeEnabled: false,
       }
-    }, this.updateCheckedCounters);
+    }, this.updateCheckedCountersState);
   }
 
   handleNewCounterClick = () => {
@@ -229,10 +226,11 @@ class App extends React.Component {
   handleNewCounterModalSubmit = (param) => {
     // TODO - Validate param
     // TODO - if `value` is not a number, assign `initial` to `value`
-    this.appendCounter({
+    const newCounter = new CounterData({
       ...param,
       value: param.initial,
     });
+    this.appendCounter(newCounter);
 
     this.openOrCloseModal(false);
   }

@@ -1,17 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { GlobalEditModeContext } from './contexts';
-import { noOp } from './utils';
-
-export const getCorrectCounterValue = (counterData) => {
-  const { value, min, max } = counterData;
-  if (value < min) {
-    return min;
-  } else if (value > max) {
-    return max;
-  }
-  return value;
-}
+import CounterAction from './counter-action';
 
 export class Counter extends React.Component {
   constructor(props) {
@@ -92,7 +82,7 @@ export class Counter extends React.Component {
         name: props.name,
       });
       return { tempValue: '' };
-    })
+    });
   }
 
   handleApplyClick = () => {
@@ -234,7 +224,7 @@ Counter.defaultProps = {
   name: '',
   checked: false,
   editMode: false,
-  onChange: noOp,
+  onChange: CounterAction.actionPresets.noOp,
 };
 
 export default Counter;

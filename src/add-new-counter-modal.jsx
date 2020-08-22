@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import ShortcutCaptureForm from './shortcut-capture-form';
-import { noShortcut } from './utils';
+import Shortcut from './shortcut';
+import ShortcutCollection from './shortcut-collection';
 
 const defaultState = {
   name: '',
@@ -9,8 +10,8 @@ const defaultState = {
   min: '0',
   max: `${Number.MAX_SAFE_INTEGER}`,
   step: '1',
-  countUpShortcut: noShortcut,
-  countDownShortcut: noShortcut,
+  countUpShortcut: Shortcut.noShortcut,
+  countDownShortcut: Shortcut.noShortcut,
 };
 
 class AddNewCounterModal extends React.Component {
@@ -56,13 +57,13 @@ class AddNewCounterModal extends React.Component {
 
   handleCountUpShortcutChange = (data) => {
     this.setState({
-      countUpShortcut: { ...noShortcut, ...data },
+      countUpShortcut: new Shortcut({ ...Shortcut.noShortcut, ...data }),
     });
   }
 
   handleCountDownShortcutChange = (data) => {
     this.setState({
-      countDownShortcut: { ...noShortcut, ...data },
+      countDownShortcut: new Shortcut({ ...Shortcut.noShortcut, ...data }),
     });
   }
 
@@ -70,6 +71,7 @@ class AddNewCounterModal extends React.Component {
     let {name, initial, min, max, step} = this.state;
     [initial, min, max, step] = [initial, min, max, step].map((value) => Number.parseInt(value, 10));
 
+    // FIXME - Show reject reason
     if ([initial, min, max, step].map((value) => Number.isSafeInteger(value)).includes(false)) {
       return;
     } else if (step <= 0) {
@@ -80,8 +82,8 @@ class AddNewCounterModal extends React.Component {
       return;
     }
 
-    const { countUpShortcut, countDownShortcut } = this.state;
-    const shortcuts = { countUp: countUpShortcut, countDown: countDownShortcut };
+    const { countUpShortcut: countUp, countDownShortcut: countDown } = this.state;
+    const shortcuts = new ShortcutCollection({ countUp, countDown });
 
     this.props.onSubmit({ name, initial, min, max, step, shortcuts });
   }

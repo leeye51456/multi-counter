@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import utils from './utils';
+import CounterAction from './counter-action';
+import Shortcut from './shortcut';
+import { isMacOs } from './utils';
 
 class ShortcutCaptureForm extends React.Component {
   handleKeyDown = (event) => {
@@ -8,14 +10,14 @@ class ShortcutCaptureForm extends React.Component {
     const { code } = event.nativeEvent;
 
     if (code) {
-      if (utils.isValidCode(code)) {
+      if (Shortcut.isValidCode(code)) {
         this.props.onChange({ code, shiftKey });
       } else {
         this.props.onChange({ code: '', shiftKey: false });
       }
 
     } else {
-      if (utils.isValidKey(key)) {
+      if (Shortcut.isValidKey(key)) {
         this.props.onChange({ keyName: key, shiftKey });
       } else {
         this.props.onChange({ keyName: '', shiftKey: false });
@@ -26,16 +28,16 @@ class ShortcutCaptureForm extends React.Component {
   getShortcutString = () => {
     const { keyName, code, shiftKey } = this.props;
     let shift;
-    if (utils.isMacOs) {
+    if (isMacOs) {
       shift = shiftKey ? '⇧' : '';
     } else {
       shift = shiftKey ? 'Shift+' : '';
     }
 
     if (code) {
-      return `${shift}${utils.getNotShiftedFromCode(code)}`;
+      return `${shift}${Shortcut.getNotShiftedFromCode(code)}`;
     }
-    return `${shift}${utils.getNotShiftedFromKey(keyName)}`;
+    return `${shift}${Shortcut.getNotShiftedFromKey(keyName)}`;
   }
 
   render = () => {
@@ -43,7 +45,7 @@ class ShortcutCaptureForm extends React.Component {
       <input
         type="text"
         value={this.getShortcutString()}
-        onChange={utils.noOp}
+        onChange={CounterAction.actionPresets.noOp}
         onKeyDown={this.handleKeyDown}
         // style={{ textAlign: 'right' }}
       />
@@ -62,7 +64,7 @@ ShortcutCaptureForm.defaultProps = {
   keyName: '',
   code: '',
   shiftKey: false,
-  onChange: utils.noOp,
+  onChange: CounterAction.actionPresets.noOp,
 };
 
 export default ShortcutCaptureForm;

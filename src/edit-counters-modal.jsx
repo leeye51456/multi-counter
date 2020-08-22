@@ -1,7 +1,10 @@
 import React from 'react';
 import ReactModal from 'react-modal';
+import ShortcutCaptureForm from './shortcut-capture-form';
+import Shortcut from './shortcut';
 
-const counterProps = ['initial', 'min', 'max', 'step'];
+const counterProps = ['initial', 'min', 'max', 'step']; // FIXME - Remove?
+const counterShortcutsProps = ['countUp', 'countDown']; // FIXME - Remove?
 
 class EditCountersModal extends React.Component {
   constructor(props) {
@@ -12,6 +15,8 @@ class EditCountersModal extends React.Component {
       min: '0',
       max: `${Number.MAX_SAFE_INTEGER}`,
       step: '1',
+      countUpShortcut: Shortcut.noShortcut,
+      countDownShortcut: Shortcut.noShortcut,
     };
   }
 
