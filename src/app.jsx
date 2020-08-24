@@ -40,7 +40,7 @@ class App extends React.Component {
   }
 
   handleDocumentKeyDown = (nativeEvent) => {
-    if (utils.isTextForm(nativeEvent.target) || this.state.modal) {
+    if (utils.isTextForm(nativeEvent.target) || this.state.isEditModeEnabled || this.state.modal) {
       return;
     }
 
