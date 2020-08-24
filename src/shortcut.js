@@ -16,17 +16,17 @@ export class Shortcut {
   }
 
   static isValidCode(code) {
-    isValidCode(code);
+    return isValidCode(code);
   }
   static getNotShiftedFromCode(code) {
-    getNotShiftedFromCode(code);
+    return getNotShiftedFromCode(code);
   }
 
   static isValidKey(keyName) {
-    isValidKey(keyName);
+    return isValidKey(keyName);
   }
   static getNotShiftedFromKey(keyName) {
-    getNotShiftedFromKey(keyName);
+    return getNotShiftedFromKey(keyName);
   }
 
   getJumbledIfDiffersFrom = (comparisonTarget) => {
