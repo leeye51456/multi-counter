@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import ShortcutCaptureForm from './shortcut-capture-form';
+import CounterData from './counter-data';
 import Shortcut from './shortcut';
-
-const counterProps = ['initial', 'min', 'max', 'step']; // FIXME - Remove?
-const counterShortcutsProps = ['countUp', 'countDown']; // FIXME - Remove?
+import ShortcutCollection from './shortcut-collection';
 
 class EditCountersModal extends React.Component {
   constructor(props) {
@@ -28,23 +27,23 @@ class EditCountersModal extends React.Component {
 
     this.setState((state, props) => {
       const checkedCount = props.names.length;
-      const firstCounter = { ...props.counters[props.names[0]] };
-      const differentProps = [];
-      const counterPropsCount = counterProps.length;
+      const firstCounter = new CounterData(props.counters[props.names[0]]);
       for (let index = 1; index < checkedCount; index += 1) {
         const currentCounter = props.counters[props.names[index]];
-        for (const counterProp of counterProps) {
+        for (const counterProp of CounterData.propsForComparison) {
           if (firstCounter[counterProp] !== currentCounter[counterProp]) {
             firstCounter[counterProp] = '';
-            differentProps.push(counterProp);
           }
         }
-        if (differentProps.length === counterPropsCount) {
-          break;
-        }
+        firstCounter.shortcuts = firstCounter.shortcuts.getDifferenceMarked(currentCounter.shortcuts);
       }
-      const { initial, min, max, step } = firstCounter;
-      return { initial, min, max, step };
+
+      const { initial, min, max, step, shortcuts } = firstCounter;
+      return {
+        initial, min, max, step,
+        countUpShortcut: shortcuts.countUp,
+        countDownShortcut: shortcuts.countDown,
+      };
     });
   }
 
@@ -72,18 +71,43 @@ class EditCountersModal extends React.Component {
     });
   }
 
+  // FIXME - `Shortcut.noShortcut` (remove this shortcut) and `Shortcut.jumbledShortcut` (don't touch this shortcut)
+  //         should be distinguished.
+  handleCountUpShortcutChange = (data) => {
+    this.setState({
+      countUpShortcut: new Shortcut({ ...Shortcut.noShortcut, ...data }),
+    });
+  }
+
+  handleCountDownShortcutChange = (data) => {
+    this.setState({
+      countDownShortcut: new Shortcut({ ...Shortcut.noShortcut, ...data }),
+    });
+  }
+
   handleSubmitClick = () => {
-    const { initial, min, max, step } = this.state;
-    const submitArgument = { initial, min, max, step };
-    for (const counterProp of counterProps) {
+    const { initial, min, max, step, countUpShortcut, countDownShortcut } = this.state;
+    const submitArgument = {
+      initial, min, max, step,
+      shortcuts: new ShortcutCollection({
+        countUp: countUpShortcut,
+        countDown: countDownShortcut,
+      }),
+    };
+
+    let isAllSafeInteger = true;
+    for (const counterProp of CounterData.propsForComparison) {
       if (submitArgument[counterProp] === '') {
         delete submitArgument[counterProp];
       } else {
         submitArgument[counterProp] = Number.parseInt(submitArgument[counterProp], 10);
+        if (!Number.isSafeInteger(submitArgument[counterProp])) {
+          isAllSafeInteger = false;
+        }
       }
     }
 
-    if (Object.values(submitArgument).map((value) => Number.isSafeInteger(value)).includes(false)) {
+    if (!isAllSafeInteger) {
       return;
     } else if (submitArgument.step === 0 || (submitArgument.step && submitArgument.step < 0)) {
       return;
@@ -98,6 +122,7 @@ class EditCountersModal extends React.Component {
   }
 
   render = () => {
+    // FIXME - Add reset buttons
     return (
       <ReactModal
         isOpen={this.props.isOpen}
@@ -163,6 +188,32 @@ class EditCountersModal extends React.Component {
               pattern="[1-9]\\d*"
               value={this.state.step}
               onChange={this.handleStepChange}
+            />
+          </li>
+        </ul>
+
+        <h2>Shortcuts</h2>
+        <ul>
+          <li>
+            <label>
+              Count Up
+            </label>
+            <ShortcutCaptureForm
+              keyName={this.state.countUpShortcut.keyName}
+              code={this.state.countUpShortcut.code}
+              shiftKey={this.state.countUpShortcut.shiftKey}
+              onChange={this.handleCountUpShortcutChange}
+            />
+          </li>
+          <li>
+            <label>
+              Count Down
+            </label>
+            <ShortcutCaptureForm
+              keyName={this.state.countDownShortcut.keyName}
+              code={this.state.countDownShortcut.code}
+              shiftKey={this.state.countDownShortcut.shiftKey}
+              onChange={this.handleCountDownShortcutChange}
             />
           </li>
         </ul>

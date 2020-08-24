@@ -64,24 +64,39 @@ class App extends React.Component {
     this.updateCounters(counters);
   }
 
-  getUpdatedCounterActions = (counterActionsByShortcutId, counterData) => {
-    const shortcuts = counterData.shortcuts;
+  getUpdatedCounterActions = (counterActionsByShortcutId, newCounterData, oldCounterData) => {
     const shortcutActions = {
       countUp: CounterAction.actionPresets.getCountedUp,
       countDown: CounterAction.actionPresets.getCountedDown,
     };
+    const oldShortcuts = oldCounterData && oldCounterData.shortcuts;
+    const newShortcuts = newCounterData.shortcuts;
 
     counterActionsByShortcutId = { ...counterActionsByShortcutId };
     for (const shortcutName of ShortcutCollection.shortcutNames) {
-      const shortcutId = String(shortcuts[shortcutName]);
-      if (shortcutId) {
+      const oldShortcutId = oldShortcuts && String(oldShortcuts[shortcutName]);
+      const newShortcutId = String(newShortcuts[shortcutName]);
+      if (oldShortcutId === newShortcutId) {
+        continue;
+      }
+
+      if (oldShortcutId) {
         const counterActionsForShortcut =
-          utils.initializeOrGetArrayProperty(counterActionsByShortcutId, shortcutId).slice();
-        // FIXME - Existing CounterAction's should be replaced with new CounterAction's.
-        counterActionsForShortcut.push(new CounterAction(counterData.name, shortcutActions[shortcutName]));
-        counterActionsByShortcutId[shortcutId] = counterActionsForShortcut;
+          utils.initializeOrGetArrayProperty(counterActionsByShortcutId, oldShortcutId);
+        counterActionsByShortcutId[oldShortcutId] = counterActionsForShortcut.filter((action) => (
+          action.target !== oldCounterData.name
+          || action.execute !== shortcutActions[shortcutName]
+        ));
+      }
+
+      if (newShortcutId) {
+        const counterActionsForShortcut =
+          utils.initializeOrGetArrayProperty(counterActionsByShortcutId, newShortcutId).slice();
+        counterActionsForShortcut.push(new CounterAction(newCounterData.name, shortcutActions[shortcutName]));
+        counterActionsByShortcutId[newShortcutId] = counterActionsForShortcut;
       }
     }
+
     return counterActionsByShortcutId;
   }
 
@@ -129,11 +144,17 @@ class App extends React.Component {
     this.setState((state) => {
       const counters = { ...state.counters };
 
+      let counterActionsByShortcutId = { ...state.counterActionsByShortcutId };
       for (const newCounterData of updatedCounters) {
         const { name } = newCounterData;
         const targetComponentIndex = state.counterIndexesByName[name];
         if (typeof targetComponentIndex !== 'number') {
           return;
+        }
+
+        if (newCounterData.shortcuts) {
+          counterActionsByShortcutId =
+            this.getUpdatedCounterActions(counterActionsByShortcutId, newCounterData, counters[name]);
         }
 
         counters[name] = {
@@ -142,7 +163,7 @@ class App extends React.Component {
         };
       }
 
-      return { counters };
+      return { counters, counterActionsByShortcutId };
     }, this.updateCheckedCountersState);
   }
 
@@ -245,14 +266,26 @@ class App extends React.Component {
     // TODO - Validate param
     // TODO - if `value` is not a number, assign `initial` to `value`
     const { counters } = this.state;
+
+    const overwritingShortcuts = {};
+    for (const shortcutName of ShortcutCollection.shortcutNames) {
+      if (param.shortcuts[shortcutName] !== Shortcut.jumbledShortcut) {
+        overwritingShortcuts[shortcutName] = param.shortcuts[shortcutName];
+      }
+    }
+
     const newCounters = param.names.map((name) => {
       const {
         initial = counters[name].initial,
         min = counters[name].min,
         max = counters[name].max,
         step = counters[name].step,
+        shortcuts = counters[name].shortcuts,
       } = param;
-      return { name, initial, min, max, step };
+      return {
+        name, initial, min, max, step,
+        shortcuts: new ShortcutCollection({ ...shortcuts, ...overwritingShortcuts }),
+      };
     });
     this.updateCounters(newCounters);
 
