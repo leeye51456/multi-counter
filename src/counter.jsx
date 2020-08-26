@@ -213,7 +213,7 @@ Counter.propTypes = {
   checked: PropTypes.bool,
   editMode: PropTypes.bool,
   onChange: PropTypes.func,
-}
+};
 
 Counter.defaultProps = {
   initial: 0,
