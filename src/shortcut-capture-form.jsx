@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CounterAction from './counter-action';
 import Shortcut from './shortcut';
-import { isMacOs } from './utils';
 
 class ShortcutCaptureForm extends React.Component {
   handleKeyDown = (event) => {
@@ -26,18 +25,15 @@ class ShortcutCaptureForm extends React.Component {
   }
 
   getShortcutString = () => {
-    const { keyName, code, shiftKey } = this.props;
-    let shift;
-    if (isMacOs) {
-      shift = shiftKey ? '⇧' : '';
-    } else {
-      shift = shiftKey ? 'Shift+' : '';
+    const { shortcut } = this.props;
+    if (shortcut === Shortcut.NONE) {
+      return '(None)';
+    } else if (shortcut === Shortcut.JUMBLED) {
+      return '(Multiple values)';
+    } else if (shortcut === Shortcut.NO_CHANGE) {
+      return '(No change)';
     }
-
-    if (code) {
-      return `${shift}${Shortcut.getNotShiftedFromCode(code)}`;
-    }
-    return `${shift}${Shortcut.getNotShiftedFromKey(keyName)}`;
+    return shortcut.getStringToDisplay();
   }
 
   render = () => {

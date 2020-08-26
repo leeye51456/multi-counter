@@ -1,4 +1,4 @@
-import { includes } from './utils';
+import { includes, isMacOs } from './utils';
 
 
 export class Shortcut {
@@ -34,6 +34,20 @@ export class Shortcut {
 
   getJumbledIfDiffersFrom = (comparisonTarget) => {
     return this.equals(comparisonTarget) ? this : jumbledShortcut;
+  }
+
+  getStringToDisplay = () => {
+    let shift;
+    if (isMacOs) {
+      shift = this.shiftKey ? '⇧' : '';
+    } else {
+      shift = this.shiftKey ? 'Shift+' : '';
+    }
+
+    if (this.code) {
+      return `${shift}${getNotShiftedFromCode(this.code)}`;
+    }
+    return `${shift}${getNotShiftedFromKey(this.keyName)}`;
   }
 
   equals = (other) => {
