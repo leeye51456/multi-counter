@@ -14,6 +14,9 @@ export class Shortcut {
   static get JUMBLED() {
     return jumbledShortcut;
   }
+  static get NO_CHANGE() {
+    return noChange;
+  }
 
   static isValidCode(code) {
     return isValidCode(code);
@@ -55,6 +58,7 @@ export class Shortcut {
 
 const noShortcut = new Shortcut({ keyName: '', code: '', shiftKey: false });
 const jumbledShortcut = new Shortcut(noShortcut);
+const noChange = new Shortcut(noShortcut);
 
 
 const notShiftedKeysFromCode = {
