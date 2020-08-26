@@ -2,7 +2,7 @@ import { includes } from './utils';
 
 
 export class Shortcut {
-  constructor({ code, keyName, shiftKey }) {
+  constructor({ code = '', keyName = '', shiftKey = false }) {
     this.code = code;
     this.keyName = keyName;
     this.shiftKey = shiftKey;
