@@ -30,7 +30,7 @@ class EditCountersModal extends React.Component {
       const firstCounter = new CounterData(props.counters[props.names[0]]);
       for (let index = 1; index < checkedCount; index += 1) {
         const currentCounter = props.counters[props.names[index]];
-        for (const counterProp of CounterData.propsForComparison) {
+        for (const counterProp of CounterData.manipulatorProps) {
           if (firstCounter[counterProp] !== currentCounter[counterProp]) {
             firstCounter[counterProp] = '';
           }
@@ -96,7 +96,7 @@ class EditCountersModal extends React.Component {
     };
 
     let isAllSafeInteger = true;
-    for (const counterProp of CounterData.propsForComparison) {
+    for (const counterProp of CounterData.manipulatorProps) {
       if (submitArgument[counterProp] === '') {
         delete submitArgument[counterProp];
       } else {
