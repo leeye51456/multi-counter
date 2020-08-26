@@ -71,17 +71,15 @@ class EditCountersModal extends React.Component {
     });
   }
 
-  // FIXME - `Shortcut.noShortcut` (remove this shortcut) and `Shortcut.jumbledShortcut` (don't touch this shortcut)
-  //         should be distinguished.
-  handleCountUpShortcutChange = (data) => {
+  handleCountUpShortcutChange = (shortcut) => {
     this.setState({
-      countUpShortcut: new Shortcut({ ...Shortcut.NONE, ...data }),
+      countUpShortcut: shortcut,
     });
   }
 
-  handleCountDownShortcutChange = (data) => {
+  handleCountDownShortcutChange = (shortcut) => {
     this.setState({
-      countDownShortcut: new Shortcut({ ...Shortcut.NONE, ...data }),
+      countDownShortcut: shortcut,
     });
   }
 
@@ -199,9 +197,7 @@ class EditCountersModal extends React.Component {
               Count Up
             </label>
             <ShortcutCaptureForm
-              keyName={this.state.countUpShortcut.keyName}
-              code={this.state.countUpShortcut.code}
-              shiftKey={this.state.countUpShortcut.shiftKey}
+              shortcut={this.state.countUpShortcut}
               onChange={this.handleCountUpShortcutChange}
             />
           </li>
@@ -210,9 +206,7 @@ class EditCountersModal extends React.Component {
               Count Down
             </label>
             <ShortcutCaptureForm
-              keyName={this.state.countDownShortcut.keyName}
-              code={this.state.countDownShortcut.code}
-              shiftKey={this.state.countDownShortcut.shiftKey}
+              shortcut={this.state.countDownShortcut}
               onChange={this.handleCountDownShortcutChange}
             />
           </li>

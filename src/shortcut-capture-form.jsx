@@ -6,21 +6,21 @@ import { isMacOs } from './utils';
 
 class ShortcutCaptureForm extends React.Component {
   handleKeyDown = (event) => {
-    const { key, shiftKey } = event;
+    const { key: keyName, shiftKey } = event;
     const { code } = event.nativeEvent;
 
     if (code) {
       if (Shortcut.isValidCode(code)) {
-        this.props.onChange({ code, shiftKey });
+        this.props.onChange(new Shortcut({ code, shiftKey }));
       } else {
-        this.props.onChange({ code: '', shiftKey: false });
+        this.props.onChange(Shortcut.NONE);
       }
 
     } else {
-      if (Shortcut.isValidKey(key)) {
-        this.props.onChange({ keyName: key, shiftKey });
+      if (Shortcut.isValidKey(keyName)) {
+        this.props.onChange(new Shortcut({ keyName, shiftKey }));
       } else {
-        this.props.onChange({ keyName: '', shiftKey: false });
+        this.props.onChange(Shortcut.NONE);
       }
     }
   }
@@ -54,9 +54,6 @@ class ShortcutCaptureForm extends React.Component {
 }
 
 ShortcutCaptureForm.propTypes = {
-  keyName: PropTypes.string,
-  code: PropTypes.string,
-  shiftKey: PropTypes.bool,
   onChange: PropTypes.func,
 }
 
@@ -64,6 +61,7 @@ ShortcutCaptureForm.defaultProps = {
   keyName: '',
   code: '',
   shiftKey: false,
+  shortcut: Shortcut.NO_CHANGE,
   onChange: CounterAction.actionPresets.noOp,
 };
 
