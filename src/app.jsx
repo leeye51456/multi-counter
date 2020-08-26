@@ -269,7 +269,7 @@ class App extends React.Component {
 
     const overwritingShortcuts = {};
     for (const shortcutName of ShortcutCollection.shortcutNames) {
-      if (param.shortcuts[shortcutName] !== Shortcut.jumbledShortcut) {
+      if (param.shortcuts[shortcutName] !== Shortcut.JUMBLED) {
         overwritingShortcuts[shortcutName] = param.shortcuts[shortcutName];
       }
     }

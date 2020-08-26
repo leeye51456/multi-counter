@@ -14,8 +14,8 @@ class EditCountersModal extends React.Component {
       min: '0',
       max: `${Number.MAX_SAFE_INTEGER}`,
       step: '1',
-      countUpShortcut: Shortcut.noShortcut,
-      countDownShortcut: Shortcut.noShortcut,
+      countUpShortcut: Shortcut.NONE,
+      countDownShortcut: Shortcut.NONE,
     };
   }
 
@@ -75,13 +75,13 @@ class EditCountersModal extends React.Component {
   //         should be distinguished.
   handleCountUpShortcutChange = (data) => {
     this.setState({
-      countUpShortcut: new Shortcut({ ...Shortcut.noShortcut, ...data }),
+      countUpShortcut: new Shortcut({ ...Shortcut.NONE, ...data }),
     });
   }
 
   handleCountDownShortcutChange = (data) => {
     this.setState({
-      countDownShortcut: new Shortcut({ ...Shortcut.noShortcut, ...data }),
+      countDownShortcut: new Shortcut({ ...Shortcut.NONE, ...data }),
     });
   }
 

@@ -8,11 +8,11 @@ export class Shortcut {
     this.shiftKey = shiftKey;
   }
 
-  static get noShortcut() {
+  static get NONE() {
     return noShortcut;
   }
-  static get jumbledShortcut() {
-    return jumbledShortcut;;
+  static get JUMBLED() {
+    return jumbledShortcut;
   }
 
   static isValidCode(code) {

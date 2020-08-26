@@ -6,7 +6,7 @@ export class ShortcutCollection {
       if (initialShortcutCollection && initialShortcutCollection[field]) {
         this[field] = initialShortcutCollection[field];
       } else {
-        this[field] = Shortcut.noShortcut;
+        this[field] = Shortcut.NONE;
       }
     }
   }
