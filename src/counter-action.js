@@ -1,12 +1,12 @@
 import CounterData from './counter-data';
 
-const actionPresets = {
-  noOp: () => {},
-  getCountedUp: (counterData) => (
+const PRESETS = {
+  NO_OP: () => {},
+  GET_COUNTED_UP: (counterData) => (
     new CounterData({ ...counterData, value: counterData.value + counterData.step })
       .getCorrectedCounterData()
   ),
-  getCountedDown: (counterData) => (
+  GET_COUNTED_DOWN: (counterData) => (
     new CounterData({ ...counterData, value: counterData.value - counterData.step })
       .getCorrectedCounterData()
   ),
@@ -18,8 +18,8 @@ export class CounterAction {
     this.execute = action;
   }
 
-  static get actionPresets() {
-    return actionPresets;
+  static get PRESETS() {
+    return PRESETS;
   }
 }
 

@@ -66,14 +66,14 @@ class App extends React.Component {
 
   getUpdatedCounterActions = (counterActionsByShortcutId, newCounterData, oldCounterData) => {
     const shortcutActions = {
-      countUp: CounterAction.actionPresets.getCountedUp,
-      countDown: CounterAction.actionPresets.getCountedDown,
+      countUp: CounterAction.PRESETS.GET_COUNTED_UP,
+      countDown: CounterAction.PRESETS.GET_COUNTED_DOWN,
     };
     const oldShortcuts = oldCounterData && oldCounterData.shortcuts;
     const newShortcuts = newCounterData.shortcuts;
 
     counterActionsByShortcutId = { ...counterActionsByShortcutId };
-    for (const shortcutName of ShortcutCollection.shortcutNames) {
+    for (const shortcutName of ShortcutCollection.SHORTCUT_NAMES) {
       const oldShortcutId = oldShortcuts && String(oldShortcuts[shortcutName]);
       const newShortcutId = String(newShortcuts[shortcutName]);
       if (oldShortcutId === newShortcutId) {
@@ -268,7 +268,7 @@ class App extends React.Component {
     const { counters } = this.state;
 
     const overwritingShortcuts = {};
-    for (const shortcutName of ShortcutCollection.shortcutNames) {
+    for (const shortcutName of ShortcutCollection.SHORTCUT_NAMES) {
       if (param.shortcuts[shortcutName] !== Shortcut.JUMBLED) {
         overwritingShortcuts[shortcutName] = param.shortcuts[shortcutName];
       }

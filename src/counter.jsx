@@ -224,7 +224,7 @@ Counter.defaultProps = {
   name: '',
   checked: false,
   editMode: false,
-  onChange: CounterAction.actionPresets.noOp,
+  onChange: CounterAction.PRESETS.NO_OP,
 };
 
 export default Counter;

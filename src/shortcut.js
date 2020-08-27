@@ -9,13 +9,13 @@ export class Shortcut {
   }
 
   static get NONE() {
-    return noShortcut;
+    return NONE;
   }
   static get JUMBLED() {
-    return jumbledShortcut;
+    return JUMBLED;
   }
   static get NO_CHANGE() {
-    return noChange;
+    return NO_CHANGE;
   }
 
   static isValidCode(code) {
@@ -33,7 +33,7 @@ export class Shortcut {
   }
 
   getJumbledIfDiffersFrom = (comparisonTarget) => {
-    return this.equals(comparisonTarget) ? this : jumbledShortcut;
+    return this.equals(comparisonTarget) ? this : JUMBLED;
   }
 
   getStringToDisplay = () => {
@@ -70,9 +70,9 @@ export class Shortcut {
 }
 
 
-const noShortcut = new Shortcut({ keyName: '', code: '', shiftKey: false });
-const jumbledShortcut = new Shortcut(noShortcut);
-const noChange = new Shortcut(noShortcut);
+const NONE = new Shortcut({ keyName: '', code: '', shiftKey: false });
+const JUMBLED = new Shortcut(NONE);
+const NO_CHANGE = new Shortcut(NONE);
 
 
 const notShiftedKeysFromCode = {

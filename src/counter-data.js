@@ -15,11 +15,11 @@ export class CounterData {
     this.step = step;
     this.checked = checked;
     this.onChange = onChange;
-    this.shortcuts = shortcuts ? shortcuts : ShortcutCollection.emptyShortcutCollection;
+    this.shortcuts = shortcuts ? shortcuts : ShortcutCollection.EMPTY;
   }
 
-  static get manipulatorProps() {
-    return manipulatorProps;
+  static get MANIPULATOR_PROPS() {
+    return MANIPULATOR_PROPS;
   }
 
   getCorrectedValue = () => {
@@ -40,7 +40,7 @@ export class CounterData {
 
   getComparisonObject = () => {
     const resultBase = {};
-    for (const prop of manipulatorProps) {
+    for (const prop of MANIPULATOR_PROPS) {
       resultBase[prop] = this[prop];
     }
     return new CounterData(resultBase);
@@ -48,7 +48,7 @@ export class CounterData {
 
   getJumbledIfDiffersFrom = (other) => {
     const result = new CounterData(this);
-    for (const prop of manipulatorProps) {
+    for (const prop of MANIPULATOR_PROPS) {
       if (this[prop] !== other[prop]) {
         result[prop] = '';
       }
@@ -57,6 +57,6 @@ export class CounterData {
   }
 }
 
-const manipulatorProps = ['initial', 'min', 'max', 'step'];
+const MANIPULATOR_PROPS = ['initial', 'min', 'max', 'step'];
 
 export default CounterData;

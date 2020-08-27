@@ -41,7 +41,7 @@ class ShortcutCaptureForm extends React.Component {
       <input
         type="text"
         value={this.getShortcutString()}
-        onChange={CounterAction.actionPresets.noOp}
+        onChange={CounterAction.PRESETS.NO_OP}
         onKeyDown={this.handleKeyDown}
         // style={{ textAlign: 'right' }}
       />
@@ -58,7 +58,7 @@ ShortcutCaptureForm.defaultProps = {
   code: '',
   shiftKey: false,
   shortcut: Shortcut.NO_CHANGE,
-  onChange: CounterAction.actionPresets.noOp,
+  onChange: CounterAction.PRESETS.NO_OP,
 };
 
 export default ShortcutCaptureForm;
