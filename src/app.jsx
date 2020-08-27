@@ -191,29 +191,7 @@ class App extends React.Component {
     }, this.updateCheckedCountersState);
   }
 
-  openOrCloseModal = (willOpen, modal) => {
-    this.setState({ modal: willOpen ? modal : '' });
-  }
-
-  isEveryCounterChecked = () => {
-    return this.state.checkedCounters.length === this.state.counterOrder.length;
-  }
-
-  handleResetClick = () => {
-    if (this.state.checkedCounters.length === 0) {
-      return;
-    }
-
-    const countersToUpdate = this.state.checkedCounters.map((name) => ({
-      name,
-      checked: false,
-      value: this.state.counters[name].initial,
-    }));
-    this.updateCounters(countersToUpdate);
-    this.setState({ isEditModeEnabled: false });
-  }
-
-  handleRemoveClick = () => {
+  removedCheckedCounters = () => {
     if (this.state.checkedCounters.length === 0) {
       return;
     }
@@ -254,6 +232,32 @@ class App extends React.Component {
         isEditModeEnabled: false,
       }
     }, this.updateCheckedCountersState);
+  }
+
+  openOrCloseModal = (willOpen, modal) => {
+    this.setState({ modal: willOpen ? modal : '' });
+  }
+
+  isEveryCounterChecked = () => {
+    return this.state.checkedCounters.length === this.state.counterOrder.length;
+  }
+
+  handleResetClick = () => {
+    if (this.state.checkedCounters.length === 0) {
+      return;
+    }
+
+    const countersToUpdate = this.state.checkedCounters.map((name) => ({
+      name,
+      checked: false,
+      value: this.state.counters[name].initial,
+    }));
+    this.updateCounters(countersToUpdate);
+    this.setState({ isEditModeEnabled: false });
+  }
+
+  handleRemoveClick = () => {
+    this.removedCheckedCounters();
   }
 
   handleNewCounterClick = () => {
