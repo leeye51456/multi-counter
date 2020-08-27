@@ -64,7 +64,7 @@ class App extends React.Component {
     this.updateCounters(counters);
   }
 
-  getUpdatedCounterActions = (counterActionsByShortcutId, newCounterData, oldCounterData) => {
+  getUpdatedCounterActions = (counterActionsByShortcutId, { newCounterData, oldCounterData }) => {
     const shortcutActions = {
       countUp: CounterAction.PRESETS.GET_COUNTED_UP,
       countDown: CounterAction.PRESETS.GET_COUNTED_DOWN,
@@ -131,7 +131,9 @@ class App extends React.Component {
       };
       counterOrder.push(name);
 
-      const counterActionsByShortcutId = this.getUpdatedCounterActions(state.counterActionsByShortcutId, counterData);
+      const counterActionsByShortcutId = this.getUpdatedCounterActions(
+        state.counterActionsByShortcutId, { newCounterData: counterData }
+      );
 
       return {
         counterOrder,
@@ -156,7 +158,9 @@ class App extends React.Component {
 
         if (newCounterData.shortcuts) {
           counterActionsByShortcutId =
-            this.getUpdatedCounterActions(counterActionsByShortcutId, newCounterData, counters[name]);
+            this.getUpdatedCounterActions(
+              counterActionsByShortcutId, { newCounterData, oldCounterData: counters[name] }
+            );
         }
 
         counters[name] = {
@@ -207,10 +211,9 @@ class App extends React.Component {
       const counterOrder = state.counterOrder.filter((name, index) => {
         const checked = counters[name].checked;
         if (checked) {
+          const newCounterData = new CounterData({ ...counters[name], shortcuts: ShortcutCollection.EMPTY });
           counterActionsByShortcutId = this.getUpdatedCounterActions(
-            counterActionsByShortcutId,
-            new CounterData({ ...counters[name], shortcuts: ShortcutCollection.EMPTY }),
-            counters[name]
+            counterActionsByShortcutId, { newCounterData, oldCounterData: counters[name] }
           );
 
           delete counterIndexesByName[name];
