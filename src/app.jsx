@@ -221,12 +221,27 @@ class App extends React.Component {
     this.setState((state) => {
       const counterIndexesByName = { ...state.counterIndexesByName };
       const counters = { ...state.counters };
+      const counterActionsByShortcutId = { ...state.counterActionsByShortcutId };
 
-      const counterOrder = state.counterOrder.filter((name) => {
+      let removed = 0;
+      const counterOrder = state.counterOrder.filter((name, index) => {
         const checked = counters[name].checked;
         if (checked) {
-          delete counterIndexesByName[name]; // FIXME - Other indexes should be updated.
+          const shortcuts = counters[name].shortcuts;
+          for (const shortcutName of ShortcutCollection.SHORTCUT_NAMES) {
+            const shortcutId = String(shortcuts[shortcutName]);
+            counterActionsByShortcutId[shortcutId] =
+              counterActionsByShortcutId[shortcutId].filter((action) => action.target !== name);
+            if (counterActionsByShortcutId[shortcutId].length === 0) {
+              delete counterActionsByShortcutId[shortcutId];
+            }
+          }
+
+          delete counterIndexesByName[name];
           delete counters[name];
+          removed += 1;
+        } else {
+          counterIndexesByName[name] = index - removed;
         }
         return !checked;
       });
@@ -235,6 +250,7 @@ class App extends React.Component {
         counterOrder,
         counterIndexesByName,
         counters,
+        counterActionsByShortcutId,
         isEditModeEnabled: false,
       }
     }, this.updateCheckedCountersState);
