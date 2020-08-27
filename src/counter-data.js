@@ -22,6 +22,22 @@ export class CounterData {
     return manipulatorProps;
   }
 
+  getCorrectedValue = () => {
+    if (this.value < this.min) {
+      return this.min;
+    } else if (this.value > this.max) {
+      return this.max;
+    }
+    return this.value;
+  }
+
+  getCorrectedCounterData = () => {
+    return new CounterData({
+      ...this,
+      value: this.getCorrectedValue(),
+    });
+  }
+
   getComparisonObject = () => {
     const resultBase = {};
     for (const prop of manipulatorProps) {

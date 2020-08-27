@@ -1,26 +1,15 @@
-const getCorrectCounterValue = (counterData) => {
-  const { value, min, max } = counterData;
-  if (value < min) {
-    return min;
-  } else if (value > max) {
-    return max;
-  }
-  return value;
-}
-
-const getNewCounterDataWithValue = (counterData, newValue) => {
-  const newCounterData = {
-    ...counterData,
-    value: newValue,
-  };
-  newCounterData.value = getCorrectCounterValue(newCounterData);
-  return newCounterData;
-}
+import CounterData from './counter-data';
 
 const actionPresets = {
   noOp: () => {},
-  getCountedUp: (counterData) => getNewCounterDataWithValue(counterData, counterData.value + counterData.step),
-  getCountedDown: (counterData) => getNewCounterDataWithValue(counterData, counterData.value - counterData.step),
+  getCountedUp: (counterData) => (
+    new CounterData({ ...counterData, value: counterData.value + counterData.step })
+      .getCorrectedCounterData()
+  ),
+  getCountedDown: (counterData) => (
+    new CounterData({ ...counterData, value: counterData.value - counterData.step })
+      .getCorrectedCounterData()
+  ),
 };
 
 export class CounterAction {
