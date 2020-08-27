@@ -81,12 +81,14 @@ class App extends React.Component {
       }
 
       if (oldShortcutId) {
-        const counterActionsForShortcut =
-          utils.initializeOrGetArrayProperty(counterActionsByShortcutId, oldShortcutId);
+        const counterActionsForShortcut = counterActionsByShortcutId[oldShortcutId];
         counterActionsByShortcutId[oldShortcutId] = counterActionsForShortcut.filter((action) => (
           action.target !== oldCounterData.name
           || action.execute !== shortcutActions[shortcutName]
         ));
+        if (counterActionsByShortcutId.length === 0) {
+          delete counterActionsByShortcutId[oldShortcutId];
+        }
       }
 
       if (newShortcutId) {
@@ -199,21 +201,17 @@ class App extends React.Component {
     this.setState((state) => {
       const counterIndexesByName = { ...state.counterIndexesByName };
       const counters = { ...state.counters };
-      const counterActionsByShortcutId = { ...state.counterActionsByShortcutId };
+      let counterActionsByShortcutId = { ...state.counterActionsByShortcutId };
 
       let removed = 0;
       const counterOrder = state.counterOrder.filter((name, index) => {
         const checked = counters[name].checked;
         if (checked) {
-          const shortcuts = counters[name].shortcuts;
-          for (const shortcutName of ShortcutCollection.SHORTCUT_NAMES) {
-            const shortcutId = String(shortcuts[shortcutName]);
-            counterActionsByShortcutId[shortcutId] =
-              counterActionsByShortcutId[shortcutId].filter((action) => action.target !== name);
-            if (counterActionsByShortcutId[shortcutId].length === 0) {
-              delete counterActionsByShortcutId[shortcutId];
-            }
-          }
+          counterActionsByShortcutId = this.getUpdatedCounterActions(
+            counterActionsByShortcutId,
+            new CounterData({ ...counters[name], shortcuts: ShortcutCollection.EMPTY }),
+            counters[name]
+          );
 
           delete counterIndexesByName[name];
           delete counters[name];
