@@ -76,11 +76,11 @@ class App extends React.Component {
     for (const shortcutName of ShortcutCollection.SHORTCUT_NAMES) {
       const oldShortcutId = oldShortcuts && String(oldShortcuts[shortcutName]);
       const newShortcutId = String(newShortcuts[shortcutName]);
-      if (oldShortcutId === newShortcutId) {
+      if (oldShortcutId && newShortcutId && oldShortcutId === newShortcutId) {
         continue;
       }
 
-      if (oldShortcutId) {
+      if (oldShortcutId && newShortcuts[shortcutName] === Shortcut.NONE) {
         const counterActionsForShortcut = counterActionsByShortcutId[oldShortcutId];
         counterActionsByShortcutId[oldShortcutId] = counterActionsForShortcut.filter((action) => (
           action.target !== oldCounterData.name
@@ -149,7 +149,7 @@ class App extends React.Component {
       const counters = { ...state.counters };
 
       let counterActionsByShortcutId = { ...state.counterActionsByShortcutId };
-      for (const newCounterData of updatedCounters) {
+      for (let newCounterData of updatedCounters) {
         const { name } = newCounterData;
         const targetComponentIndex = state.counterIndexesByName[name];
         if (typeof targetComponentIndex !== 'number') {
@@ -157,10 +157,21 @@ class App extends React.Component {
         }
 
         if (newCounterData.shortcuts) {
-          counterActionsByShortcutId =
-            this.getUpdatedCounterActions(
-              counterActionsByShortcutId, { newCounterData, oldCounterData: counters[name] }
-            );
+          counterActionsByShortcutId = this.getUpdatedCounterActions(
+            counterActionsByShortcutId, { newCounterData, oldCounterData: counters[name] }
+          );
+
+          const correctedShortcuts = {};
+          for (const shortcutName of Object.keys(newCounterData.shortcuts)) {
+            const providedShortcut = newCounterData.shortcuts[shortcutName];
+            const hasChange = String(providedShortcut) || providedShortcut === Shortcut.NONE;
+            correctedShortcuts[shortcutName] = hasChange ? providedShortcut : counters[name].shortcuts[shortcutName];
+          }
+          newCounterData = new CounterData({
+            ...counters[name],
+            ...newCounterData,
+            shortcuts: new ShortcutCollection(correctedShortcuts),
+          });
         }
 
         counters[name] = {
