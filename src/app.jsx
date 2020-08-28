@@ -86,7 +86,7 @@ class App extends React.Component {
           action.target !== oldCounterData.name
           || action.execute !== shortcutActions[shortcutName]
         ));
-        if (counterActionsByShortcutId.length === 0) {
+        if (counterActionsByShortcutId[oldShortcutId].length === 0) {
           delete counterActionsByShortcutId[oldShortcutId];
         }
       }
