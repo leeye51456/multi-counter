@@ -54,13 +54,7 @@ export class Counter extends React.Component {
   }
 
   handleEditClick = () => {
-    this.setState((state, props) => {
-      props.onChange({
-        editMode: true,
-        name: props.name,
-      });
-      return { tempValue: props.value };
-    });
+    this.props.onEditClick(this.props.name);
   }
 
   handleCountDownClick = () => {
@@ -137,15 +131,6 @@ export class Counter extends React.Component {
           <li style={{display: normalOnly}}>
             <button
               type="button"
-              onClick={this.handleEditClick}
-            >
-              Edit
-            </button>
-          </li>
-
-          <li style={{display: normalOnly}}>
-            <button
-              type="button"
               onClick={this.handleCountDownClick}
             >
               -
@@ -167,6 +152,15 @@ export class Counter extends React.Component {
               value={this.state.tempValue}
               onChange={this.handleValueInputChange}
             />
+          </li>
+
+          <li style={{display: globalEditModeOnly}}>
+            <button
+              type="button"
+              onClick={this.handleEditClick}
+            >
+              Edit
+            </button>
           </li>
 
           <li style={{display: editableOnly}}>
@@ -213,6 +207,7 @@ Counter.propTypes = {
   checked: PropTypes.bool,
   editMode: PropTypes.bool,
   onChange: PropTypes.func,
+  onEditClick: PropTypes.func,
 };
 
 Counter.defaultProps = {
@@ -225,6 +220,7 @@ Counter.defaultProps = {
   checked: false,
   editMode: false,
   onChange: CounterAction.PRESETS.NO_OP,
+  onEditClick: CounterAction.PRESETS.NO_OP,
 };
 
 export default Counter;

@@ -24,6 +24,7 @@ class App extends React.Component {
       counters: {},
       counterActionsByShortcutId: {},
       checkedCounters: [],
+      singleCounterToEdit: null,
       modal: '',
       isEditModeEnabled: false,
     };
@@ -131,7 +132,8 @@ class App extends React.Component {
       counterData = new CounterData({
         ...counterData,
         shortcuts: correctedShortcuts,
-        onChange
+        onChange,
+        onEditClick: this.handleSingleCounterEditClick,
       });
 
       const counters = {
@@ -337,8 +339,11 @@ class App extends React.Component {
     this.updateCounters(newCounters);
 
     this.openOrCloseModal(false);
-    this.checkOrUncheckAll(false);
-    this.setState({ isEditModeEnabled: false });
+    this.setState((state) => ({
+      checkedCounters: state.singleCounterToEdit ? state.checkedCounters : [],
+      singleCounterToEdit: null,
+      isEditModeEnabled: !!state.singleCounterToEdit,
+    }));
   }
 
   handleModalCancel = () => {
@@ -356,6 +361,14 @@ class App extends React.Component {
 
   handleSelectAllClick = () => {
     this.checkOrUncheckAll(!this.isEveryCounterChecked());
+  }
+
+  handleSingleCounterEditClick = (name) => {
+    this.setState((state) => ({
+      singleCounterToEdit: state.counters[name],
+    }), () => {
+      this.openOrCloseModal(true, 'EditCountersModal');
+    });
   }
 
   render = () => {
@@ -451,8 +464,8 @@ class App extends React.Component {
         />
 
         <EditCountersModal
-          counters={this.state.counters}
-          names={this.state.checkedCounters}
+          counters={this.state.singleCounterToEdit ? [this.state.singleCounterToEdit] : this.state.counters}
+          names={this.state.singleCounterToEdit ? [this.state.singleCounterToEdit.name] : this.state.checkedCounters}
           isOpen={this.state.modal === 'EditCountersModal'}
           onSubmit={this.handleEditCountersModalSubmit}
           onCancel={this.handleModalCancel}

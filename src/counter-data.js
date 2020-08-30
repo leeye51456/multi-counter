@@ -3,7 +3,7 @@ import ShortcutCollection from './shortcut-collection';
 
 export class CounterData {
   constructor(param) {
-    const { name, value, initial, min, max, step, checked, onChange, shortcuts } = {
+    const { name, value, initial, min, max, step, checked, onChange, onEditClick, shortcuts } = {
       ...Counter.defaultProps,
       ...param,
     };
@@ -15,6 +15,7 @@ export class CounterData {
     this.step = step;
     this.checked = checked;
     this.onChange = onChange;
+    this.onEditClick = onEditClick;
     this.shortcuts = shortcuts ? shortcuts : ShortcutCollection.EMPTY;
   }
 
