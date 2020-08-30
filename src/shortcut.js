@@ -51,16 +51,11 @@ export class Shortcut {
   }
 
   equals = (other) => {
-    if (this.shiftKey !== other.shiftKey) {
-      return false;
-    } else if (this.code && other.code) {
-      return this.code === other.code;
-    } else if ((this.code && !other.code) || (!this.code && other.code)) {
-      return false;
-    } else if (this.keyName && other.keyName) {
-      return this.keyName === other.keyName;
-    }
-    return false;
+    return (
+      this.shiftKey === other.shiftKey
+      && this.code === other.code
+      && this.keyName === other.keyName
+    );
   }
 
   toString = () => {
