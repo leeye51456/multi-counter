@@ -351,6 +351,7 @@ class App extends React.Component {
 
   handleModalCancel = () => {
     this.openOrCloseModal(false);
+    this.setState({ singleCounterToEdit: null });
   }
 
   handleEditCounterListClick = () => {
@@ -380,6 +381,15 @@ class App extends React.Component {
       return this.getNewCounter(this.state.counters[name]);
     });
     const selectAllLabel = this.isEveryCounterChecked() ? 'Unselect All' : 'Select All';
+    const singleCounterToEdit = this.state.singleCounterToEdit;
+    const editCountersModalProps = {
+      counters: (
+        singleCounterToEdit
+        ? { [singleCounterToEdit.name]: singleCounterToEdit }
+        : this.state.counters
+      ),
+      names: singleCounterToEdit ? [singleCounterToEdit.name] : this.state.checkedCounters,
+    };
 
     return (
       <div className="App">
@@ -467,8 +477,8 @@ class App extends React.Component {
         />
 
         <EditCountersModal
-          counters={this.state.singleCounterToEdit ? [this.state.singleCounterToEdit] : this.state.counters}
-          names={this.state.singleCounterToEdit ? [this.state.singleCounterToEdit.name] : this.state.checkedCounters}
+          counters={editCountersModalProps.counters}
+          names={editCountersModalProps.names}
           isOpen={this.state.modal === 'EditCountersModal'}
           onSubmit={this.handleEditCountersModalSubmit}
           onCancel={this.handleModalCancel}
