@@ -80,7 +80,12 @@ class App extends React.Component {
         continue;
       }
 
-      if (oldShortcutId && newShortcuts[shortcutName] === Shortcut.NONE) {
+      const shouldOldShortcutBeRemoved = (
+        oldShortcutId
+        && newShortcuts[shortcutName] !== Shortcut.JUMBLED
+        && newShortcuts[shortcutName] !== Shortcut.NO_CHANGE
+      );
+      if (shouldOldShortcutBeRemoved) {
         const counterActionsForShortcut = counterActionsByShortcutId[oldShortcutId];
         counterActionsByShortcutId[oldShortcutId] = counterActionsForShortcut.filter((action) => (
           action.target !== oldCounterData.name
