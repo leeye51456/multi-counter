@@ -177,7 +177,7 @@ class App extends React.Component {
           );
 
           const correctedShortcuts = {};
-          for (const shortcutName of Object.keys(newCounterData.shortcuts)) {
+          for (const shortcutName of ShortcutCollection.SHORTCUT_NAMES) {
             const providedShortcut = newCounterData.shortcuts[shortcutName];
             const hasChange = String(providedShortcut) || providedShortcut === Shortcut.NONE;
             correctedShortcuts[shortcutName] = hasChange ? providedShortcut : counters[name].shortcuts[shortcutName];
