@@ -340,8 +340,10 @@ class App extends React.Component {
     this.updateCounters(newCounters);
 
     this.openOrCloseModal(false);
+    if (!this.state.singleCounterToEdit) {
+      this.checkOrUncheckAll(false);
+    }
     this.setState((state) => ({
-      checkedCounters: state.singleCounterToEdit ? state.checkedCounters : [],
       singleCounterToEdit: null,
       isEditModeEnabled: !!state.singleCounterToEdit,
     }));
