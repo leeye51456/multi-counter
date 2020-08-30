@@ -58,6 +58,6 @@ export class CounterData {
   }
 }
 
-const MANIPULATOR_PROPS = ['initial', 'min', 'max', 'step'];
+const MANIPULATOR_PROPS = ['value', 'initial', 'min', 'max', 'step'];
 
 export default CounterData;

@@ -10,6 +10,7 @@ class EditCountersModal extends React.Component {
     super(props);
 
     this.state = {
+      value: '0',
       initial: '0',
       min: '0',
       max: `${Number.MAX_SAFE_INTEGER}`,
@@ -38,12 +39,18 @@ class EditCountersModal extends React.Component {
         firstCounter.shortcuts = firstCounter.shortcuts.getDifferenceMarked(currentCounter.shortcuts);
       }
 
-      const { initial, min, max, step, shortcuts } = firstCounter;
+      const { value, initial, min, max, step, shortcuts } = firstCounter;
       return {
-        initial, min, max, step,
+        value, initial, min, max, step,
         countUpShortcut: shortcuts.countUp,
         countDownShortcut: shortcuts.countDown,
       };
+    });
+  }
+
+  handleValueChange = (event) => {
+    this.setState({
+      value: event.target.value,
     });
   }
 
@@ -84,9 +91,9 @@ class EditCountersModal extends React.Component {
   }
 
   handleSubmitClick = () => {
-    const { initial, min, max, step, countUpShortcut, countDownShortcut } = this.state;
+    const { value, initial, min, max, step, countUpShortcut, countDownShortcut } = this.state;
     const submitArgument = {
-      initial, min, max, step,
+      value, initial, min, max, step,
       shortcuts: new ShortcutCollection({
         countUp: countUpShortcut,
         countDown: countDownShortcut,
@@ -139,6 +146,18 @@ class EditCountersModal extends React.Component {
             <label>
               Counters: {this.props.names.join(', ')}
             </label>
+          </li>
+          <li>
+            <label>
+              Value (Integer)
+            </label>
+            <input
+              type="number"
+              inputMode="numeric"
+              pattern="-?\\d*"
+              value={this.state.value}
+              onChange={this.handleValueChange}
+            />
           </li>
           <li>
             <label>

@@ -325,6 +325,7 @@ class App extends React.Component {
 
     const newCounters = param.names.map((name) => {
       const {
+        value = counters[name].value,
         initial = counters[name].initial,
         min = counters[name].min,
         max = counters[name].max,
@@ -332,7 +333,7 @@ class App extends React.Component {
         shortcuts = counters[name].shortcuts,
       } = param;
       return {
-        name, initial, min, max, step,
+        name, value, initial, min, max, step,
         shortcuts: new ShortcutCollection({ ...shortcuts, ...overwritingShortcuts }),
       };
     });
