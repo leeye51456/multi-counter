@@ -114,10 +114,20 @@ class App extends React.Component {
   appendCounter = (counterData) => {
     this.setState((state) => {
       const { name } = counterData;
+      const correctedShortcuts = new ShortcutCollection(counterData.shortcuts);
+      for (const shortcutName of ShortcutCollection.SHORTCUT_NAMES) {
+        if (Shortcut.NONE.equals(correctedShortcuts[shortcutName])) {
+          correctedShortcuts[shortcutName] = Shortcut.NONE;
+        }
+      }
       const onChange = (newCounterData) => {
         this.updateCounters([newCounterData]);
       };
-      counterData = new CounterData({ ...counterData, onChange });
+      counterData = new CounterData({
+        ...counterData,
+        shortcuts: correctedShortcuts,
+        onChange
+      });
 
       const counters = {
         ...state.counters,
