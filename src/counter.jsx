@@ -4,18 +4,6 @@ import { GlobalEditModeContext } from './contexts';
 import CounterAction from './counter-action';
 
 export class Counter extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      tempValue: '',
-    };
-  }
-
-  componentDidUpdate = () => {
-    this.callOnChangeByValue(this.props.value);
-  }
-
   getCorrectValue = (newValue) => {
     if (newValue < this.props.min) {
       newValue = this.props.min;
@@ -65,48 +53,21 @@ export class Counter extends React.Component {
     this.countUp();
   }
 
-  handleValueInputChange = (event) => {
-    this.setState({ tempValue: event.target.value });
-  }
-
-  handleCancelClick = () => {
-    this.setState((state, props) => {
-      props.onChange({
-        editMode: false,
-        name: props.name,
-      });
-      return { tempValue: '' };
-    });
-  }
-
-  handleApplyClick = () => {
-    this.setState((state) => {
-      const newValue = Number.parseInt(state.tempValue, 10);
-      if (!isNaN(newValue)) {
-        this.callOnChangeByValue(newValue, { editMode: false });
-      }
-      return { tempValue: '' };
-    });
-  }
-
   handleResetClick = () => {
     this.callOnChangeByValue(this.props.initial);
   }
 
   render = () => {
-    const isThisEditable = this.props.editMode;
     const isGlobalEditModeEnabled = this.context;
 
     const always = 'inline-block';
-    const normalOnly = isThisEditable || isGlobalEditModeEnabled ? 'none' : 'inline-block';
-    const globalEditModeOnly = isGlobalEditModeEnabled ? 'inline-block' : 'none';
-    const editableOnly = isThisEditable ? 'inline-block' : 'none';
-    const nonEditableOnly = isThisEditable ? 'none' : 'inline-block';
+    const normalOnly = isGlobalEditModeEnabled ? 'none' : 'inline-block';
+    const editModeOnly = isGlobalEditModeEnabled ? 'inline-block' : 'none';
 
     return (
       <div>
         <ul>
-          <li style={{display: globalEditModeOnly}}>
+          <li style={{display: editModeOnly}}>
             <input
               type="checkbox"
               checked={this.props.checked}
@@ -120,7 +81,7 @@ export class Counter extends React.Component {
             </label>
           </li>
 
-          <li style={{display: nonEditableOnly}}>
+          <li style={{display: always}}>
             <input
               type="text"
               value={this.props.value}
@@ -146,15 +107,7 @@ export class Counter extends React.Component {
             </button>
           </li>
 
-          <li style={{display: editableOnly}}>
-            <input
-              type="text"
-              value={this.state.tempValue}
-              onChange={this.handleValueInputChange}
-            />
-          </li>
-
-          <li style={{display: globalEditModeOnly}}>
+          <li style={{display: editModeOnly}}>
             <button
               type="button"
               onClick={this.handleEditClick}
@@ -163,25 +116,7 @@ export class Counter extends React.Component {
             </button>
           </li>
 
-          <li style={{display: editableOnly}}>
-            <button
-              type="button"
-              onClick={this.handleCancelClick}
-            >
-              X
-            </button>
-          </li>
-
-          <li style={{display: editableOnly}}>
-            <button
-              type="button"
-              onClick={this.handleApplyClick}
-            >
-              OK
-            </button>
-          </li>
-
-          <li style={{display: globalEditModeOnly}}>
+          <li style={{display: editModeOnly}}>
             <button
               type="button"
               onClick={this.handleResetClick}
@@ -205,7 +140,6 @@ Counter.propTypes = {
   step: PropTypes.number,
   name: PropTypes.string,
   checked: PropTypes.bool,
-  editMode: PropTypes.bool,
   onChange: PropTypes.func,
   onEditClick: PropTypes.func,
 };
@@ -218,7 +152,6 @@ Counter.defaultProps = {
   step: 1,
   name: '',
   checked: false,
-  editMode: false,
   onChange: CounterAction.PRESETS.NO_OP,
   onEditClick: CounterAction.PRESETS.NO_OP,
 };
