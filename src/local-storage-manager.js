@@ -3,15 +3,22 @@ import Shortcut from './shortcut';
 import ShortcutCollection from './shortcut-collection';
 
 
+const ITEM_NAMES = {
+  COUNTER_ORDER: 'counterOrder',
+  COUNTER_PREFIX: 'counter_',
+  _STORAGE_TEST: '__storage_test__',
+};
+
+
 const getCounterItemName = (name) => {
-  return `counter_${name}`;
-}
+  return ITEM_NAMES.COUNTER_PREFIX + name;
+};
 
 
 export const available = (() => {
   try {
-    localStorage.setItem('__storage_test__', '__storage_test__');
-    localStorage.removeItem('__storage_test__');
+    localStorage.setItem(ITEM_NAMES._STORAGE_TEST, ITEM_NAMES._STORAGE_TEST);
+    localStorage.removeItem(ITEM_NAMES._STORAGE_TEST);
     return true;
   } catch (e) {
     return false;
@@ -19,20 +26,36 @@ export const available = (() => {
 })();
 
 
-export const getCounterOrder = () => {
+export const initialize = () => {
   if (!available) {
     return null;
   }
 
-  const counterOrderString = window.localStorage.getItem('counterOrder');
-  const counterOrder = JSON.parse(counterOrderString);
-  console.log(counterOrderString, counterOrder);
-  if (counterOrder.constructor !== Array) {
-    window.localStorage.setItem('counterOrder', '[]');
-    return [];
+  clear();
+  const INITIAL_COUNTER_NAME = 'Sample Counter';
+  setCounterOrder([INITIAL_COUNTER_NAME]);
+  setCounterData(new CounterData({ name: INITIAL_COUNTER_NAME }));
+  return true;
+};
+
+
+export const getCounterOrder = (isSecondTrial) => {
+  if (!available) {
+    return null;
   }
 
-  return counterOrder;
+  const counterOrderString = localStorage.getItem(ITEM_NAMES.COUNTER_ORDER);
+  const counterOrder = JSON.parse(counterOrderString);
+
+  if (counterOrder && counterOrder.constructor === Array) {
+    return counterOrder;
+  }
+
+  if (isSecondTrial) {
+    return null;
+  }
+  initialize();
+  return getCounterOrder(true);
 };
 
 export const setCounterOrder = (counterOrder) => {
@@ -40,7 +63,7 @@ export const setCounterOrder = (counterOrder) => {
     return null;
   }
 
-  localStorage.setItem('counterOrder', JSON.stringify(counterOrder));
+  localStorage.setItem(ITEM_NAMES.COUNTER_ORDER, JSON.stringify(counterOrder));
   return true;
 };
 
@@ -52,7 +75,6 @@ export const getCounterData = (name) => {
 
   const counterDataString = localStorage.getItem(getCounterItemName(name));
   const counterData = JSON.parse(counterDataString);
-  console.log(counterDataString, counterData);
   if (!counterData) {
     return null;
   }
@@ -83,7 +105,7 @@ export const setCounterData = (counterData) => {
     storedCounterData[property] = counterData[property];
   }
 
-  localStorage.setItem(counterData.name, JSON.stringify(storedCounterData));
+  localStorage.setItem(getCounterItemName(counterData.name), JSON.stringify(storedCounterData));
   return true;
 };
 
@@ -95,7 +117,7 @@ export const removeCounterData = (name) => {
 
   localStorage.removeItem(getCounterItemName(name));
   return true;
-}
+};
 
 
 export const clear = () => {
@@ -105,11 +127,12 @@ export const clear = () => {
 
   localStorage.clear();
   return true;
-}
+};
 
 
 const localStorageManager = {
   available,
+  initialize,
   getCounterOrder, setCounterOrder,
   getCounterData, setCounterData, removeCounterData,
   clear,
