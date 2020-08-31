@@ -238,7 +238,7 @@ class App extends React.Component {
     }, this.updateCheckedCountersState);
   }
 
-  removedCheckedCounters = () => {
+  removeCheckedCounters = () => {
     if (this.state.checkedCounters.length === 0) {
       return;
     }
@@ -302,7 +302,7 @@ class App extends React.Component {
   }
 
   handleRemoveClick = () => {
-    this.removedCheckedCounters();
+    this.removeCheckedCounters();
   }
 
   handleClearClick = () => {
