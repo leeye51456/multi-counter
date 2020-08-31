@@ -28,6 +28,17 @@ export const isMacOs = (
 );
 
 
+export const localStorageAvailable = (() => {
+  try {
+    localStorage.setItem('__storage_test__', '__storage_test__');
+    localStorage.removeItem('__storage_test__');
+    return true;
+  } catch (e) {
+    return false;
+  }
+})();
+
+
 const textInputTypes = [
   'date', 'datetime-local', 'email', 'month', 'number', 'password', 'search', 'tel', 'text', 'time', 'url', 'week'
 ];
@@ -45,6 +56,7 @@ const utils = {
   includes,
   initializeOrGetArrayProperty,
   isMacOs,
+  localStorageAvailable,
   isTextForm,
 };
 export default utils;
