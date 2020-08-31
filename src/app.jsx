@@ -160,6 +160,9 @@ class App extends React.Component {
         state.counterActionsByShortcutId, { newCounterData: counterData }
       );
 
+      localStorageManager.setCounterOrder(counterOrder);
+      localStorageManager.setCounterData(counterData);
+
       return {
         counterOrder,
         counterIndexesByName,
@@ -203,6 +206,8 @@ class App extends React.Component {
           ...counters[name],
           ...newCounterData,
         };
+
+        localStorageManager.setCounterData(counters[name]);
       }
 
       return { counters, counterActionsByShortcutId };
@@ -254,12 +259,15 @@ class App extends React.Component {
 
           delete counterIndexesByName[name];
           delete counters[name];
+          localStorageManager.removeCounterData(name);
           removed += 1;
         } else {
           counterIndexesByName[name] = index - removed;
         }
         return !checked;
       });
+
+      localStorageManager.setCounterOrder(counterOrder);
 
       return {
         counterOrder,
