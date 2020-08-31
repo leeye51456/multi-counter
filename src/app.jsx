@@ -8,6 +8,7 @@ import CounterAction from './counter-action';
 import CounterData from './counter-data';
 import Shortcut from './shortcut';
 import ShortcutCollection from './shortcut-collection';
+import localStorageManager from './local-storage-manager';
 import utils from './utils';
 
 ReactModal.setAppElement('#root');
@@ -31,7 +32,7 @@ class App extends React.Component {
   componentDidMount = () => {
     document.addEventListener('keydown', this.handleDocumentKeyDown);
 
-    this.appendCounter(new CounterData({ name: 'Sample Counter' }));
+    this.loadCounters();
   }
 
   componentWillUnmount = () => {
@@ -61,6 +62,15 @@ class App extends React.Component {
 
     const counters = counterActions.map((action) => action.execute({ ...this.state.counters[action.target] }));
     this.updateCounters(counters);
+  }
+
+  loadCounters = () => {
+    for (const name of localStorageManager.getCounterOrder()) {
+      const counter = localStorageManager.getCounterData(name);
+      if (counter) {
+        this.appendCounter(counter);
+      }
+    }
   }
 
   getUpdatedCounterActions = (counterActionsByShortcutId, { newCounterData, oldCounterData }) => {
