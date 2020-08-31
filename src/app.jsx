@@ -305,6 +305,13 @@ class App extends React.Component {
     this.removedCheckedCounters();
   }
 
+  handleClearClick = () => {
+    if (window.confirm('Are you sure to remove all counters?')) {
+      localStorageManager.initialize();
+      window.location.reload();
+    }
+  }
+
   handleNewCounterClick = () => {
     this.openOrCloseModal(true, 'AddNewCounterModal');
   }
@@ -480,6 +487,14 @@ class App extends React.Component {
                 onClick={this.handleRemoveClick}
               >
                 Remove Selected Counters
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                onClick={this.handleClearClick}
+              >
+                Clear Counters
               </button>
             </li>
           </ul>
