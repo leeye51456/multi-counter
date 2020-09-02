@@ -462,6 +462,7 @@ class App extends React.Component {
               <button
                 type="button"
                 onClick={this.handleResetClick}
+                className="button-with-icon"
               >
                 {/* Reset Selected Counters */}
                 [Rs]
@@ -473,6 +474,7 @@ class App extends React.Component {
               <button
                 type="button"
                 onClick={this.handleRemoveClick}
+                className="button-with-icon"
               >
                 {/* Remove Selected Counters */}
                 [Rm]
