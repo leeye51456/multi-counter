@@ -379,12 +379,12 @@ class App extends React.Component {
   }
 
   handleEditCounterListClick = () => {
-    this.setState({ isEditModeEnabled: true });
-  }
-
-  handleExitEditModeClick = () => {
     this.checkOrUncheckAll(false);
-    this.setState({ isEditModeEnabled: false });
+    this.setState((state) => {
+      return {
+        isEditModeEnabled: !state.isEditModeEnabled,
+      };
+    });
   }
 
   handleSelectAllClick = () => {
