@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { GlobalEditModeContext } from './contexts';
 import CounterAction from './counter-action';
 
@@ -60,14 +61,20 @@ export class Counter extends React.Component {
   render = () => {
     const isGlobalEditModeEnabled = this.context;
 
-    const always = 'inline-block';
-    const normalOnly = isGlobalEditModeEnabled ? 'none' : 'inline-block';
-    const editModeOnly = isGlobalEditModeEnabled ? 'inline-block' : 'none';
+    const classes = {
+      counter: classNames('counter', { 'counter-checked': this.props.checked }),
+      counterElement: {
+        normalOnly: classNames('counter-element', { 'hidden': isGlobalEditModeEnabled }),
+        editModeOnly: classNames('counter-element', { 'hidden': !isGlobalEditModeEnabled }),
+      },
+    };
 
     return (
-      <div>
+      <div className={classes.counter}>
         <ul>
-          <li style={{display: editModeOnly}}>
+          {/* TODO - Hide this checkbox after implementing counter-checked css. */}
+          {/* <li className="hidden"> */}
+          <li className={classes.counterElement.editModeOnly}>
             <input
               type="checkbox"
               checked={this.props.checked}
@@ -75,42 +82,46 @@ export class Counter extends React.Component {
             />
           </li>
 
-          <li style={{display: always}}>
-            <label>
+          <li className="counter-element">
+            <label className="counter-label">
               {this.props.name}
             </label>
           </li>
 
-          <li style={{display: always}}>
+          <li className="counter-element">
             <input
               type="text"
               value={this.props.value}
               readOnly={true}
+              className="counter-value"
             />
           </li>
 
-          <li style={{display: normalOnly}}>
+          <li className={classes.counterElement.normalOnly}>
             <button
               type="button"
               onClick={this.handleCountDownClick}
+              className="button-with-icon"
             >
               -
             </button>
           </li>
 
-          <li style={{display: normalOnly}}>
+          <li className={classes.counterElement.normalOnly}>
             <button
               type="button"
               onClick={this.handleCountUpClick}
+              className="button-with-icon"
             >
               +
             </button>
           </li>
 
-          <li style={{display: editModeOnly}}>
+          <li className={classes.counterElement.editModeOnly}>
             <button
               type="button"
               onClick={this.handleEditClick}
+              className="button-with-icon"
             >
               Edit
             </button>
