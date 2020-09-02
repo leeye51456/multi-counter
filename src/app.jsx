@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactModal from 'react-modal';
+import classNames from 'classnames';
 import Counter from './counter';
 import AddNewCounterModal from './add-new-counter-modal';
 import EditCountersModal from './edit-counters-modal';
@@ -400,10 +401,17 @@ class App extends React.Component {
 
   render = () => {
     const isEditModeEnabled = this.state.isEditModeEnabled;
+    const classes = {
+      headerItem: {
+        normalOnly: classNames('header-item', { 'hidden': isEditModeEnabled }),
+        editModeOnly: classNames('header-item', { 'hidden': !isEditModeEnabled }),
+      },
+      addNewCounterButton: classNames('button-with-icon', { 'hidden': isEditModeEnabled }),
+    };
+
     const counterComponents = this.state.counterOrder.slice().map((name) => {
       return this.getNewCounter(this.state.counters[name]);
     });
-    const selectAllLabel = this.isEveryCounterChecked() ? 'Unselect All' : 'Select All';
     const singleCounterToEdit = this.state.singleCounterToEdit;
     const editCountersModalProps = {
       counters: (
@@ -416,89 +424,107 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <header>
-          {/* TODO - Add header */}
-        </header>
 
-        <section>
-          <GlobalEditModeContext.Provider
-            value={this.state.isEditModeEnabled}
-          >
-            {counterComponents}
-          </GlobalEditModeContext.Provider>
-        </section>
+        <header className="header">
+          <ul className="header-item-group group-left">
+            <li className={classes.headerItem.normalOnly}>
+              <h1 className="app-title">
+                MultiCounter
+              </h1>
+            </li>
 
-        <aside>
-          <ul style={{display: isEditModeEnabled ? 'none' : 'block'}}>
-            <li>
-              <button
-                type="button"
-                onClick={this.handleNewCounterClick}
-              >
-                Add New Counter
-              </button>
-            </li>
-            <li>
-              <button
-                type="button"
-                onClick={this.handleEditCounterListClick}
-              >
-                Edit Counter List
-              </button>
-            </li>
-          </ul>
-
-          <ul style={{display: isEditModeEnabled ? 'block' : 'none'}}>
-            <li>
-              <button
-                type="button"
-                onClick={this.handleExitEditModeClick}
-              >
-                Exit Edit Mode
-              </button>
-            </li>
-            <li>
+            {/* TODO - Hide this on devices which can show sidebar. */}
+            <li className={classes.headerItem.editModeOnly}>
               <button
                 type="button"
                 onClick={this.handleSelectAllClick}
+                className="button-with-icon"
               >
-                {selectAllLabel}
+                {/* Select/Unselect All */}
+                [S]
               </button>
             </li>
-            <li>
+
+            {/* TODO - Hide this on devices which can show sidebar. */}
+            <li className={classes.headerItem.editModeOnly}>
               <button
                 type="button"
                 onClick={this.handleEditCountersClick}
+                className="button-with-icon"
               >
-                Edit Selected Counters
+                {/* Edit Selected Counters */}
+                [E]
               </button>
             </li>
-            <li>
+
+            {/* TODO - Hide this on devices which can show sidebar. */}
+            <li className={classes.headerItem.editModeOnly}>
               <button
                 type="button"
                 onClick={this.handleResetClick}
               >
-                Reset Selected Counters
+                {/* Reset Selected Counters */}
+                [Rs]
               </button>
             </li>
-            <li>
+
+            {/* TODO - Hide this on devices which can show sidebar. */}
+            <li className={classes.headerItem.editModeOnly}>
               <button
                 type="button"
                 onClick={this.handleRemoveClick}
               >
-                Remove Selected Counters
+                {/* Remove Selected Counters */}
+                [Rm]
               </button>
             </li>
-            <li>
+
+            {/* TODO - Hide this on devices which can show sidebar. */}
+            <li className={classes.headerItem.editModeOnly}>
               <button
                 type="button"
                 onClick={this.handleClearClick}
+                className="button-with-icon"
               >
-                Clear Counters
+                {/* Clear All Counters */}
+                [C]
               </button>
             </li>
           </ul>
-        </aside>
+
+          <ul className="header-item-group group-right">
+            {/* TODO - Hide this on devices which can show sidebar. */}
+            <li className="header-item">
+              <button
+                type="button"
+                onClick={this.handleEditCounterListClick}
+                className="button-with-icon"
+              >
+                {/* Edit Counter List / Exit Edit Mode */}
+                [E]
+              </button>
+            </li>
+          </ul>
+        </header>
+
+        <main className="main">
+          <GlobalEditModeContext.Provider
+            value={isEditModeEnabled}
+          >
+            {counterComponents}
+          </GlobalEditModeContext.Provider>
+
+          <div className="main-additional">
+            <button
+              type="button"
+              onClick={this.handleNewCounterClick}
+              className={classes.addNewCounterButton}
+            >
+              {/* Add New Counter */}
+              [A]
+            </button>
+          </div>
+        </main>
 
         <AddNewCounterModal
           existingNames={this.state.counterOrder}
