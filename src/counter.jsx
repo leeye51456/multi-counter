@@ -115,15 +115,6 @@ export class Counter extends React.Component {
               Edit
             </button>
           </li>
-
-          <li style={{display: editModeOnly}}>
-            <button
-              type="button"
-              onClick={this.handleResetClick}
-            >
-              Reset
-            </button>
-          </li>
         </ul>
       </div>
     );
