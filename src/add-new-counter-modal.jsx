@@ -71,14 +71,20 @@ class AddNewCounterModal extends React.Component {
     let {name, initial, min, max, step} = this.state;
     [initial, min, max, step] = [initial, min, max, step].map((value) => Number.parseInt(value, 10));
 
-    // FIXME - Show reject reason
+    // TODO - Display what form is invalid.
     if ([initial, min, max, step].map((value) => Number.isSafeInteger(value)).includes(false)) {
+      // FIXME - Show what is invalid exactly.
+      window.alert('Initial value, minimum value, maximum value, and counter step should be safe integers.');
       return;
     } else if (step <= 0) {
+      window.alert('Counter step should be a positive integer.');
       return;
     } else if (min > max) {
+      window.alert('Mininum value should be lesser than maximum value.');
       return;
     } else if (name === '' || this.props.existingNames.includes(name)) {
+      // FIXME - Show what is invalid exactly.
+      window.alert('Name should not be empty or duplicated.');
       return;
     }
 

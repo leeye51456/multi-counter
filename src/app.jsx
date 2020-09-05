@@ -307,7 +307,7 @@ class App extends React.Component {
   }
 
   handleClearClick = () => {
-    if (window.confirm('Are you sure to remove all counters?')) {
+    if (window.confirm('All counters will be removed if you click ‘OK’ button.')) {
       localStorageManager.initialize();
       window.location.reload();
     }
