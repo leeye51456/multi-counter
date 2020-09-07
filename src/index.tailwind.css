@@ -3,3 +3,111 @@
 @tailwind components;
 
 @tailwind utilities;
+
+
+/* Common */
+
+body {
+  @apply bg-gray-600;
+}
+
+.button-with-icon {
+  @apply box-border border border-gray-300 rounded-lg;
+  @apply w-12 h-12 bg-gray-200;
+  @apply shadow;
+}
+
+.button-with-text {
+  @apply button-with-icon;
+}
+
+
+/* For App.jsx */
+
+.header {
+  @apply fixed z-50;
+  @apply border-b border-gray-200;
+  @apply h-16 w-full bg-gray-100 bg-opacity-75;
+  @apply shadow;
+}
+
+.header-item-group {
+  @apply absolute;
+  @apply h-16;
+  @apply p-2;
+}
+
+.group-left {
+  @apply left-0;
+}
+.group-left .header-item {
+  @apply mr-1;
+}
+.group-right {
+  @apply right-0;
+}
+
+.header-item {
+  @apply inline-block;
+  @apply my-auto;
+}
+.app-title {
+  @apply inline-block;
+  @apply h-12;
+  @apply p-2;
+  @apply text-xl font-bold;
+}
+
+
+.main {
+  @apply pt-16;
+}
+
+.main-additional {
+  @apply mx-4 mt-8 mb-16;
+}
+.button-add {
+  @apply button-with-icon;
+  @apply mx-auto;
+  @apply w-full;
+}
+
+
+.counter {
+  @apply mx-2 my-3;
+  @apply rounded-lg;
+  @apply bg-white;
+  @apply p-2 pl-3;
+  @apply shadow;
+}
+
+.counter-checked {
+  @apply bg-indigo-300;
+}
+
+.counter-row {
+  @apply flex flex-row flex-no-wrap;
+  @apply overflow-x-hidden;
+}
+
+.counter-element-fill {
+  @apply flex-1;
+}
+
+.counter-label {
+  @apply counter-element-fill;
+  @apply text-lg font-bold;
+}
+.counter-value {
+  @apply counter-element-fill;
+  @apply bg-transparent;
+  @apply w-0;
+  @apply text-2xl font-mono;
+}
+
+
+/* Hidden */
+
+.force-hidden {
+  @apply hidden;
+}
