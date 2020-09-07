@@ -403,10 +403,10 @@ class App extends React.Component {
     const isEditModeEnabled = this.state.isEditModeEnabled;
     const classes = {
       headerItem: {
-        normalOnly: classNames('header-item', { 'hidden': isEditModeEnabled }),
-        editModeOnly: classNames('header-item', { 'hidden': !isEditModeEnabled }),
+        normalOnly: classNames('header-item', { 'force-hidden': isEditModeEnabled }),
+        editModeOnly: classNames('header-item', { 'force-hidden': !isEditModeEnabled }),
       },
-      addNewCounterButton: classNames('button-with-icon', { 'hidden': isEditModeEnabled }),
+      addNewCounterButton: classNames('button-add', { 'force-hidden': isEditModeEnabled }),
     };
 
     const counterComponents = this.state.counterOrder.slice().map((name) => {

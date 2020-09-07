@@ -74,9 +74,9 @@ export class Counter extends React.Component {
 
     const classes = {
       counter: classNames('counter', { 'counter-checked': this.props.checked }),
-      counterElement: {
-        normalOnly: classNames('counter-element', { 'hidden': isGlobalEditModeEnabled }),
-        editModeOnly: classNames('counter-element', { 'hidden': !isGlobalEditModeEnabled }),
+      counterButton: {
+        normalOnly: classNames('button-with-icon', { 'force-hidden': isGlobalEditModeEnabled }),
+        editModeOnly: classNames('button-with-icon', { 'force-hidden': !isGlobalEditModeEnabled }),
       },
     };
 
@@ -86,46 +86,40 @@ export class Counter extends React.Component {
         onClick={this.handleCounterClick}
       >
         <ul>
-          <li className="counter-element">
+          <li className="counter-row">
             <label className="counter-label">
               {this.props.name}
             </label>
           </li>
 
-          <li className="counter-element">
+          <li className="counter-row">
             <input
               type="text"
               value={this.props.value}
               readOnly={true}
               className="counter-value"
             />
-          </li>
 
-          <li className={classes.counterElement.normalOnly}>
             <button
               type="button"
               onClick={this.handleCountDownClick}
-              className="button-with-icon"
+              className={classes.counterButton.normalOnly}
             >
               -
             </button>
-          </li>
 
-          <li className={classes.counterElement.normalOnly}>
             <button
               type="button"
               onClick={this.handleCountUpClick}
-              className="button-with-icon"
+              className={classes.counterButton.normalOnly}
             >
               +
             </button>
-          </li>
 
-          <li className={classes.counterElement.editModeOnly}>
             <button
               type="button"
               onClick={this.handleEditClick}
-              className="button-with-icon"
+              className={classes.counterButton.editModeOnly}
             >
               Edit
             </button>
