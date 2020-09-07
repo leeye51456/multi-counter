@@ -35,6 +35,17 @@ export class Counter extends React.Component {
     this.callOnChangeByValue(newValue);
   }
 
+  handleCounterClick = (event) => {
+    const isGlobalEditModeEnabled = this.context;
+    const buttonClicked = event.target.tagName && event.target.tagName.toUpperCase() === 'BUTTON';
+    if (isGlobalEditModeEnabled && !buttonClicked) {
+      this.props.onChange({
+        checked: !this.props.checked,
+        name: this.props.name,
+      });
+    }
+  }
+
   handleCheckboxChange = (event) => {
     this.props.onChange({
       checked: event.target.checked,
@@ -70,18 +81,11 @@ export class Counter extends React.Component {
     };
 
     return (
-      <div className={classes.counter}>
+      <div
+        className={classes.counter}
+        onClick={this.handleCounterClick}
+      >
         <ul>
-          {/* TODO - Hide this checkbox after implementing counter-checked css. */}
-          {/* <li className="hidden"> */}
-          <li className={classes.counterElement.editModeOnly}>
-            <input
-              type="checkbox"
-              checked={this.props.checked}
-              onChange={this.handleCheckboxChange}
-            />
-          </li>
-
           <li className="counter-element">
             <label className="counter-label">
               {this.props.name}
