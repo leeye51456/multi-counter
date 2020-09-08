@@ -208,7 +208,7 @@ class AddNewCounterModal extends React.Component {
             <button
               type="reset"
               onClick={this.handleCancelClick}
-              className="action-button"
+              className="action-button button-negative"
             >
               <img src={icons.close} alt="Cancel" />
             </button>
@@ -217,7 +217,7 @@ class AddNewCounterModal extends React.Component {
             <button
               type="button"
               onClick={this.handleSubmitClick}
-              className="action-button"
+              className="action-button button-positive"
             >
               <img src={icons.check} alt="Add" />
             </button>

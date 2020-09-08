@@ -407,7 +407,7 @@ class App extends React.Component {
         normalOnly: classNames('header-item', { 'force-hidden': isEditModeEnabled }),
         editModeOnly: classNames('header-item', { 'force-hidden': !isEditModeEnabled }),
       },
-      addNewCounterButton: classNames('button-add', { 'force-hidden': isEditModeEnabled }),
+      addNewCounterButton: classNames('button-add', 'button-positive', { 'invisible': isEditModeEnabled }),
     };
 
     const counterComponents = this.state.counterOrder.slice().map((name) => {
@@ -458,7 +458,7 @@ class App extends React.Component {
               <button
                 type="button"
                 onClick={this.handleResetClick}
-                className="button-with-icon"
+                className="button-with-icon button-negative"
               >
                 <img src={icons.reset} alt="Reset Selected Counters" />
               </button>
@@ -468,7 +468,7 @@ class App extends React.Component {
               <button
                 type="button"
                 onClick={this.handleRemoveClick}
-                className="button-with-icon"
+                className="button-with-icon button-negative"
               >
                 <img src={icons.remove} alt="Remove Selected Counters" />
               </button>
@@ -478,7 +478,7 @@ class App extends React.Component {
               <button
                 type="button"
                 onClick={this.handleClearClick}
-                className="button-with-icon"
+                className="button-with-icon button-negative"
               >
                 <img src={icons.clear} alt="Clear All Counters" />
               </button>
