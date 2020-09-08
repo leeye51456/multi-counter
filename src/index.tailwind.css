@@ -11,11 +11,19 @@ body {
   @apply bg-gray-600;
 }
 
+.button-icon {
+  @apply m-auto;
+  @apply w-auto h-3/4;
+}
+
 .button-with-icon {
-  @apply box-border border border-gray-300 rounded-lg;
-  @apply w-12 h-12 bg-gray-200;
-  @apply shadow;
+  @apply rounded-lg;
+  @apply w-12 h-12 bg-gray-300;
+  @apply shadow-md;
   @apply overflow-hidden whitespace-no-wrap;
+}
+.button-with-icon img {
+  @apply button-icon;
 }
 
 .button-with-text {
@@ -28,9 +36,9 @@ body {
 
 .header {
   @apply fixed z-50;
-  @apply border-b border-gray-200;
-  @apply h-16 w-full bg-gray-100 bg-opacity-75;
-  @apply shadow;
+  @apply border-b border-gray-100;
+  @apply h-16 w-full bg-white;
+  @apply shadow-md;
 }
 
 .header-item-group {
@@ -70,26 +78,29 @@ body {
 }
 .button-add {
   @apply button-with-icon;
-  @apply mx-auto;
   @apply w-full;
+}
+.button-add img {
+  @apply button-icon;
 }
 
 
 .counter {
-  @apply mx-2 my-3;
+  @apply m-4;
   @apply rounded-lg;
   @apply bg-white;
   @apply p-2 pl-3;
-  @apply shadow;
+  @apply shadow-md;
 }
-
 .counter-checked {
-  @apply bg-indigo-300;
+  @apply bg-blue-300;
 }
 
 .counter-row {
   @apply flex flex-row flex-no-wrap;
-  @apply overflow-x-hidden;
+}
+.counter-row .button-with-icon {
+  @apply ml-1;
 }
 
 .counter-element-fill {
@@ -98,6 +109,8 @@ body {
 
 .counter-label {
   @apply counter-element-fill;
+  @apply max-w-full;
+  @apply break-words leading-tight;
   @apply text-lg font-bold;
 }
 .counter-value {
@@ -157,6 +170,9 @@ body {
   @apply button-with-text;
   @apply mx-1;
 }
+.ReactModalPortal .action-button img {
+  @apply button-icon;
+}
 
 
 /* Shortcut Capture Form */
@@ -170,8 +186,12 @@ body {
 }
 .shortcut-capture-button {
   @apply button-with-icon;
+  @apply ml-1;
   @apply rounded;
   @apply h-8;
+}
+.shortcut-capture-button img {
+  @apply button-icon;
 }
 
 
@@ -179,4 +199,21 @@ body {
 
 .force-hidden {
   @apply hidden;
+}
+
+
+/* Button Themes */
+
+.button-positive {
+  @apply bg-green-200;
+}
+.button-negative {
+  @apply bg-red-200;
+}
+
+.ReactModalPortal .button-positive {
+  @apply button-positive;
+}
+.ReactModalPortal .button-negative {
+  @apply button-negative;
 }
