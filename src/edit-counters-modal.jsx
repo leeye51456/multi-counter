@@ -141,11 +141,16 @@ class EditCountersModal extends React.Component {
           Edit Counters
         </h1>
 
+        <hr />
+
         <ul>
           <li>
             <label>
-              Counters: {this.props.names.join(', ')}
+              Name
             </label>
+            <p className="modal-counter-names">
+              {this.props.names.join(', ')}
+            </p>
           </li>
           <li>
             <label>
@@ -209,6 +214,8 @@ class EditCountersModal extends React.Component {
           </li>
         </ul>
 
+        <hr />
+
         <h2>Shortcuts</h2>
         <ul>
           <li>
@@ -231,21 +238,25 @@ class EditCountersModal extends React.Component {
           </li>
         </ul>
 
-        <ul>
-          <li>
-            <button
-              type="button"
-              onClick={this.handleSubmitClick}
-            >
-              Apply
-            </button>
-          </li>
+        <hr />
+
+        <ul className="modal-actions">
           <li>
             <button
               type="reset"
               onClick={this.handleCancelClick}
+              className="action-button"
             >
               Cancel
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              onClick={this.handleSubmitClick}
+              className="action-button"
+            >
+              Apply
             </button>
           </li>
         </ul>

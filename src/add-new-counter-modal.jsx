@@ -111,6 +111,8 @@ class AddNewCounterModal extends React.Component {
           Add New Counter
         </h1>
 
+        <hr />
+
         <ul>
           <li>
             <label>
@@ -199,21 +201,23 @@ class AddNewCounterModal extends React.Component {
 
         <hr />
 
-        <ul>
-          <li>
-            <button
-              type="button"
-              onClick={this.handleSubmitClick}
-            >
-              Add
-            </button>
-          </li>
+        <ul className="modal-actions">
           <li>
             <button
               type="reset"
               onClick={this.handleCancelClick}
+              className="action-button"
             >
               Cancel
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              onClick={this.handleSubmitClick}
+              className="action-button"
+            >
+              Add
             </button>
           </li>
         </ul>

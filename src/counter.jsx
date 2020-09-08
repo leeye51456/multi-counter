@@ -105,7 +105,7 @@ export class Counter extends React.Component {
               onClick={this.handleCountDownClick}
               className={classes.counterButton.normalOnly}
             >
-              -
+              [Down]
             </button>
 
             <button
@@ -113,7 +113,7 @@ export class Counter extends React.Component {
               onClick={this.handleCountUpClick}
               className={classes.counterButton.normalOnly}
             >
-              +
+              [Up]
             </button>
 
             <button
@@ -121,7 +121,7 @@ export class Counter extends React.Component {
               onClick={this.handleEditClick}
               className={classes.counterButton.editModeOnly}
             >
-              Edit
+              [Edit This Counter]
             </button>
           </li>
         </ul>

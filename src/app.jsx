@@ -433,77 +433,65 @@ class App extends React.Component {
               </h1>
             </li>
 
-            {/* TODO - Hide this on devices which can show sidebar. */}
             <li className={classes.headerItem.editModeOnly}>
               <button
                 type="button"
                 onClick={this.handleSelectAllClick}
                 className="button-with-icon"
               >
-                {/* Select/Unselect All */}
-                [S]
+                [Select/Unselect All]
               </button>
             </li>
 
-            {/* TODO - Hide this on devices which can show sidebar. */}
             <li className={classes.headerItem.editModeOnly}>
               <button
                 type="button"
                 onClick={this.handleEditCountersClick}
                 className="button-with-icon"
               >
-                {/* Edit Selected Counters */}
-                [E]
+                [Edit Selected Counters]
               </button>
             </li>
 
-            {/* TODO - Hide this on devices which can show sidebar. */}
             <li className={classes.headerItem.editModeOnly}>
               <button
                 type="button"
                 onClick={this.handleResetClick}
                 className="button-with-icon"
               >
-                {/* Reset Selected Counters */}
-                [Rs]
+                [Reset Selected Counters]
               </button>
             </li>
 
-            {/* TODO - Hide this on devices which can show sidebar. */}
             <li className={classes.headerItem.editModeOnly}>
               <button
                 type="button"
                 onClick={this.handleRemoveClick}
                 className="button-with-icon"
               >
-                {/* Remove Selected Counters */}
-                [Rm]
+                [Remove Selected Counters]
               </button>
             </li>
 
-            {/* TODO - Hide this on devices which can show sidebar. */}
             <li className={classes.headerItem.editModeOnly}>
               <button
                 type="button"
                 onClick={this.handleClearClick}
                 className="button-with-icon"
               >
-                {/* Clear All Counters */}
-                [C]
+                [Clear All Counters]
               </button>
             </li>
           </ul>
 
           <ul className="header-item-group group-right">
-            {/* TODO - Hide this on devices which can show sidebar. */}
             <li className="header-item">
               <button
                 type="button"
                 onClick={this.handleEditCounterListClick}
                 className="button-with-icon"
               >
-                {/* Edit Counter List / Exit Edit Mode */}
-                [E]
+                [Edit Counter List / Exit Edit Mode]
               </button>
             </li>
           </ul>
@@ -522,8 +510,7 @@ class App extends React.Component {
               onClick={this.handleNewCounterClick}
               className={classes.addNewCounterButton}
             >
-              {/* Add New Counter */}
-              [A]
+              [Add New Counter]
             </button>
           </div>
         </main>
