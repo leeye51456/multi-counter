@@ -15,10 +15,12 @@ body {
   @apply box-border border border-gray-300 rounded-lg;
   @apply w-12 h-12 bg-gray-200;
   @apply shadow;
+  @apply overflow-hidden whitespace-no-wrap;
 }
 
 .button-with-text {
   @apply button-with-icon;
+  @apply w-auto;
 }
 
 
@@ -103,6 +105,73 @@ body {
   @apply bg-transparent;
   @apply w-0;
   @apply text-2xl font-mono;
+}
+
+
+/* For modals */
+
+.ReactModalPortal h1 {
+  @apply mb-2;
+  @apply text-lg font-bold;
+}
+.ReactModalPortal h2 {
+  @apply mb-2;
+  @apply text-lg;
+}
+
+.ReactModalPortal li {
+  @apply flex flex-col;
+  @apply my-2;
+}
+.ReactModalPortal li > * {
+  @apply flex-1;
+}
+
+.ReactModalPortal label {
+  @apply font-bold;
+}
+.ReactModalPortal .modal-counter-names {
+  @apply leading-tight;
+  @apply text-sm text-gray-700;
+}
+.ReactModalPortal input {
+  @apply border border-gray-500 rounded;
+  @apply px-2 py-1;
+}
+.ReactModalPortal input[type="number"] {
+  @apply font-mono;
+}
+
+.ReactModalPortal hr {
+  @apply mt-5 mb-3;
+}
+
+.ReactModalPortal .modal-actions {
+  @apply flex flex-row;
+}
+.ReactModalPortal .modal-actions li {
+  @apply flex-1;
+  @apply h-10;
+}
+.ReactModalPortal .action-button {
+  @apply button-with-text;
+  @apply mx-1;
+}
+
+
+/* Shortcut Capture Form */
+
+.shortcut-capture {
+  @apply flex flex-row;
+}
+.shortcut-capture-input {
+  @apply flex-1;
+  @apply w-0;
+}
+.shortcut-capture-button {
+  @apply button-with-icon;
+  @apply rounded;
+  @apply h-8;
 }
 
 
