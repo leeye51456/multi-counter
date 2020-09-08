@@ -35,32 +35,33 @@ body {
 /* For App.jsx */
 
 .header {
-  @apply fixed z-50;
+  @apply fixed flex flex-row flex-no-wrap justify-start z-50;
   @apply border-b border-gray-100;
   @apply h-16 w-full bg-white;
   @apply shadow-md;
 }
 
 .header-item-group {
-  @apply absolute;
+  @apply block;
   @apply h-16;
   @apply p-2;
-}
-
-.group-left {
-  @apply left-0;
-}
-.group-left .header-item {
-  @apply mr-1;
-}
-.group-right {
-  @apply right-0;
+  @apply overflow-x-scroll overflow-y-hidden whitespace-no-wrap;
 }
 
 .header-item {
   @apply inline-block;
   @apply my-auto;
 }
+.group-left {
+  @apply flex-1;
+}
+.group-left .header-item {
+  @apply mr-1;
+}
+.group-left .header-item:last-child {
+  @apply mr-0;
+}
+
 .app-title {
   @apply inline-block;
   @apply h-12;
