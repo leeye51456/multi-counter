@@ -38,8 +38,7 @@ export class Counter extends React.Component {
 
   handleCounterClick = (event) => {
     const isGlobalEditModeEnabled = this.context;
-    const buttonClicked = event.target.tagName && event.target.tagName.toUpperCase() === 'BUTTON';
-    if (isGlobalEditModeEnabled && !buttonClicked) {
+    if (isGlobalEditModeEnabled) {
       this.props.onChange({
         checked: !this.props.checked,
         name: this.props.name,
@@ -54,8 +53,9 @@ export class Counter extends React.Component {
     });
   }
 
-  handleEditClick = () => {
+  handleEditClick = (event) => {
     this.props.onEditClick(this.props.name);
+    event.stopPropagation();
   }
 
   handleCountDownClick = () => {
