@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CounterAction from './counter-action';
 import Shortcut from './shortcut';
+import icons from './icons';
 
 class ShortcutCaptureForm extends React.Component {
   handleKeyDown = (event) => {
@@ -59,14 +60,14 @@ class ShortcutCaptureForm extends React.Component {
           onClick={this.handleCancelClick}
           className="shortcut-capture-button"
         >
-          [Cancel]
+          <img src={icons.reset} alt="Cancel modifying this shortcut binding" />
         </button>
         <button
           type="button"
           onClick={this.handleRemoveClick}
           className="shortcut-capture-button"
         >
-          [Remove]
+          <img src={icons.remove} alt="Remove this shortcut binding" />
         </button>
       </div>
     );

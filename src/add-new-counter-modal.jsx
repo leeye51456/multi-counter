@@ -3,6 +3,7 @@ import ReactModal from 'react-modal';
 import ShortcutCaptureForm from './shortcut-capture-form';
 import Shortcut from './shortcut';
 import ShortcutCollection from './shortcut-collection';
+import icons from './icons';
 
 const defaultState = {
   name: '',
@@ -208,7 +209,7 @@ class AddNewCounterModal extends React.Component {
               onClick={this.handleCancelClick}
               className="action-button"
             >
-              Cancel
+              <img src={icons.close} alt="Cancel" />
             </button>
           </li>
           <li>
@@ -217,7 +218,7 @@ class AddNewCounterModal extends React.Component {
               onClick={this.handleSubmitClick}
               className="action-button"
             >
-              Add
+              <img src={icons.check} alt="Add" />
             </button>
           </li>
         </ul>

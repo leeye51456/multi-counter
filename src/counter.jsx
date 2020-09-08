@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { GlobalEditModeContext } from './contexts';
 import CounterAction from './counter-action';
+import icons from './icons';
 
 export class Counter extends React.Component {
   getCorrectValue = (newValue) => {
@@ -105,7 +106,7 @@ export class Counter extends React.Component {
               onClick={this.handleCountDownClick}
               className={classes.counterButton.normalOnly}
             >
-              [Down]
+              <img src={icons.subtract} alt="Count down" />
             </button>
 
             <button
@@ -113,7 +114,7 @@ export class Counter extends React.Component {
               onClick={this.handleCountUpClick}
               className={classes.counterButton.normalOnly}
             >
-              [Up]
+              <img src={icons.add} alt="Count up" />
             </button>
 
             <button
@@ -121,7 +122,7 @@ export class Counter extends React.Component {
               onClick={this.handleEditClick}
               className={classes.counterButton.editModeOnly}
             >
-              [Edit This Counter]
+              <img src={icons.edit} alt="Edit this counter" />
             </button>
           </li>
         </ul>

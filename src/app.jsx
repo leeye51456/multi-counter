@@ -10,6 +10,7 @@ import CounterData from './counter-data';
 import Shortcut from './shortcut';
 import ShortcutCollection from './shortcut-collection';
 import localStorageManager from './local-storage-manager';
+import icons from './icons';
 import utils from './utils';
 
 ReactModal.setAppElement('#root');
@@ -439,7 +440,7 @@ class App extends React.Component {
                 onClick={this.handleSelectAllClick}
                 className="button-with-icon"
               >
-                [Select/Unselect All]
+                <img src={icons.checkAll} alt="Select/Unselect All" />
               </button>
             </li>
 
@@ -449,7 +450,7 @@ class App extends React.Component {
                 onClick={this.handleEditCountersClick}
                 className="button-with-icon"
               >
-                [Edit Selected Counters]
+                <img src={icons.edit} alt="Edit Selected Counters" />
               </button>
             </li>
 
@@ -459,7 +460,7 @@ class App extends React.Component {
                 onClick={this.handleResetClick}
                 className="button-with-icon"
               >
-                [Reset Selected Counters]
+                <img src={icons.reset} alt="Reset Selected Counters" />
               </button>
             </li>
 
@@ -469,7 +470,7 @@ class App extends React.Component {
                 onClick={this.handleRemoveClick}
                 className="button-with-icon"
               >
-                [Remove Selected Counters]
+                <img src={icons.remove} alt="Remove Selected Counters" />
               </button>
             </li>
 
@@ -479,7 +480,7 @@ class App extends React.Component {
                 onClick={this.handleClearClick}
                 className="button-with-icon"
               >
-                [Clear All Counters]
+                <img src={icons.clear} alt="Clear All Counters" />
               </button>
             </li>
           </ul>
@@ -491,7 +492,11 @@ class App extends React.Component {
                 onClick={this.handleEditCounterListClick}
                 className="button-with-icon"
               >
-                [Edit Counter List / Exit Edit Mode]
+                {
+                  isEditModeEnabled
+                  ? <img src={icons.close} alt="Exit Edit Mode" />
+                  : <img src={icons.menu} alt="Edit Counter List" />
+                }
               </button>
             </li>
           </ul>
@@ -510,7 +515,7 @@ class App extends React.Component {
               onClick={this.handleNewCounterClick}
               className={classes.addNewCounterButton}
             >
-              [Add New Counter]
+              <img src={icons.add} alt="Add New Counter" />
             </button>
           </div>
         </main>

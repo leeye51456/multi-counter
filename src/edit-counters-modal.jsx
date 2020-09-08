@@ -4,6 +4,7 @@ import ShortcutCaptureForm from './shortcut-capture-form';
 import CounterData from './counter-data';
 import Shortcut from './shortcut';
 import ShortcutCollection from './shortcut-collection';
+import icons from './icons';
 
 class EditCountersModal extends React.Component {
   constructor(props) {
@@ -247,7 +248,7 @@ class EditCountersModal extends React.Component {
               onClick={this.handleCancelClick}
               className="action-button"
             >
-              Cancel
+              <img src={icons.close} alt="Cancel" />
             </button>
           </li>
           <li>
@@ -256,7 +257,7 @@ class EditCountersModal extends React.Component {
               onClick={this.handleSubmitClick}
               className="action-button"
             >
-              Apply
+              <img src={icons.check} alt="Apply" />
             </button>
           </li>
         </ul>
