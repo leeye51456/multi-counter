@@ -91,7 +91,9 @@ class EditCountersModal extends React.Component {
     });
   }
 
-  handleSubmitClick = () => {
+  handleSubmitClick = (event) => {
+    event.preventDefault();
+
     const { value, initial, min, max, step, countUpShortcut, countDownShortcut } = this.state;
     const submitArgument = {
       value, initial, min, max, step,
@@ -123,7 +125,8 @@ class EditCountersModal extends React.Component {
     this.props.onSubmit({ names: this.props.names, ...submitArgument });
   }
 
-  handleCancelClick = () => {
+  handleCancelClick = (event) => {
+    event.preventDefault();
     this.props.onCancel();
   }
 

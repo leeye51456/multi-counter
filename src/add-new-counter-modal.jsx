@@ -68,7 +68,9 @@ class AddNewCounterModal extends React.Component {
     });
   }
 
-  handleSubmitClick = () => {
+  handleSubmitClick = (event) => {
+    event.preventDefault();
+
     let {name, initial, min, max, step} = this.state;
     [initial, min, max, step] = [initial, min, max, step].map((value) => Number.parseInt(value, 10));
 
@@ -95,7 +97,8 @@ class AddNewCounterModal extends React.Component {
     this.props.onSubmit({ name, initial, min, max, step, shortcuts });
   }
 
-  handleCancelClick = () => {
+  handleCancelClick = (event) => {
+    event.preventDefault();
     this.props.onCancel();
   }
 

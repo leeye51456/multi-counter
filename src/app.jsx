@@ -289,7 +289,8 @@ class App extends React.Component {
     return this.state.checkedCounters.length === this.state.counterOrder.length;
   }
 
-  handleResetClick = () => {
+  handleResetClick = (event) => {
+    event.preventDefault();
     if (this.state.checkedCounters.length === 0) {
       return;
     }
@@ -303,18 +304,21 @@ class App extends React.Component {
     this.setState({ isEditModeEnabled: false });
   }
 
-  handleRemoveClick = () => {
+  handleRemoveClick = (event) => {
+    event.preventDefault();
     this.removeCheckedCounters();
   }
 
-  handleClearClick = () => {
+  handleClearClick = (event) => {
+    event.preventDefault();
     if (window.confirm('All counters will be removed if you click ‘OK’ button.')) {
       localStorageManager.initialize();
       window.location.reload();
     }
   }
 
-  handleNewCounterClick = () => {
+  handleNewCounterClick = (event) => {
+    event.preventDefault();
     this.openOrCloseModal(true, 'AddNewCounterModal');
   }
 
@@ -330,7 +334,8 @@ class App extends React.Component {
     this.openOrCloseModal(false);
   }
 
-  handleEditCountersClick = () => {
+  handleEditCountersClick = (event) => {
+    event.preventDefault();
     if (this.state.checkedCounters.length > 0) {
       this.openOrCloseModal(true, 'EditCountersModal');
     }
@@ -379,7 +384,8 @@ class App extends React.Component {
     this.setState({ singleCounterToEdit: null });
   }
 
-  handleEditCounterListClick = () => {
+  handleEditCounterListClick = (event) => {
+    event.preventDefault();
     this.checkOrUncheckAll(false);
     this.setState((state) => {
       return {
@@ -388,7 +394,8 @@ class App extends React.Component {
     });
   }
 
-  handleSelectAllClick = () => {
+  handleSelectAllClick = (event) => {
+    event.preventDefault();
     this.checkOrUncheckAll(!this.isEveryCounterChecked());
   }
 

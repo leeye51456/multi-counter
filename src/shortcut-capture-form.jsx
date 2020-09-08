@@ -37,11 +37,13 @@ class ShortcutCaptureForm extends React.Component {
     return shortcut.getStringToDisplay();
   }
 
-  handleCancelClick = () => {
+  handleCancelClick = (event) => {
+    event.preventDefault();
     this.props.onChange(Shortcut.NO_CHANGE);
   }
 
-  handleRemoveClick = () => {
+  handleRemoveClick = (event) => {
+    event.preventDefault();
     this.props.onChange(Shortcut.NONE);
   }
 
