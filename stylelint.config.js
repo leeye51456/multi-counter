@@ -1,5 +1,6 @@
 module.exports = {
   extends: ["stylelint-config-standard"],
+  ignoreFiles: ["**/*.js", "**/*.jsx"],
   rules: {
     "at-rule-no-unknown": [
       true,
