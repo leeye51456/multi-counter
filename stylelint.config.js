@@ -17,5 +17,6 @@ module.exports = {
     "no-descending-specificity": null,
     "at-rule-empty-line-before": null,
     "max-empty-lines": 2,
+    "rule-empty-line-before": null,
   },
 };
