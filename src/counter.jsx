@@ -54,15 +54,18 @@ export class Counter extends React.Component {
   }
 
   handleEditClick = (event) => {
-    this.props.onEditClick(this.props.name);
     event.stopPropagation();
+    event.preventDefault();
+    this.props.onEditClick(this.props.name);
   }
 
-  handleCountDownClick = () => {
+  handleCountDownClick = (event) => {
+    event.preventDefault();
     this.countDown();
   }
 
-  handleCountUpClick = () => {
+  handleCountUpClick = (event) => {
+    event.preventDefault();
     this.countUp();
   }
 
