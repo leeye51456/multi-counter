@@ -107,6 +107,7 @@ class AddNewCounterModal extends React.Component {
         contentLabel="Add New Counter"
         shouldCloseOnOverlayClick={true}
         shouldCloseOnEsc={true}
+        style={{ overlay: { zIndex: 100 }}}
       >
         <h1>
           Add New Counter
