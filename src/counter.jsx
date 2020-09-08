@@ -69,10 +69,6 @@ export class Counter extends React.Component {
     this.countUp();
   }
 
-  handleResetClick = () => {
-    this.callOnChangeByValue(this.props.initial);
-  }
-
   render = () => {
     const isGlobalEditModeEnabled = this.context;
 
