@@ -139,8 +139,8 @@ class EditCountersModal extends React.Component {
         contentLabel="Edit Counters"
         shouldCloseOnOverlayClick={true}
         shouldCloseOnEsc={true}
-        // shouldReturnFocusAfterClose={false}
-        style={{ overlay: { zIndex: 100 }}}
+        className="modal"
+        overlayClassName="modal-overlay"
       >
         <h1>
           Edit Counters

@@ -134,54 +134,72 @@ body {
 
 /* For modals */
 
-.ReactModalPortal h1 {
+.modal-overlay {
+  @apply fixed z-50;
+  @apply inset-0;
+  @apply bg-black bg-opacity-75;
+}
+
+.modal {
+  @apply absolute;
+  @apply inset-x-8 inset-y-12;
+  @apply outline-none;
+  @apply mx-auto;
+  @apply border border-gray-400 rounded;
+  @apply max-w-screen-sm;
+  @apply p-5;
+  @apply bg-white;
+  @apply overflow-auto;
+}
+
+.modal h1 {
   @apply mb-2;
   @apply text-lg font-bold;
 }
-.ReactModalPortal h2 {
+.modal h2 {
   @apply mb-2;
   @apply text-lg;
 }
 
-.ReactModalPortal li {
+.modal li {
   @apply flex flex-col;
   @apply my-2;
 }
-.ReactModalPortal li > * {
+.modal li > * {
   @apply flex-1;
 }
 
-.ReactModalPortal label {
+.modal label {
   @apply font-bold;
 }
-.ReactModalPortal .modal-counter-names {
+.modal .modal-counter-names {
   @apply leading-tight;
   @apply text-sm text-gray-700;
 }
-.ReactModalPortal input {
+.modal input {
   @apply border border-gray-500 rounded;
   @apply px-2 py-1;
 }
-.ReactModalPortal input[type="number"] {
+.modal input[type="number"] {
   @apply font-mono;
 }
 
-.ReactModalPortal hr {
+.modal hr {
   @apply mt-5 mb-3;
 }
 
-.ReactModalPortal .modal-actions {
+.modal .modal-actions {
   @apply flex flex-row;
 }
-.ReactModalPortal .modal-actions li {
+.modal .modal-actions li {
   @apply flex-1;
   @apply h-10;
 }
-.ReactModalPortal .action-button {
+.modal .action-button {
   @apply button-with-text;
   @apply mx-1;
 }
-.ReactModalPortal .action-button img {
+.modal .action-button img {
   @apply button-icon;
 }
 
@@ -222,9 +240,9 @@ body {
   @apply bg-red-200;
 }
 
-.ReactModalPortal .button-positive {
+.modal .button-positive {
   @apply button-positive;
 }
-.ReactModalPortal .button-negative {
+.modal .button-negative {
   @apply button-negative;
 }
