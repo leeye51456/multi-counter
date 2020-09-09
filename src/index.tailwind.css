@@ -34,11 +34,16 @@ body {
 
 /* For App.jsx */
 
-.header {
-  @apply fixed flex flex-row flex-no-wrap justify-start z-50;
+.header-container {
+  @apply fixed;
   @apply border-b border-gray-100;
-  @apply h-16 w-full bg-white;
+  @apply w-full bg-white;
   @apply shadow-md;
+}
+.header {
+  @apply flex flex-row flex-no-wrap justify-start;
+  @apply mx-auto;
+  @apply max-w-screen-sm h-16;
 }
 
 .header-item-group {
@@ -70,8 +75,12 @@ body {
 }
 
 
-.main {
+.main-container {
   @apply pt-16;
+}
+.main {
+  @apply mx-auto;
+  @apply max-w-screen-sm;
 }
 
 .main-additional {

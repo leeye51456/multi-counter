@@ -433,99 +433,103 @@ class App extends React.Component {
     return (
       <div className="App">
 
-        <header className="header">
-          <ul className="header-item-group group-left">
-            <li className={classes.headerItem.normalOnly}>
-              <h1 className="app-title">
-                MultiCounter
-              </h1>
-            </li>
+        <div className="header-container">
+          <header className="header">
+            <ul className="header-item-group group-left">
+              <li className={classes.headerItem.normalOnly}>
+                <h1 className="app-title">
+                  MultiCounter
+                </h1>
+              </li>
 
-            <li className={classes.headerItem.editModeOnly}>
-              <button
-                type="button"
-                onClick={this.handleSelectAllClick}
-                className="button-with-icon"
-              >
-                <img src={icons.checkAll} alt="Select/Unselect All" />
-              </button>
-            </li>
+              <li className={classes.headerItem.editModeOnly}>
+                <button
+                  type="button"
+                  onClick={this.handleSelectAllClick}
+                  className="button-with-icon"
+                >
+                  <img src={icons.checkAll} alt="Select/Unselect All" />
+                </button>
+              </li>
 
-            <li className={classes.headerItem.editModeOnly}>
-              <button
-                type="button"
-                onClick={this.handleEditCountersClick}
-                className="button-with-icon"
-              >
-                <img src={icons.edit} alt="Edit Selected Counters" />
-              </button>
-            </li>
+              <li className={classes.headerItem.editModeOnly}>
+                <button
+                  type="button"
+                  onClick={this.handleEditCountersClick}
+                  className="button-with-icon"
+                >
+                  <img src={icons.edit} alt="Edit Selected Counters" />
+                </button>
+              </li>
 
-            <li className={classes.headerItem.editModeOnly}>
-              <button
-                type="button"
-                onClick={this.handleResetClick}
-                className="button-with-icon button-negative"
-              >
-                <img src={icons.reset} alt="Reset Selected Counters" />
-              </button>
-            </li>
+              <li className={classes.headerItem.editModeOnly}>
+                <button
+                  type="button"
+                  onClick={this.handleResetClick}
+                  className="button-with-icon button-negative"
+                >
+                  <img src={icons.reset} alt="Reset Selected Counters" />
+                </button>
+              </li>
 
-            <li className={classes.headerItem.editModeOnly}>
-              <button
-                type="button"
-                onClick={this.handleRemoveClick}
-                className="button-with-icon button-negative"
-              >
-                <img src={icons.remove} alt="Remove Selected Counters" />
-              </button>
-            </li>
+              <li className={classes.headerItem.editModeOnly}>
+                <button
+                  type="button"
+                  onClick={this.handleRemoveClick}
+                  className="button-with-icon button-negative"
+                >
+                  <img src={icons.remove} alt="Remove Selected Counters" />
+                </button>
+              </li>
 
-            <li className={classes.headerItem.editModeOnly}>
-              <button
-                type="button"
-                onClick={this.handleClearClick}
-                className="button-with-icon button-negative"
-              >
-                <img src={icons.clear} alt="Clear All Counters" />
-              </button>
-            </li>
-          </ul>
+              <li className={classes.headerItem.editModeOnly}>
+                <button
+                  type="button"
+                  onClick={this.handleClearClick}
+                  className="button-with-icon button-negative"
+                >
+                  <img src={icons.clear} alt="Clear All Counters" />
+                </button>
+              </li>
+            </ul>
 
-          <ul className="header-item-group group-right">
-            <li className="header-item">
-              <button
-                type="button"
-                onClick={this.handleEditCounterListClick}
-                className="button-with-icon"
-              >
-                {
-                  isEditModeEnabled
-                  ? <img src={icons.close} alt="Exit Edit Mode" />
-                  : <img src={icons.menu} alt="Edit Counter List" />
-                }
-              </button>
-            </li>
-          </ul>
-        </header>
+            <ul className="header-item-group group-right">
+              <li className="header-item">
+                <button
+                  type="button"
+                  onClick={this.handleEditCounterListClick}
+                  className="button-with-icon"
+                >
+                  {
+                    isEditModeEnabled
+                    ? <img src={icons.close} alt="Exit Edit Mode" />
+                    : <img src={icons.menu} alt="Edit Counter List" />
+                  }
+                </button>
+              </li>
+            </ul>
+          </header>
+        </div>
 
-        <main className="main">
-          <GlobalEditModeContext.Provider
-            value={isEditModeEnabled}
-          >
-            {counterComponents}
-          </GlobalEditModeContext.Provider>
-
-          <div className="main-additional">
-            <button
-              type="button"
-              onClick={this.handleNewCounterClick}
-              className={classes.addNewCounterButton}
+        <div className="main-container">
+          <main className="main">
+            <GlobalEditModeContext.Provider
+              value={isEditModeEnabled}
             >
-              <img src={icons.add} alt="Add New Counter" />
-            </button>
-          </div>
-        </main>
+              {counterComponents}
+            </GlobalEditModeContext.Provider>
+
+            <div className="main-additional">
+              <button
+                type="button"
+                onClick={this.handleNewCounterClick}
+                className={classes.addNewCounterButton}
+              >
+                <img src={icons.add} alt="Add New Counter" />
+              </button>
+            </div>
+          </main>
+        </div>
 
         <AddNewCounterModal
           existingNames={this.state.counterOrder}
