@@ -136,6 +136,7 @@ class EditCountersModal extends React.Component {
       <ReactModal
         isOpen={this.props.isOpen}
         onAfterOpen={this.handleModalAfterOpen}
+        onRequestClose={this.props.onCancel}
         contentLabel="Edit Counters"
         shouldCloseOnOverlayClick={true}
         shouldCloseOnEsc={true}

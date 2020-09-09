@@ -107,6 +107,7 @@ class AddNewCounterModal extends React.Component {
       <ReactModal
         isOpen={this.props.isOpen}
         onAfterOpen={this.handleModalAfterOpen}
+        onRequestClose={this.props.onCancel}
         contentLabel="Add New Counter"
         shouldCloseOnOverlayClick={true}
         shouldCloseOnEsc={true}
