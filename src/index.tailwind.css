@@ -35,7 +35,7 @@ body {
 /* For App.jsx */
 
 .header-container {
-  @apply fixed;
+  @apply fixed z-40;
   @apply border-b border-gray-100;
   @apply w-full bg-white;
   @apply shadow-md;
@@ -48,6 +48,7 @@ body {
 
 .header-item-group {
   @apply block;
+  @apply mx-2;
   @apply h-16;
   @apply p-2;
   @apply overflow-x-scroll overflow-y-hidden whitespace-no-wrap;
@@ -55,7 +56,7 @@ body {
 
 .header-item {
   @apply inline-block;
-  @apply my-auto;
+  @apply h-full;
 }
 .group-left {
   @apply flex-1;
@@ -70,7 +71,7 @@ body {
 .app-title {
   @apply inline-block;
   @apply h-12;
-  @apply p-2;
+  @apply px-1 py-2;
   @apply text-xl font-bold;
 }
 
