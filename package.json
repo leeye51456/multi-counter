@@ -14,9 +14,12 @@
     "tailwindcss": "^1.7.6"
   },
   "scripts": {
-    "prestart": "tailwindcss build src/index.tailwind.css -o src/index.css",
+    "prestart": "yarn run prebuild",
     "start": "react-scripts start",
+    "prebuild": "tailwindcss build src/index.tailwind.css -o src/index.css",
     "build": "react-scripts build",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
