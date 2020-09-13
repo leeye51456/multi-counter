@@ -1,7 +1,21 @@
 {
   "name": "multi-counter",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Multi counter web application",
+  "homepage": "https://leeye51456.github.io/multi-counter",
+  "bugs": {
+    "url": "https://github.com/leeye51456/multi-counter/issues"
+  },
+  "license": "MIT",
   "private": true,
+  "author": {
+    "name": "leeye51456",
+    "url": "https://github.com/leeye51456"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/leeye51456/multi-counter"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
