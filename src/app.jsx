@@ -446,9 +446,10 @@ class App extends React.Component {
                 <button
                   type="button"
                   onClick={this.handleSelectAllClick}
-                  className="button-with-icon"
+                  className="button-with-icon-text"
                 >
-                  <img src={icons.checkAll} alt="Select/Unselect All" />
+                  <img src={icons.checkAll} alt="" />
+                  <span>Select All</span>
                 </button>
               </li>
 
@@ -456,9 +457,10 @@ class App extends React.Component {
                 <button
                   type="button"
                   onClick={this.handleEditCountersClick}
-                  className="button-with-icon"
+                  className="button-with-icon-text"
                 >
-                  <img src={icons.edit} alt="Edit Selected Counters" />
+                  <img src={icons.edit} alt="" />
+                  <span>Edit</span>
                 </button>
               </li>
 
@@ -466,9 +468,10 @@ class App extends React.Component {
                 <button
                   type="button"
                   onClick={this.handleResetClick}
-                  className="button-with-icon button-negative"
+                  className="button-with-icon-text button-negative"
                 >
-                  <img src={icons.reset} alt="Reset Selected Counters" />
+                  <img src={icons.reset} alt="" />
+                  <span>Reset</span>
                 </button>
               </li>
 
@@ -476,9 +479,10 @@ class App extends React.Component {
                 <button
                   type="button"
                   onClick={this.handleRemoveClick}
-                  className="button-with-icon button-negative"
+                  className="button-with-icon-text button-negative"
                 >
-                  <img src={icons.remove} alt="Remove Selected Counters" />
+                  <img src={icons.remove} alt="" />
+                  <span>Remove</span>
                 </button>
               </li>
 
@@ -486,9 +490,10 @@ class App extends React.Component {
                 <button
                   type="button"
                   onClick={this.handleClearClick}
-                  className="button-with-icon button-negative"
+                  className="button-with-icon-text button-negative"
                 >
-                  <img src={icons.clear} alt="Clear All Counters" />
+                  <img src={icons.clear} alt="" />
+                  <span>Clear All</span>
                 </button>
               </li>
             </ul>

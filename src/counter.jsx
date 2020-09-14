@@ -74,10 +74,8 @@ export class Counter extends React.Component {
 
     const classes = {
       counter: classNames('counter', { 'counter-checked': this.props.checked }),
-      counterButton: {
-        normalOnly: classNames('button-with-icon', { 'force-hidden': isGlobalEditModeEnabled }),
-        editModeOnly: classNames('button-with-icon', { 'force-hidden': !isGlobalEditModeEnabled }),
-      },
+      normalCounterButton: classNames('button-with-icon', { 'force-hidden': isGlobalEditModeEnabled }),
+      editCounterButton: classNames('button-with-icon-text', { 'force-hidden': !isGlobalEditModeEnabled }),
     };
 
     return (
@@ -103,7 +101,7 @@ export class Counter extends React.Component {
             <button
               type="button"
               onClick={this.handleCountDownClick}
-              className={classes.counterButton.normalOnly}
+              className={classes.normalCounterButton}
             >
               <img src={icons.subtract} alt="Count down" />
             </button>
@@ -111,7 +109,7 @@ export class Counter extends React.Component {
             <button
               type="button"
               onClick={this.handleCountUpClick}
-              className={classes.counterButton.normalOnly}
+              className={classes.normalCounterButton}
             >
               <img src={icons.add} alt="Count up" />
             </button>
@@ -119,9 +117,10 @@ export class Counter extends React.Component {
             <button
               type="button"
               onClick={this.handleEditClick}
-              className={classes.counterButton.editModeOnly}
+              className={classes.editCounterButton}
             >
-              <img src={icons.edit} alt="Edit this counter" />
+              <img src={icons.edit} alt="" />
+              <span>Edit</span>
             </button>
           </li>
         </ul>
