@@ -70,6 +70,7 @@ body {
 .header-item {
   @apply inline-block;
   @apply h-full;
+  @apply align-middle;
 }
 .group-left {
   @apply flex-1;
