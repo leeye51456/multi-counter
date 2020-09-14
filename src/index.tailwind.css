@@ -31,6 +31,19 @@ body {
   @apply w-auto;
 }
 
+.button-with-icon-text {
+  @apply button-with-icon;
+  @apply leading-2;
+}
+.button-with-icon-text img {
+  @apply button-icon;
+  @apply h-1/2;
+}
+.button-with-icon-text span {
+  @apply opacity-75;
+  @apply text-smallest tracking-tightest;
+}
+
 
 /* For App.jsx */
 
