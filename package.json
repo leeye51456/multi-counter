@@ -28,6 +28,7 @@
     "tailwindcss": "^1.7.6"
   },
   "scripts": {
+    "check-version": "node scripts/check-version.js",
     "prestart": "yarn run prebuild",
     "start": "react-scripts start",
     "prebuild": "tailwindcss build src/index.tailwind.css -o src/index.css",
