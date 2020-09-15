@@ -33,8 +33,9 @@
     "start": "react-scripts start",
     "prebuild": "tailwindcss build src/index.tailwind.css -o src/index.css",
     "build": "react-scripts build",
-    "predeploy": "yarn run build",
-    "deploy": "gh-pages -d build",
+    "predeploy": "yarn run check-version && yarn run build",
+    "deploy": "gh-pages -d build -m \"Deploy $npm_package_version\"",
+    "postdeploy": "git tag $npm_package_version && git push origin $npm_package_version",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
