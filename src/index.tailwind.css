@@ -197,6 +197,11 @@ body {
 .modal input[type="number"] {
   @apply font-mono;
 }
+.modal input:invalid {
+  @apply border-red-600;
+  @apply bg-red-100;
+  @apply text-red-600 font-bold;
+}
 
 .modal hr {
   @apply mt-5 mb-3;
