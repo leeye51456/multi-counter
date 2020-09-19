@@ -1,9 +1,16 @@
 import React from 'react';
 import ReactModal from 'react-modal';
+import escapeStringRegexp from 'escape-string-regexp';
 import ShortcutCaptureForm from './shortcut-capture-form';
 import Shortcut from './shortcut';
 import ShortcutCollection from './shortcut-collection';
 import icons from './icons';
+
+const REJECTION_REASON = {
+  name: '- "Name" should not be empty or duplicated.',
+  range: '- "Initial/Maximum/Minimum value" should be safe integers, where (Minimum value) <= (Initial value) <= (Maximum value).',
+  step: '- "Counter step" should be a safe integer.',
+};
 
 const defaultState = {
   name: '',
@@ -13,46 +20,57 @@ const defaultState = {
   step: '1',
   countUpShortcut: Shortcut.NONE,
   countDownShortcut: Shortcut.NONE,
+  nameValidity: true,
+  rangeValidity: true,
+  stepValidity: true,
 };
 
 class AddNewCounterModal extends React.Component {
   constructor(props) {
     super(props);
 
+    this.initialRef = React.createRef();
+    this.minRef = React.createRef();
+    this.maxRef = React.createRef();
+
     this.state = defaultState;
   }
 
   handleModalAfterOpen = () => {
-    this.setState(defaultState);
+    if (!this.props.existingNames) {
+      this.props.onCancel();
+      return;
+    }
+
+    this.setState({
+      ...defaultState,
+      namePattern: `^(?!(${this.props.existingNames.map((value) => escapeStringRegexp(value)).join('|')})$).+$`,
+    });
   }
 
   handleNameChange = (event) => {
     this.setState({
       name: event.target.value,
+      nameValidity: event.target.validity.valid,
     });
   }
 
-  handleInitialChange = (event) => {
+  handleRangeChange = () => {
+    const initialValidity = this.initialRef.current.validity.valid;
+    const minValidity = this.minRef.current.validity.valid;
+    const maxValidity = this.maxRef.current.validity.valid;
     this.setState({
-      initial: event.target.value,
-    });
-  }
-
-  handleMinChange = (event) => {
-    this.setState({
-      min: event.target.value,
-    });
-  }
-
-  handleMaxChange = (event) => {
-    this.setState({
-      max: event.target.value,
+      initial: this.initialRef.current.value,
+      min: this.minRef.current.value,
+      max: this.maxRef.current.value,
+      rangeValidity: initialValidity && minValidity && maxValidity,
     });
   }
 
   handleStepChange = (event) => {
     this.setState({
       step: event.target.value,
+      stepValidity: event.target.validity.valid,
     });
   }
 
@@ -71,26 +89,24 @@ class AddNewCounterModal extends React.Component {
   handleSubmitClick = (event) => {
     event.preventDefault();
 
-    let {name, initial, min, max, step} = this.state;
-    [initial, min, max, step] = [initial, min, max, step].map((value) => Number.parseInt(value, 10));
+    const rejectionReasons = [];
+    if (!this.state.nameValidity) {
+      rejectionReasons.push(REJECTION_REASON.name);
+    }
+    if (!this.state.rangeValidity) {
+      rejectionReasons.push(REJECTION_REASON.range);
+    }
+    if (!this.state.stepValidity) {
+      rejectionReasons.push(REJECTION_REASON.step);
+    }
 
-    // TODO - Display what form is invalid.
-    if ([initial, min, max, step].map((value) => Number.isSafeInteger(value)).includes(false)) {
-      // FIXME - Show what is invalid exactly.
-      window.alert('Initial value, minimum value, maximum value, and counter step should be safe integers.');
-      return;
-    } else if (step <= 0) {
-      window.alert('Counter step should be a positive integer.');
-      return;
-    } else if (min > max) {
-      window.alert('Mininum value should be lesser than maximum value.');
-      return;
-    } else if (name === '' || this.props.existingNames.includes(name)) {
-      // FIXME - Show what is invalid exactly.
-      window.alert('Name should not be empty or duplicated.');
+    if (rejectionReasons.length > 0) {
+      window.alert('Some values are invalid!\n' + rejectionReasons.join('\n'));
       return;
     }
 
+    let {name, initial, min, max, step} = this.state;
+    [initial, min, max, step] = [initial, min, max, step].map((value) => Number.parseInt(value, 10));
     const { countUpShortcut: countUp, countDownShortcut: countDown } = this.state;
     const shortcuts = new ShortcutCollection({ countUp, countDown });
 
@@ -128,6 +144,7 @@ class AddNewCounterModal extends React.Component {
             <input
               type="text"
               required={true}
+              pattern={this.state.namePattern}
               value={this.state.name}
               onChange={this.handleNameChange}
             />
@@ -137,11 +154,14 @@ class AddNewCounterModal extends React.Component {
               Initial value (Integer)
             </label>
             <input
+              ref={this.initialRef}
               type="number"
               inputMode="numeric"
-              pattern="-?\\d*"
+              min={this.state.min}
+              max={this.state.max}
+              step={1}
               value={this.state.initial}
-              onChange={this.handleInitialChange}
+              onChange={this.handleRangeChange}
             />
           </li>
           <li>
@@ -149,11 +169,14 @@ class AddNewCounterModal extends React.Component {
               Minimum value (Integer)
             </label>
             <input
+              ref={this.minRef}
               type="number"
               inputMode="numeric"
-              pattern="-?\\d*"
+              min={Number.MIN_SAFE_INTEGER}
+              max={this.state.initial}
+              step={1}
               value={this.state.min}
-              onChange={this.handleMinChange}
+              onChange={this.handleRangeChange}
             />
           </li>
           <li>
@@ -161,11 +184,14 @@ class AddNewCounterModal extends React.Component {
               Maximum value (Integer)
             </label>
             <input
+              ref={this.maxRef}
               type="number"
               inputMode="numeric"
-              pattern="-?\\d*"
+              min={this.state.initial}
+              max={Number.MAX_SAFE_INTEGER}
+              step={1}
               value={this.state.max}
-              onChange={this.handleMaxChange}
+              onChange={this.handleRangeChange}
             />
           </li>
           <li>
@@ -175,7 +201,9 @@ class AddNewCounterModal extends React.Component {
             <input
               type="number"
               inputMode="numeric"
-              pattern="[1-9]\\d*"
+              min={1}
+              max={Number.MAX_SAFE_INTEGER}
+              step={1}
               value={this.state.step}
               onChange={this.handleStepChange}
             />
