@@ -6,6 +6,22 @@ import Shortcut from './shortcut';
 import ShortcutCollection from './shortcut-collection';
 import icons from './icons';
 
+const INITIAL_VALIDITIES = {
+  valueValidity: true,
+  initialValidity: true,
+  minValidity: true,
+  maxValidity: true,
+  stepValidity: true,
+};
+
+const REJECTION_REASON = {
+  value: '- "Value" should be a safe integer.',
+  initial: '- "Initial value" should be a safe integer.',
+  min: '- "Minimum value" should be a safe integer.',
+  max: '- "Maximum value" should be a safe integer.',
+  step: '- "Counter step" should be a safe integer.',
+};
+
 class EditCountersModal extends React.Component {
   constructor(props) {
     super(props);
@@ -18,6 +34,11 @@ class EditCountersModal extends React.Component {
       step: '1',
       countUpShortcut: Shortcut.NONE,
       countDownShortcut: Shortcut.NONE,
+      valueValidity: true,
+      initialValidity: true,
+      minValidity: true,
+      maxValidity: true,
+      stepValidity: true,
     };
   }
 
@@ -45,6 +66,7 @@ class EditCountersModal extends React.Component {
         value, initial, min, max, step,
         countUpShortcut: shortcuts.countUp,
         countDownShortcut: shortcuts.countDown,
+        ...INITIAL_VALIDITIES,
       };
     });
   }
@@ -52,30 +74,35 @@ class EditCountersModal extends React.Component {
   handleValueChange = (event) => {
     this.setState({
       value: event.target.value,
+      valueValidity: event.target.validity.valid,
     });
   }
 
   handleInitialChange = (event) => {
     this.setState({
       initial: event.target.value,
+      initialValidity: event.target.validity.valid,
     });
   }
 
   handleMinChange = (event) => {
     this.setState({
       min: event.target.value,
+      minValidity: event.target.validity.valid,
     });
   }
 
   handleMaxChange = (event) => {
     this.setState({
       max: event.target.value,
+      maxValidity: event.target.validity.valid,
     });
   }
 
   handleStepChange = (event) => {
     this.setState({
       step: event.target.value,
+      stepValidity: event.target.validity.valid,
     });
   }
 
@@ -93,6 +120,28 @@ class EditCountersModal extends React.Component {
 
   handleSubmitClick = (event) => {
     event.preventDefault();
+
+    const rejectionReasons = [];
+    if (!this.state.valueValidity) {
+      rejectionReasons.push(REJECTION_REASON.value);
+    }
+    if (!this.state.initialValidity) {
+      rejectionReasons.push(REJECTION_REASON.initial);
+    }
+    if (!this.state.minValidity) {
+      rejectionReasons.push(REJECTION_REASON.min);
+    }
+    if (!this.state.maxValidity) {
+      rejectionReasons.push(REJECTION_REASON.max);
+    }
+    if (!this.state.stepValidity) {
+      rejectionReasons.push(REJECTION_REASON.step);
+    }
+
+    if (rejectionReasons.length > 0) {
+      window.alert('Some values are invalid!\n' + rejectionReasons.join('\n'));
+      return;
+    }
 
     const { value, initial, min, max, step, countUpShortcut, countDownShortcut } = this.state;
     const submitArgument = {
@@ -116,11 +165,9 @@ class EditCountersModal extends React.Component {
     }
 
     if (!isAllSafeInteger) {
-      return;
-    } else if (submitArgument.step === 0 || (submitArgument.step && submitArgument.step < 0)) {
+      console.error('Something wrong!');
       return;
     }
-    // TODO - re-implement min/max validation check (be careful of empty values)
 
     this.props.onSubmit({ names: this.props.names, ...submitArgument });
   }
@@ -165,7 +212,9 @@ class EditCountersModal extends React.Component {
             <input
               type="number"
               inputMode="numeric"
-              pattern="-?\\d*"
+              min={Number.MIN_SAFE_INTEGER}
+              max={Number.MAX_SAFE_INTEGER}
+              step={1}
               value={this.state.value}
               onChange={this.handleValueChange}
             />
@@ -177,7 +226,9 @@ class EditCountersModal extends React.Component {
             <input
               type="number"
               inputMode="numeric"
-              pattern="-?\\d*"
+              min={Number.MIN_SAFE_INTEGER}
+              max={Number.MAX_SAFE_INTEGER}
+              step={1}
               value={this.state.initial}
               onChange={this.handleInitialChange}
             />
@@ -189,7 +240,9 @@ class EditCountersModal extends React.Component {
             <input
               type="number"
               inputMode="numeric"
-              pattern="-?\\d*"
+              min={Number.MIN_SAFE_INTEGER}
+              max={Number.MAX_SAFE_INTEGER}
+              step={1}
               value={this.state.min}
               onChange={this.handleMinChange}
             />
@@ -201,7 +254,9 @@ class EditCountersModal extends React.Component {
             <input
               type="number"
               inputMode="numeric"
-              pattern="-?\\d*"
+              min={Number.MIN_SAFE_INTEGER}
+              max={Number.MAX_SAFE_INTEGER}
+              step={1}
               value={this.state.max}
               onChange={this.handleMaxChange}
             />
@@ -213,7 +268,9 @@ class EditCountersModal extends React.Component {
             <input
               type="number"
               inputMode="numeric"
-              pattern="[1-9]\\d*"
+              min={1}
+              max={Number.MAX_SAFE_INTEGER}
+              step={1}
               value={this.state.step}
               onChange={this.handleStepChange}
             />
