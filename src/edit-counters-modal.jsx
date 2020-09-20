@@ -15,16 +15,22 @@ const INITIAL_VALIDITIES = {
 };
 
 const REJECTION_REASON = {
-  value: '- "Value" should be a safe integer.',
-  initial: '- "Initial value" should be a safe integer.',
-  min: '- "Minimum value" should be a safe integer.',
-  max: '- "Maximum value" should be a safe integer.',
-  step: '- "Counter step" should be a safe integer.',
+  value: '- "Value" should be a safe integer within the correct range.',
+  initial: '- "Initial value" should be a safe integer within the correct range.',
+  min: '- "Minimum value" should be a safe integer within the correct range.',
+  max: '- "Maximum value" should be a safe integer within the correct range.',
+  step: '- "Counter step" should be a positive safe integer.',
 };
 
 class EditCountersModal extends React.Component {
   constructor(props) {
     super(props);
+
+    this.valueRef = React.createRef();
+    this.initialRef = React.createRef();
+    this.minRef = React.createRef();
+    this.maxRef = React.createRef();
+    this.stepRef = React.createRef();
 
     this.state = {
       value: '0',
@@ -32,13 +38,15 @@ class EditCountersModal extends React.Component {
       min: '0',
       max: `${Number.MAX_SAFE_INTEGER}`,
       step: '1',
+      defaults: {
+        minPropUpperBound: Number.MAX_SAFE_INTEGER,
+        maxPropLowerBound: Number.MIN_SAFE_INTEGER,
+        rangeLowerBound: Number.MIN_SAFE_INTEGER,
+        rangeUpperBound: Number.MAX_SAFE_INTEGER,
+      },
       countUpShortcut: Shortcut.NONE,
       countDownShortcut: Shortcut.NONE,
-      valueValidity: true,
-      initialValidity: true,
-      minValidity: true,
-      maxValidity: true,
-      stepValidity: true,
+      ...INITIAL_VALIDITIES,
     };
   }
 
@@ -50,20 +58,29 @@ class EditCountersModal extends React.Component {
 
     this.setState((state, props) => {
       const checkedCount = props.names.length;
-      const firstCounter = new CounterData(props.counters[props.names[0]]);
+      const commonCounter = new CounterData(props.counters[props.names[0]]);
+      let minPropUpperBound = Math.min(Number.MAX_SAFE_INTEGER, commonCounter.initial, commonCounter.value);
+      let maxPropLowerBound = Math.max(Number.MIN_SAFE_INTEGER, commonCounter.initial, commonCounter.value);
+      let rangeLowerBound = commonCounter.min;
+      let rangeUpperBound = commonCounter.max;
       for (let index = 1; index < checkedCount; index += 1) {
         const currentCounter = props.counters[props.names[index]];
+        minPropUpperBound = Math.min(minPropUpperBound, currentCounter.initial, currentCounter.value);
+        maxPropLowerBound = Math.max(maxPropLowerBound, currentCounter.initial, currentCounter.value);
+        rangeLowerBound = Math.max(rangeLowerBound, currentCounter.min);
+        rangeUpperBound = Math.min(rangeUpperBound, currentCounter.max);
         for (const counterProp of CounterData.MANIPULATOR_PROPS) {
-          if (firstCounter[counterProp] !== currentCounter[counterProp]) {
-            firstCounter[counterProp] = '';
+          if (commonCounter[counterProp] !== currentCounter[counterProp]) {
+            commonCounter[counterProp] = '';
           }
         }
-        firstCounter.shortcuts = firstCounter.shortcuts.getDifferenceMarked(currentCounter.shortcuts);
+        commonCounter.shortcuts = commonCounter.shortcuts.getDifferenceMarked(currentCounter.shortcuts);
       }
 
-      const { value, initial, min, max, step, shortcuts } = firstCounter;
+      const { value, initial, min, max, step, shortcuts } = commonCounter;
       return {
         value, initial, min, max, step,
+        defaults: { minPropUpperBound, maxPropLowerBound, rangeLowerBound, rangeUpperBound },
         countUpShortcut: shortcuts.countUp,
         countDownShortcut: shortcuts.countDown,
         ...INITIAL_VALIDITIES,
@@ -71,31 +88,12 @@ class EditCountersModal extends React.Component {
     });
   }
 
-  handleValueChange = (event) => {
+  handleRangeChange = () => {
     this.setState({
-      value: event.target.value,
-      valueValidity: event.target.validity.valid,
-    });
-  }
-
-  handleInitialChange = (event) => {
-    this.setState({
-      initial: event.target.value,
-      initialValidity: event.target.validity.valid,
-    });
-  }
-
-  handleMinChange = (event) => {
-    this.setState({
-      min: event.target.value,
-      minValidity: event.target.validity.valid,
-    });
-  }
-
-  handleMaxChange = (event) => {
-    this.setState({
-      max: event.target.value,
-      maxValidity: event.target.validity.valid,
+      value: this.valueRef.current.value,
+      initial: this.initialRef.current.value,
+      min: this.minRef.current.value,
+      max: this.maxRef.current.value,
     });
   }
 
@@ -122,19 +120,19 @@ class EditCountersModal extends React.Component {
     event.preventDefault();
 
     const rejectionReasons = [];
-    if (!this.state.valueValidity) {
+    if (!this.valueRef.current.validity.valid) {
       rejectionReasons.push(REJECTION_REASON.value);
     }
-    if (!this.state.initialValidity) {
+    if (!this.initialRef.current.validity.valid) {
       rejectionReasons.push(REJECTION_REASON.initial);
     }
-    if (!this.state.minValidity) {
+    if (!this.minRef.current.validity.valid) {
       rejectionReasons.push(REJECTION_REASON.min);
     }
-    if (!this.state.maxValidity) {
+    if (!this.maxRef.current.validity.valid) {
       rejectionReasons.push(REJECTION_REASON.max);
     }
-    if (!this.state.stepValidity) {
+    if (!this.stepRef.current.validity.valid) {
       rejectionReasons.push(REJECTION_REASON.step);
     }
 
@@ -178,6 +176,23 @@ class EditCountersModal extends React.Component {
   }
 
   render = () => {
+    // TODO - Show commas in range text
+    const initialAndValue = [this.state.initial, this.state.value];
+    const valueMin = this.state.min === '' ? this.state.defaults.rangeLowerBound : this.state.min;
+    const valueMax = this.state.max === '' ? this.state.defaults.rangeUpperBound : this.state.max;
+    const maxOfMin = Math.min(
+      ...[this.state.max].filter((value) => value !== ''),
+      initialAndValue.some((value) => value !== '')
+        ? Math.min(...initialAndValue)
+        : this.state.defaults.minPropUpperBound
+    );
+    const minOfMax = Math.max(
+      ...[this.state.min].filter((value) => value !== ''),
+      initialAndValue.some((value) => value !== '')
+        ? Math.max(...initialAndValue)
+        : this.state.defaults.maxPropLowerBound
+    );
+
     // FIXME - Add reset buttons
     return (
       <ReactModal
@@ -210,62 +225,79 @@ class EditCountersModal extends React.Component {
               Value (Integer)
             </label>
             <input
+              ref={this.valueRef}
               type="number"
               inputMode="numeric"
-              min={Number.MIN_SAFE_INTEGER}
-              max={Number.MAX_SAFE_INTEGER}
+              min={valueMin}
+              max={valueMax}
               step={1}
               value={this.state.value}
-              onChange={this.handleValueChange}
+              onChange={this.handleRangeChange}
             />
+            <p className="modal-input-constraint">
+              {valueMin} ... {valueMax}
+            </p>
           </li>
           <li>
             <label>
               Initial value (Integer)
             </label>
             <input
+              ref={this.initialRef}
               type="number"
               inputMode="numeric"
-              min={Number.MIN_SAFE_INTEGER}
-              max={Number.MAX_SAFE_INTEGER}
+              min={valueMin}
+              max={valueMax}
               step={1}
               value={this.state.initial}
-              onChange={this.handleInitialChange}
+              onChange={this.handleRangeChange}
             />
+            <p className="modal-input-constraint">
+              {valueMin} ... {valueMax}
+            </p>
           </li>
           <li>
             <label>
               Minimum value (Integer)
             </label>
             <input
+              ref={this.minRef}
               type="number"
               inputMode="numeric"
               min={Number.MIN_SAFE_INTEGER}
-              max={Number.MAX_SAFE_INTEGER}
+              max={maxOfMin}
               step={1}
               value={this.state.min}
-              onChange={this.handleMinChange}
+              onChange={this.handleRangeChange}
             />
+            <p className="modal-input-constraint">
+              {Number.MIN_SAFE_INTEGER} ... {maxOfMin}
+            </p>
           </li>
           <li>
             <label>
               Maximum value (Integer)
             </label>
             <input
+              ref={this.maxRef}
               type="number"
               inputMode="numeric"
-              min={Number.MIN_SAFE_INTEGER}
+              min={minOfMax}
               max={Number.MAX_SAFE_INTEGER}
               step={1}
               value={this.state.max}
-              onChange={this.handleMaxChange}
+              onChange={this.handleRangeChange}
             />
+            <p className="modal-input-constraint">
+              {minOfMax} ... {Number.MAX_SAFE_INTEGER}
+            </p>
           </li>
           <li>
             <label>
               Count step (Positive integer)
             </label>
             <input
+              ref={this.stepRef}
               type="number"
               inputMode="numeric"
               min={1}
@@ -274,6 +306,9 @@ class EditCountersModal extends React.Component {
               value={this.state.step}
               onChange={this.handleStepChange}
             />
+            <p className="modal-input-constraint">
+              1 ... {Number.MAX_SAFE_INTEGER}
+            </p>
           </li>
         </ul>
 

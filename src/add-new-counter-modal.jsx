@@ -9,7 +9,7 @@ import icons from './icons';
 const REJECTION_REASON = {
   name: '- "Name" should not be empty or duplicated.',
   range: '- "Initial/Maximum/Minimum value" should be safe integers, where (Minimum value) <= (Initial value) <= (Maximum value).',
-  step: '- "Counter step" should be a safe integer.',
+  step: '- "Counter step" should be a positive safe integer.',
 };
 
 const defaultState = {
@@ -163,6 +163,9 @@ class AddNewCounterModal extends React.Component {
               value={this.state.initial}
               onChange={this.handleRangeChange}
             />
+            <p className="modal-input-constraint">
+              {this.state.min} ... {this.state.max}
+            </p>
           </li>
           <li>
             <label>
@@ -178,6 +181,9 @@ class AddNewCounterModal extends React.Component {
               value={this.state.min}
               onChange={this.handleRangeChange}
             />
+            <p className="modal-input-constraint">
+              {Number.MIN_SAFE_INTEGER} ... {this.state.initial}
+            </p>
           </li>
           <li>
             <label>
@@ -193,6 +199,9 @@ class AddNewCounterModal extends React.Component {
               value={this.state.max}
               onChange={this.handleRangeChange}
             />
+            <p className="modal-input-constraint">
+              {this.state.initial} ... {Number.MAX_SAFE_INTEGER}
+            </p>
           </li>
           <li>
             <label>
@@ -207,6 +216,9 @@ class AddNewCounterModal extends React.Component {
               value={this.state.step}
               onChange={this.handleStepChange}
             />
+            <p className="modal-input-constraint">
+              1 ... {Number.MAX_SAFE_INTEGER}
+            </p>
           </li>
         </ul>
 
