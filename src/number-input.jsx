@@ -44,18 +44,8 @@ class NumberInput extends React.Component {
       }
     }
 
-    const classes = {
-      invertButton: classNames(
-        'button-for-input',
-        { 'force-hidden': this.props.onInvert === CounterAction.PRESETS.NO_OP }
-      ),
-      resetButton: classNames(
-        'button-for-input', { 'force-hidden': this.props.onReset === CounterAction.PRESETS.NO_OP }
-      ),
-    };
-
     return (
-      <div className="number-input-component">
+      <div className="extended-input">
         <input
           { ...inputProps }
           ref={this.inputRef}
@@ -66,14 +56,14 @@ class NumberInput extends React.Component {
         <button
           type="button"
           onClick={this.handleInvertClick}
-          className={classes.invertButton}
+          className={classNames({ 'force-hidden': this.props.onInvert === CounterAction.PRESETS.NO_OP })}
         >
           [-]
         </button>
         <button
           type="button"
           onClick={this.handleResetClick}
-          className={classes.resetButton}
+          className={classNames({ 'force-hidden': this.props.onReset === CounterAction.PRESETS.NO_OP })}
         >
           [R]
         </button>
