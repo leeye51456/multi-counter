@@ -64,7 +64,7 @@ body {
   @apply mx-2;
   @apply h-16;
   @apply p-2;
-  @apply overflow-x-scroll overflow-y-hidden whitespace-no-wrap;
+  @apply overflow-x-auto overflow-y-hidden whitespace-no-wrap;
 }
 
 .header-item {
