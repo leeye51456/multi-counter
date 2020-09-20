@@ -2,6 +2,7 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import ShortcutCaptureForm from './shortcut-capture-form';
 import CounterData from './counter-data';
+import NumberInput from './number-input';
 import Shortcut from './shortcut';
 import ShortcutCollection from './shortcut-collection';
 import { insertCommas, numbersWithCommas } from './utils';
@@ -18,6 +19,9 @@ const REJECTION_REASON = {
 class EditCountersModal extends React.Component {
   constructor(props) {
     super(props);
+
+    this.bindNumberInputEventHandler(['value', 'initial', 'min', 'max'], ['change', 'invert', 'reset']);
+    this.bindNumberInputEventHandler(['step'], ['change', 'reset']);
 
     this.valueRef = React.createRef();
     this.initialRef = React.createRef();
@@ -40,6 +44,42 @@ class EditCountersModal extends React.Component {
       countUpShortcut: Shortcut.NONE,
       countDownShortcut: Shortcut.NONE,
     };
+  }
+
+  bindNumberInputEventHandler = (names, types) => {
+    for (const name of names) {
+      const sentenceCasedName = name[0].toUpperCase() + name.substring(1);
+      for (const type of types) {
+        const sentenceCasedType = type[0].toUpperCase() + type.substring(1);
+        const primitiveFunctionName = `handleNumberInput${sentenceCasedType}`;
+        if (this[primitiveFunctionName]) {
+          this[`handle${sentenceCasedName}${sentenceCasedType}`] = this[primitiveFunctionName].bind(this, name);
+        }
+      }
+    }
+  }
+
+  getActualLowerBound = (state) => {
+    return state.min === '' ? state.defaults.rangeLowerBound : state.min;
+  }
+  getActualUpperBound = (state) => {
+    return state.max === '' ? state.defaults.rangeUpperBound : state.max;
+  }
+  getActualMaxOfMin = (state) => {
+    return Math.min(
+      ...[state.max].filter((value) => value !== ''),
+      state.initial !== '' || state.value !== ''
+        ? Math.min(state.initial, state.value)
+        : state.defaults.minPropUpperBound
+    );
+  }
+  getActualMinOfMax = (state) => {
+    return Math.max(
+      ...[state.min].filter((value) => value !== ''),
+      state.initial !== '' || state.value !== ''
+        ? Math.max(state.initial, state.value)
+        : state.defaults.maxPropLowerBound
+    );
   }
 
   handleModalAfterOpen = () => {
@@ -79,26 +119,18 @@ class EditCountersModal extends React.Component {
     });
   }
 
-  handleValueChange = (event) => {
-    this.setState({ value: event.target.value });
+  handleNumberInputChange = (event, stateName) => {
+    this.setState({ [stateName]: event.target.value });
   }
-
-  handleInitialChange = (event) => {
-    this.setState({ initial: event.target.value });
-  }
-
-  handleMinChange = (event) => {
-    this.setState({ min: event.target.value });
-  }
-
-  handleMaxChange = (event) => {
-    this.setState({ max: event.target.value });
-  }
-
-  handleStepChange = (event) => {
-    this.setState({
-      step: event.target.value,
+  handleNumberInputInvert = (stateName) => {
+    this.setState((state) => {
+      if (typeof state[stateName] === 'number') {
+        return { [stateName]: -state[stateName] };
+      }
     });
+  }
+  handleNumberInputReset = (stateName) => {
+    this.setState({ [stateName]: '' });
   }
 
   handleCountUpShortcutChange = (shortcut) => {
@@ -173,23 +205,14 @@ class EditCountersModal extends React.Component {
   }
 
   render = () => {
-    const initialAndValue = [this.state.initial, this.state.value];
-    const valueMin = this.state.min === '' ? this.state.defaults.rangeLowerBound : this.state.min;
-    const valueMax = this.state.max === '' ? this.state.defaults.rangeUpperBound : this.state.max;
-    const maxOfMin = Math.min(
-      ...[this.state.max].filter((value) => value !== ''),
-      initialAndValue.some((value) => value !== '')
-        ? Math.min(...initialAndValue)
-        : this.state.defaults.minPropUpperBound
-    );
-    const minOfMax = Math.max(
-      ...[this.state.min].filter((value) => value !== ''),
-      initialAndValue.some((value) => value !== '')
-        ? Math.max(...initialAndValue)
-        : this.state.defaults.maxPropLowerBound
-    );
+    const valueMin = this.getActualLowerBound(this.state);
+    const valueMax = this.getActualUpperBound(this.state);
+    const maxOfMin = this.getActualMaxOfMin(this.state);
+    const minOfMax = this.getActualMinOfMax(this.state);
 
-    // FIXME - Add reset buttons
+    const valueMinWithCommas = insertCommas(valueMin);
+    const valueMaxWithCommas = insertCommas(valueMax);
+
     return (
       <ReactModal
         isOpen={this.props.isOpen}
@@ -220,51 +243,51 @@ class EditCountersModal extends React.Component {
             <label>
               Value (Integer)
             </label>
-            <input
+            <NumberInput
               ref={this.valueRef}
-              type="number"
-              inputMode="numeric"
               min={valueMin}
               max={valueMax}
               step={1}
               value={this.state.value}
               onChange={this.handleValueChange}
+              onInvert={this.handleValueInvert}
+              onReset={this.handleValueReset}
             />
             <p className="modal-input-constraint">
-              {insertCommas(valueMin)} ... {insertCommas(valueMax)}
+              {valueMinWithCommas} ... {valueMaxWithCommas}
             </p>
           </li>
           <li>
             <label>
               Initial value (Integer)
             </label>
-            <input
+            <NumberInput
               ref={this.initialRef}
-              type="number"
-              inputMode="numeric"
               min={valueMin}
               max={valueMax}
               step={1}
               value={this.state.initial}
               onChange={this.handleInitialChange}
+              onInvert={this.handleInitialInvert}
+              onReset={this.handleInitialReset}
             />
             <p className="modal-input-constraint">
-              {insertCommas(valueMin)} ... {insertCommas(valueMax)}
+              {valueMinWithCommas} ... {valueMaxWithCommas}
             </p>
           </li>
           <li>
             <label>
               Minimum value (Integer)
             </label>
-            <input
+            <NumberInput
               ref={this.minRef}
-              type="number"
-              inputMode="numeric"
               min={Number.MIN_SAFE_INTEGER}
               max={maxOfMin}
               step={1}
               value={this.state.min}
               onChange={this.handleMinChange}
+              onInvert={this.handleMinInvert}
+              onReset={this.handleMinReset}
             />
             <p className="modal-input-constraint">
               {numbersWithCommas.MIN_SAFE_INTEGER} ... {insertCommas(maxOfMin)}
@@ -274,15 +297,15 @@ class EditCountersModal extends React.Component {
             <label>
               Maximum value (Integer)
             </label>
-            <input
+            <NumberInput
               ref={this.maxRef}
-              type="number"
-              inputMode="numeric"
               min={minOfMax}
               max={Number.MAX_SAFE_INTEGER}
               step={1}
               value={this.state.max}
               onChange={this.handleMaxChange}
+              onInvert={this.handleMaxInvert}
+              onReset={this.handleMaxReset}
             />
             <p className="modal-input-constraint">
               {insertCommas(minOfMax)} ... {numbersWithCommas.MAX_SAFE_INTEGER}
@@ -292,15 +315,14 @@ class EditCountersModal extends React.Component {
             <label>
               Count step (Positive integer)
             </label>
-            <input
+            <NumberInput
               ref={this.stepRef}
-              type="number"
-              inputMode="numeric"
               min={1}
               max={Number.MAX_SAFE_INTEGER}
               step={1}
               value={this.state.step}
               onChange={this.handleStepChange}
+              onReset={this.handleStepReset}
             />
             <p className="modal-input-constraint">
               1 ... {numbersWithCommas.MAX_SAFE_INTEGER}
