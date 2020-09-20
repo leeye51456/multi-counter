@@ -323,7 +323,6 @@ class App extends React.Component {
   }
 
   handleNewCounterModalSubmit = (param) => {
-    // TODO - Validate param
     const newCounter = new CounterData({
       ...param,
       value: param.initial,
@@ -341,7 +340,6 @@ class App extends React.Component {
   }
 
   handleEditCountersModalSubmit = (param) => {
-    // TODO - Validate param
     const { counters } = this.state;
 
     const overwritingShortcuts = {};

@@ -173,7 +173,6 @@ class EditCountersModal extends React.Component {
   }
 
   render = () => {
-    // TODO - Show commas in range text
     const initialAndValue = [this.state.initial, this.state.value];
     const valueMin = this.state.min === '' ? this.state.defaults.rangeLowerBound : this.state.min;
     const valueMax = this.state.max === '' ? this.state.defaults.rangeUpperBound : this.state.max;
