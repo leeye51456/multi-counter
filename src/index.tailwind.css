@@ -228,6 +228,26 @@ body {
 }
 
 
+/* Input with Buttons */
+
+.extended-input {
+  @apply flex flex-row;
+}
+.extended-input input {
+  @apply flex-1;
+  @apply w-0;
+}
+.extended-input button {
+  @apply button-with-icon;
+  @apply ml-1;
+  @apply rounded;
+  @apply h-8;
+}
+.extended-input button img {
+  @apply button-icon;
+}
+
+
 /* Shortcut Capture Form */
 
 .shortcut-capture {
