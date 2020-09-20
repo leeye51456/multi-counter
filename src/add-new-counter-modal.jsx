@@ -22,7 +22,6 @@ const defaultState = {
   countUpShortcut: Shortcut.NONE,
   countDownShortcut: Shortcut.NONE,
   nameValidity: true,
-  rangeValidity: true,
   stepValidity: true,
 };
 
@@ -56,16 +55,16 @@ class AddNewCounterModal extends React.Component {
     });
   }
 
-  handleRangeChange = () => {
-    const initialValidity = this.initialRef.current.validity.valid;
-    const minValidity = this.minRef.current.validity.valid;
-    const maxValidity = this.maxRef.current.validity.valid;
-    this.setState({
-      initial: this.initialRef.current.value,
-      min: this.minRef.current.value,
-      max: this.maxRef.current.value,
-      rangeValidity: initialValidity && minValidity && maxValidity,
-    });
+  handleInitialChange = (event) => {
+    this.setState({ initial: event.target.value });
+  }
+
+  handleMinChange = (event) => {
+    this.setState({ min: event.target.value });
+  }
+
+  handleMaxChange = (event) => {
+    this.setState({ max: event.target.value });
   }
 
   handleStepChange = (event) => {
@@ -94,7 +93,12 @@ class AddNewCounterModal extends React.Component {
     if (!this.state.nameValidity) {
       rejectionReasons.push(REJECTION_REASON.name);
     }
-    if (!this.state.rangeValidity) {
+    const rangeValidity = (
+      this.initialRef.current.validity.valid
+      && this.minRef.current.validity.valid
+      && this.maxRef.current.validity.valid
+    );
+    if (!rangeValidity) {
       rejectionReasons.push(REJECTION_REASON.range);
     }
     if (!this.state.stepValidity) {
@@ -162,7 +166,7 @@ class AddNewCounterModal extends React.Component {
               max={this.state.max}
               step={1}
               value={this.state.initial}
-              onChange={this.handleRangeChange}
+              onChange={this.handleInitialChange}
             />
             <p className="modal-input-constraint">
               {insertCommas(this.state.min)} ... {insertCommas(this.state.max)}
@@ -180,7 +184,7 @@ class AddNewCounterModal extends React.Component {
               max={this.state.initial}
               step={1}
               value={this.state.min}
-              onChange={this.handleRangeChange}
+              onChange={this.handleMinChange}
             />
             <p className="modal-input-constraint">
               {numbersWithCommas.MIN_SAFE_INTEGER} ... {insertCommas(this.state.initial)}
@@ -198,7 +202,7 @@ class AddNewCounterModal extends React.Component {
               max={Number.MAX_SAFE_INTEGER}
               step={1}
               value={this.state.max}
-              onChange={this.handleRangeChange}
+              onChange={this.handleMaxChange}
             />
             <p className="modal-input-constraint">
               {insertCommas(this.state.initial)} ... {numbersWithCommas.MAX_SAFE_INTEGER}

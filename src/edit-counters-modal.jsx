@@ -7,14 +7,6 @@ import ShortcutCollection from './shortcut-collection';
 import { insertCommas, numbersWithCommas } from './utils';
 import icons from './icons';
 
-const INITIAL_VALIDITIES = {
-  valueValidity: true,
-  initialValidity: true,
-  minValidity: true,
-  maxValidity: true,
-  stepValidity: true,
-};
-
 const REJECTION_REASON = {
   value: '- "Value" should be a safe integer within the correct range.',
   initial: '- "Initial value" should be a safe integer within the correct range.',
@@ -47,7 +39,6 @@ class EditCountersModal extends React.Component {
       },
       countUpShortcut: Shortcut.NONE,
       countDownShortcut: Shortcut.NONE,
-      ...INITIAL_VALIDITIES,
     };
   }
 
@@ -84,24 +75,29 @@ class EditCountersModal extends React.Component {
         defaults: { minPropUpperBound, maxPropLowerBound, rangeLowerBound, rangeUpperBound },
         countUpShortcut: shortcuts.countUp,
         countDownShortcut: shortcuts.countDown,
-        ...INITIAL_VALIDITIES,
       };
     });
   }
 
-  handleRangeChange = () => {
-    this.setState({
-      value: this.valueRef.current.value,
-      initial: this.initialRef.current.value,
-      min: this.minRef.current.value,
-      max: this.maxRef.current.value,
-    });
+  handleValueChange = (event) => {
+    this.setState({ value: event.target.value });
+  }
+
+  handleInitialChange = (event) => {
+    this.setState({ initial: event.target.value });
+  }
+
+  handleMinChange = (event) => {
+    this.setState({ min: event.target.value });
+  }
+
+  handleMaxChange = (event) => {
+    this.setState({ max: event.target.value });
   }
 
   handleStepChange = (event) => {
     this.setState({
       step: event.target.value,
-      stepValidity: event.target.validity.valid,
     });
   }
 
@@ -233,7 +229,7 @@ class EditCountersModal extends React.Component {
               max={valueMax}
               step={1}
               value={this.state.value}
-              onChange={this.handleRangeChange}
+              onChange={this.handleValueChange}
             />
             <p className="modal-input-constraint">
               {insertCommas(valueMin)} ... {insertCommas(valueMax)}
@@ -251,7 +247,7 @@ class EditCountersModal extends React.Component {
               max={valueMax}
               step={1}
               value={this.state.initial}
-              onChange={this.handleRangeChange}
+              onChange={this.handleInitialChange}
             />
             <p className="modal-input-constraint">
               {insertCommas(valueMin)} ... {insertCommas(valueMax)}
@@ -269,7 +265,7 @@ class EditCountersModal extends React.Component {
               max={maxOfMin}
               step={1}
               value={this.state.min}
-              onChange={this.handleRangeChange}
+              onChange={this.handleMinChange}
             />
             <p className="modal-input-constraint">
               {numbersWithCommas.MIN_SAFE_INTEGER} ... {insertCommas(maxOfMin)}
@@ -287,7 +283,7 @@ class EditCountersModal extends React.Component {
               max={Number.MAX_SAFE_INTEGER}
               step={1}
               value={this.state.max}
-              onChange={this.handleRangeChange}
+              onChange={this.handleMaxChange}
             />
             <p className="modal-input-constraint">
               {insertCommas(minOfMax)} ... {numbersWithCommas.MAX_SAFE_INTEGER}
