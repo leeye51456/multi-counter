@@ -119,12 +119,12 @@ class EditCountersModal extends React.Component {
     });
   }
 
-  handleNumberInputChange = (event, stateName) => {
+  handleNumberInputChange = (stateName, event) => {
     this.setState({ [stateName]: event.target.value });
   }
   handleNumberInputInvert = (stateName) => {
     this.setState((state) => {
-      if (typeof state[stateName] === 'number') {
+      if (!isNaN(parseInt(state[stateName], 10))) {
         return { [stateName]: -state[stateName] };
       }
     });

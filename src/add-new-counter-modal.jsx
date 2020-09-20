@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import escapeStringRegexp from 'escape-string-regexp';
+import NumberInput from './number-input';
 import ShortcutCaptureForm from './shortcut-capture-form';
 import Shortcut from './shortcut';
 import ShortcutCollection from './shortcut-collection';
@@ -22,18 +23,34 @@ const defaultState = {
   countUpShortcut: Shortcut.NONE,
   countDownShortcut: Shortcut.NONE,
   nameValidity: true,
-  stepValidity: true,
 };
 
 class AddNewCounterModal extends React.Component {
   constructor(props) {
     super(props);
 
+    this.bindNumberInputEventHandler(['initial', 'min', 'max'], ['change', 'invert']);
+    this.bindNumberInputEventHandler(['step'], ['change']);
+
     this.initialRef = React.createRef();
     this.minRef = React.createRef();
     this.maxRef = React.createRef();
+    this.stepRef = React.createRef();
 
     this.state = defaultState;
+  }
+
+  bindNumberInputEventHandler = (names, types) => {
+    for (const name of names) {
+      const sentenceCasedName = name[0].toUpperCase() + name.substring(1);
+      for (const type of types) {
+        const sentenceCasedType = type[0].toUpperCase() + type.substring(1);
+        const primitiveFunctionName = `handleNumberInput${sentenceCasedType}`;
+        if (this[primitiveFunctionName]) {
+          this[`handle${sentenceCasedName}${sentenceCasedType}`] = this[primitiveFunctionName].bind(this, name);
+        }
+      }
+    }
   }
 
   handleModalAfterOpen = () => {
@@ -55,22 +72,14 @@ class AddNewCounterModal extends React.Component {
     });
   }
 
-  handleInitialChange = (event) => {
-    this.setState({ initial: event.target.value });
+  handleNumberInputChange = (stateName, event) => {
+    this.setState({ [stateName]: event.target.value });
   }
-
-  handleMinChange = (event) => {
-    this.setState({ min: event.target.value });
-  }
-
-  handleMaxChange = (event) => {
-    this.setState({ max: event.target.value });
-  }
-
-  handleStepChange = (event) => {
-    this.setState({
-      step: event.target.value,
-      stepValidity: event.target.validity.valid,
+  handleNumberInputInvert = (stateName) => {
+    this.setState((state) => {
+      if (!isNaN(parseInt(state[stateName], 10))) {
+        return { [stateName]: -state[stateName] };
+      }
     });
   }
 
@@ -101,7 +110,7 @@ class AddNewCounterModal extends React.Component {
     if (!rangeValidity) {
       rejectionReasons.push(REJECTION_REASON.range);
     }
-    if (!this.state.stepValidity) {
+    if (!this.stepRef.current.validity.valid) {
       rejectionReasons.push(REJECTION_REASON.step);
     }
 
@@ -158,15 +167,14 @@ class AddNewCounterModal extends React.Component {
             <label>
               Initial value (Integer)
             </label>
-            <input
+            <NumberInput
               ref={this.initialRef}
-              type="number"
-              inputMode="numeric"
               min={this.state.min}
               max={this.state.max}
               step={1}
               value={this.state.initial}
               onChange={this.handleInitialChange}
+              onInvert={this.handleInitialInvert}
             />
             <p className="modal-input-constraint">
               {insertCommas(this.state.min)} ... {insertCommas(this.state.max)}
@@ -176,15 +184,14 @@ class AddNewCounterModal extends React.Component {
             <label>
               Minimum value (Integer)
             </label>
-            <input
+            <NumberInput
               ref={this.minRef}
-              type="number"
-              inputMode="numeric"
               min={Number.MIN_SAFE_INTEGER}
               max={this.state.initial}
               step={1}
               value={this.state.min}
               onChange={this.handleMinChange}
+              onInvert={this.handleMinInvert}
             />
             <p className="modal-input-constraint">
               {numbersWithCommas.MIN_SAFE_INTEGER} ... {insertCommas(this.state.initial)}
@@ -194,15 +201,14 @@ class AddNewCounterModal extends React.Component {
             <label>
               Maximum value (Integer)
             </label>
-            <input
+            <NumberInput
               ref={this.maxRef}
-              type="number"
-              inputMode="numeric"
               min={this.state.initial}
               max={Number.MAX_SAFE_INTEGER}
               step={1}
               value={this.state.max}
               onChange={this.handleMaxChange}
+              onInvert={this.handleMaxInvert}
             />
             <p className="modal-input-constraint">
               {insertCommas(this.state.initial)} ... {numbersWithCommas.MAX_SAFE_INTEGER}
@@ -212,9 +218,8 @@ class AddNewCounterModal extends React.Component {
             <label>
               Count step (Positive integer)
             </label>
-            <input
-              type="number"
-              inputMode="numeric"
+            <NumberInput
+              ref={this.stepRef}
               min={1}
               max={Number.MAX_SAFE_INTEGER}
               step={1}
