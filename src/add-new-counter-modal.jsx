@@ -9,7 +9,7 @@ import icons from './icons';
 const REJECTION_REASON = {
   name: '- "Name" should not be empty or duplicated.',
   range: '- "Initial/Maximum/Minimum value" should be safe integers, where (Minimum value) <= (Initial value) <= (Maximum value).',
-  step: '- "Counter step" should be a safe integer.',
+  step: '- "Counter step" should be a positive safe integer.',
 };
 
 const defaultState = {
