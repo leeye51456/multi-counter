@@ -202,6 +202,11 @@ body {
   @apply bg-red-100;
   @apply text-red-600 font-bold;
 }
+.modal .modal-input-constraint {
+  @apply px-1;
+  @apply leading-tight;
+  @apply text-xs text-gray-700 tracking-tight;
+}
 
 .modal hr {
   @apply mt-5 mb-3;
