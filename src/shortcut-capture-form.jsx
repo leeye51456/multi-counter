@@ -49,25 +49,22 @@ class ShortcutCaptureForm extends React.Component {
 
   render = () => {
     return (
-      <div className="shortcut-capture">
+      <div className="extended-input">
         <input
           type="text"
           value={this.getShortcutString()}
           onChange={CounterAction.PRESETS.NO_OP}
           onKeyDown={this.handleKeyDown}
-          className="shortcut-capture-input"
         />
         <button
           type="button"
           onClick={this.handleCancelClick}
-          className="shortcut-capture-button"
         >
           <img src={icons.reset} alt="Cancel modifying this shortcut binding" />
         </button>
         <button
           type="button"
           onClick={this.handleRemoveClick}
-          className="shortcut-capture-button"
         >
           <img src={icons.remove} alt="Remove this shortcut binding" />
         </button>

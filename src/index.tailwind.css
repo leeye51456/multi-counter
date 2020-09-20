@@ -248,26 +248,6 @@ body {
 }
 
 
-/* Shortcut Capture Form */
-
-.shortcut-capture {
-  @apply flex flex-row;
-}
-.shortcut-capture-input {
-  @apply flex-1;
-  @apply w-0;
-}
-.shortcut-capture-button {
-  @apply button-with-icon;
-  @apply ml-1;
-  @apply rounded;
-  @apply h-8;
-}
-.shortcut-capture-button img {
-  @apply button-icon;
-}
-
-
 /* Hidden */
 
 .force-hidden {
