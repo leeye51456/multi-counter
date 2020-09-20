@@ -4,6 +4,7 @@ import escapeStringRegexp from 'escape-string-regexp';
 import ShortcutCaptureForm from './shortcut-capture-form';
 import Shortcut from './shortcut';
 import ShortcutCollection from './shortcut-collection';
+import { insertCommas, numbersWithCommas } from './utils';
 import icons from './icons';
 
 const REJECTION_REASON = {
@@ -164,7 +165,7 @@ class AddNewCounterModal extends React.Component {
               onChange={this.handleRangeChange}
             />
             <p className="modal-input-constraint">
-              {this.state.min} ... {this.state.max}
+              {insertCommas(this.state.min)} ... {insertCommas(this.state.max)}
             </p>
           </li>
           <li>
@@ -182,7 +183,7 @@ class AddNewCounterModal extends React.Component {
               onChange={this.handleRangeChange}
             />
             <p className="modal-input-constraint">
-              {Number.MIN_SAFE_INTEGER} ... {this.state.initial}
+              {numbersWithCommas.MIN_SAFE_INTEGER} ... {insertCommas(this.state.initial)}
             </p>
           </li>
           <li>
@@ -200,7 +201,7 @@ class AddNewCounterModal extends React.Component {
               onChange={this.handleRangeChange}
             />
             <p className="modal-input-constraint">
-              {this.state.initial} ... {Number.MAX_SAFE_INTEGER}
+              {insertCommas(this.state.initial)} ... {numbersWithCommas.MAX_SAFE_INTEGER}
             </p>
           </li>
           <li>
@@ -217,7 +218,7 @@ class AddNewCounterModal extends React.Component {
               onChange={this.handleStepChange}
             />
             <p className="modal-input-constraint">
-              1 ... {Number.MAX_SAFE_INTEGER}
+              1 ... {numbersWithCommas.MAX_SAFE_INTEGER}
             </p>
           </li>
         </ul>

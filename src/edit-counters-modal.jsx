@@ -4,6 +4,7 @@ import ShortcutCaptureForm from './shortcut-capture-form';
 import CounterData from './counter-data';
 import Shortcut from './shortcut';
 import ShortcutCollection from './shortcut-collection';
+import { insertCommas, numbersWithCommas } from './utils';
 import icons from './icons';
 
 const INITIAL_VALIDITIES = {
@@ -235,7 +236,7 @@ class EditCountersModal extends React.Component {
               onChange={this.handleRangeChange}
             />
             <p className="modal-input-constraint">
-              {valueMin} ... {valueMax}
+              {insertCommas(valueMin)} ... {insertCommas(valueMax)}
             </p>
           </li>
           <li>
@@ -253,7 +254,7 @@ class EditCountersModal extends React.Component {
               onChange={this.handleRangeChange}
             />
             <p className="modal-input-constraint">
-              {valueMin} ... {valueMax}
+              {insertCommas(valueMin)} ... {insertCommas(valueMax)}
             </p>
           </li>
           <li>
@@ -271,7 +272,7 @@ class EditCountersModal extends React.Component {
               onChange={this.handleRangeChange}
             />
             <p className="modal-input-constraint">
-              {Number.MIN_SAFE_INTEGER} ... {maxOfMin}
+              {numbersWithCommas.MIN_SAFE_INTEGER} ... {insertCommas(maxOfMin)}
             </p>
           </li>
           <li>
@@ -289,7 +290,7 @@ class EditCountersModal extends React.Component {
               onChange={this.handleRangeChange}
             />
             <p className="modal-input-constraint">
-              {minOfMax} ... {Number.MAX_SAFE_INTEGER}
+              {insertCommas(minOfMax)} ... {numbersWithCommas.MAX_SAFE_INTEGER}
             </p>
           </li>
           <li>
@@ -307,7 +308,7 @@ class EditCountersModal extends React.Component {
               onChange={this.handleStepChange}
             />
             <p className="modal-input-constraint">
-              1 ... {Number.MAX_SAFE_INTEGER}
+              1 ... {numbersWithCommas.MAX_SAFE_INTEGER}
             </p>
           </li>
         </ul>
