@@ -205,6 +205,12 @@ class EditCountersModal extends React.Component {
   }
 
   render = () => {
+    const counterNames = this.props.names.map((name) => (
+      <li key={name}>
+        {name}
+      </li>
+    ));
+
     const valueMin = this.getActualLowerBound(this.state);
     const valueMax = this.getActualUpperBound(this.state);
     const maxOfMin = this.getActualMaxOfMin(this.state);
@@ -241,9 +247,9 @@ class EditCountersModal extends React.Component {
             <label>
               Name
             </label>
-            <p className="modal-counter-names">
-              {this.props.names.join(', ')}
-            </p>
+            <ul className="modal-counter-names">
+              {counterNames}
+            </ul>
           </li>
           <li>
             <label>
