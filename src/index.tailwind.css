@@ -187,8 +187,17 @@ body {
   @apply font-bold;
 }
 .modal .modal-counter-names {
+  @apply flex flex-row flex-wrap;
+  @apply -mr-1;
   @apply leading-tight;
-  @apply text-sm text-gray-700;
+}
+.modal .modal-counter-names li {
+  @apply block;
+  @apply ml-0 mr-1 mt-0 mb-1;
+  @apply px-2 py-1;
+  @apply rounded;
+  @apply bg-gray-200;
+  @apply text-sm text-gray-800;
 }
 .modal input {
   @apply border border-gray-500 rounded;
