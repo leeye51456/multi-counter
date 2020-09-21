@@ -32,7 +32,7 @@ function checkVersion() {
   }
 
   const packageVersion = process.env.npm_package_version;
-  if (packageVersion.test(/^(?:[1-9]\d*|0)\.(?:[1-9]\d*|0)\.(?:[1-9]\d*|0)$/)) {
+  if (!/^(?:[1-9]\d*|0)\.(?:[1-9]\d*|0)\.(?:[1-9]\d*|0)$/.test(packageVersion)) {
     printError(`Version \`${packageVersion}\` is not deployable`);
     return 1;
   }
