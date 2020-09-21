@@ -1,3 +1,6 @@
+export const NO_OP = () => {};
+
+
 export const includes = (obj, target) => {
   if (target === 'indexOf') {
     return !!obj.indexOf;
@@ -51,6 +54,7 @@ export const numbersWithCommas = {
 
 
 const utils = {
+  NO_OP,
   includes,
   initializeOrGetArrayProperty,
   isMacOs,

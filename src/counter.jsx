@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { GlobalEditModeContext } from './contexts';
-import CounterAction from './counter-action';
+import { NO_OP } from './utils';
 import icons from './icons';
 
 export class Counter extends React.Component {
@@ -151,8 +151,8 @@ Counter.defaultProps = {
   step: 1,
   name: '',
   checked: false,
-  onChange: CounterAction.PRESETS.NO_OP,
-  onEditClick: CounterAction.PRESETS.NO_OP,
+  onChange: NO_OP,
+  onEditClick: NO_OP,
 };
 
 export default Counter;

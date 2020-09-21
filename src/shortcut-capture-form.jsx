@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CounterAction from './counter-action';
 import Shortcut from './shortcut';
+import { NO_OP } from './utils';
 import icons from './icons';
 
 class ShortcutCaptureForm extends React.Component {
@@ -53,7 +53,7 @@ class ShortcutCaptureForm extends React.Component {
         <input
           type="text"
           value={this.getShortcutString()}
-          onChange={CounterAction.PRESETS.NO_OP}
+          onChange={NO_OP}
           onKeyDown={this.handleKeyDown}
         />
         <button
@@ -82,7 +82,7 @@ ShortcutCaptureForm.defaultProps = {
   code: '',
   shiftKey: false,
   shortcut: Shortcut.NO_CHANGE,
-  onChange: CounterAction.PRESETS.NO_OP,
+  onChange: NO_OP,
 };
 
 export default ShortcutCaptureForm;

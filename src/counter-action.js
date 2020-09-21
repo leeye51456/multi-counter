@@ -1,7 +1,6 @@
 import CounterData from './counter-data';
 
 const PRESETS = {
-  NO_OP: () => {},
   GET_COUNTED_UP: (counterData) => (
     new CounterData({ ...counterData, value: counterData.value + counterData.step })
       .getCorrectedCounterData()

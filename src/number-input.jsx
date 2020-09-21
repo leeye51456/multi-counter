@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import CounterAction from './counter-action';
+import { NO_OP } from './utils';
 import icons from './icons';
 
 
@@ -57,14 +57,14 @@ class NumberInput extends React.Component {
         <button
           type="button"
           onClick={this.handleInvertClick}
-          className={classNames({ 'force-hidden': this.props.onInvert === CounterAction.PRESETS.NO_OP })}
+          className={classNames({ 'force-hidden': this.props.onInvert === NO_OP })}
         >
           <img src={icons.invert} alt="Invert sign of this value" />
         </button>
         <button
           type="button"
           onClick={this.handleResetClick}
-          className={classNames({ 'force-hidden': this.props.onReset === CounterAction.PRESETS.NO_OP })}
+          className={classNames({ 'force-hidden': this.props.onReset === NO_OP })}
         >
           <img src={icons.reset} alt="Reset this value" />
         </button>
@@ -84,9 +84,9 @@ NumberInput.defaultProps = {
   max: Number.MAX_SAFE_INTEGER,
   step: 1,
   value: '',
-  onChange: CounterAction.PRESETS.NO_OP,
-  onInvert: CounterAction.PRESETS.NO_OP,
-  onReset: CounterAction.PRESETS.NO_OP,
+  onChange: NO_OP,
+  onInvert: NO_OP,
+  onReset: NO_OP,
 };
 
 export default NumberInput;
