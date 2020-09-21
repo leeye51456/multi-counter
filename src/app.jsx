@@ -77,14 +77,14 @@ class App extends React.Component {
 
   getUpdatedCounterActions = (counterActionsByShortcutId, { newCounterData, oldCounterData }) => {
     const shortcutActions = {
-      countUp: CounterAction.PRESETS.GET_COUNTED_UP,
-      countDown: CounterAction.PRESETS.GET_COUNTED_DOWN,
+      countUp: CounterAction.actionPresets.GET_COUNTED_UP,
+      countDown: CounterAction.actionPresets.GET_COUNTED_DOWN,
     };
     const oldShortcuts = oldCounterData && oldCounterData.shortcuts;
     const newShortcuts = newCounterData.shortcuts;
 
     counterActionsByShortcutId = { ...counterActionsByShortcutId };
-    for (const shortcutName of ShortcutCollection.SHORTCUT_NAMES) {
+    for (const shortcutName of ShortcutCollection.shortcutNames) {
       const oldShortcutId = oldShortcuts && String(oldShortcuts[shortcutName]);
       const newShortcutId = String(newShortcuts[shortcutName]);
       if (oldShortcutId && newShortcutId && oldShortcutId === newShortcutId) {
@@ -131,7 +131,7 @@ class App extends React.Component {
     this.setState((state) => {
       const { name } = counterData;
       const correctedShortcuts = new ShortcutCollection(counterData.shortcuts);
-      for (const shortcutName of ShortcutCollection.SHORTCUT_NAMES) {
+      for (const shortcutName of ShortcutCollection.shortcutNames) {
         if (Shortcut.NONE.equals(correctedShortcuts[shortcutName])) {
           correctedShortcuts[shortcutName] = Shortcut.NONE;
         }
@@ -192,7 +192,7 @@ class App extends React.Component {
           );
 
           const correctedShortcuts = {};
-          for (const shortcutName of ShortcutCollection.SHORTCUT_NAMES) {
+          for (const shortcutName of ShortcutCollection.shortcutNames) {
             const providedShortcut = newCounterData.shortcuts[shortcutName];
             const hasChange = String(providedShortcut) || providedShortcut === Shortcut.NONE;
             correctedShortcuts[shortcutName] = hasChange ? providedShortcut : counters[name].shortcuts[shortcutName];
@@ -323,8 +323,6 @@ class App extends React.Component {
   }
 
   handleNewCounterModalSubmit = (param) => {
-    // TODO - Validate param
-    // TODO - if `value` is not a number, assign `initial` to `value`
     const newCounter = new CounterData({
       ...param,
       value: param.initial,
@@ -342,12 +340,10 @@ class App extends React.Component {
   }
 
   handleEditCountersModalSubmit = (param) => {
-    // TODO - Validate param
-    // TODO - if `value` is not a number, assign `initial` to `value`
     const { counters } = this.state;
 
     const overwritingShortcuts = {};
-    for (const shortcutName of ShortcutCollection.SHORTCUT_NAMES) {
+    for (const shortcutName of ShortcutCollection.shortcutNames) {
       if (param.shortcuts[shortcutName] !== Shortcut.JUMBLED) {
         overwritingShortcuts[shortcutName] = param.shortcuts[shortcutName];
       }

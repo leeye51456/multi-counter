@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CounterAction from './counter-action';
 import Shortcut from './shortcut';
+import { NO_OP } from './utils';
 import icons from './icons';
 
 class ShortcutCaptureForm extends React.Component {
@@ -49,25 +49,22 @@ class ShortcutCaptureForm extends React.Component {
 
   render = () => {
     return (
-      <div className="shortcut-capture">
+      <div className="extended-input">
         <input
           type="text"
           value={this.getShortcutString()}
-          onChange={CounterAction.PRESETS.NO_OP}
+          onChange={NO_OP}
           onKeyDown={this.handleKeyDown}
-          className="shortcut-capture-input"
         />
         <button
           type="button"
           onClick={this.handleCancelClick}
-          className="shortcut-capture-button"
         >
           <img src={icons.reset} alt="Cancel modifying this shortcut binding" />
         </button>
         <button
           type="button"
           onClick={this.handleRemoveClick}
-          className="shortcut-capture-button"
         >
           <img src={icons.remove} alt="Remove this shortcut binding" />
         </button>
@@ -85,7 +82,7 @@ ShortcutCaptureForm.defaultProps = {
   code: '',
   shiftKey: false,
   shortcut: Shortcut.NO_CHANGE,
-  onChange: CounterAction.PRESETS.NO_OP,
+  onChange: NO_OP,
 };
 
 export default ShortcutCaptureForm;

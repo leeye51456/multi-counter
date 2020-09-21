@@ -2,7 +2,7 @@ import Shortcut from './shortcut';
 
 export class ShortcutCollection {
   constructor(initialShortcutCollection) {
-    for (const field of SHORTCUT_NAMES) {
+    for (const field of shortcutNames) {
       if (initialShortcutCollection && initialShortcutCollection[field]) {
         this[field] = initialShortcutCollection[field];
       } else {
@@ -15,13 +15,13 @@ export class ShortcutCollection {
     return EMPTY;
   }
 
-  static get SHORTCUT_NAMES() {
-    return SHORTCUT_NAMES;
+  static get shortcutNames() {
+    return shortcutNames;
   }
 
   getDifferenceMarked = (comparisonTarget) => {
     const result = new ShortcutCollection(this);
-    for (const field of SHORTCUT_NAMES) {
+    for (const field of shortcutNames) {
       result[field] = this[field].getJumbledIfDiffersFrom(comparisonTarget[field]);
     }
     return result;
@@ -37,7 +37,7 @@ export class ShortcutCollection {
   }
 }
 
-const SHORTCUT_NAMES = ['countUp', 'countDown'];
+const shortcutNames = ['countUp', 'countDown'];
 const EMPTY = new ShortcutCollection();
 
 export default ShortcutCollection;

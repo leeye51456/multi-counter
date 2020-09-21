@@ -187,8 +187,17 @@ body {
   @apply font-bold;
 }
 .modal .modal-counter-names {
+  @apply flex flex-row flex-wrap;
+  @apply -mr-1;
   @apply leading-tight;
-  @apply text-sm text-gray-700;
+}
+.modal .modal-counter-names li {
+  @apply block;
+  @apply ml-0 mr-1 mt-0 mb-1;
+  @apply px-2 py-1;
+  @apply rounded;
+  @apply bg-gray-200;
+  @apply text-sm text-gray-800;
 }
 .modal input {
   @apply border border-gray-500 rounded;
@@ -196,6 +205,16 @@ body {
 }
 .modal input[type="number"] {
   @apply font-mono;
+}
+.modal input:invalid {
+  @apply border-red-600;
+  @apply bg-red-100;
+  @apply text-red-600 font-bold;
+}
+.modal .modal-input-constraint {
+  @apply px-1;
+  @apply leading-tight;
+  @apply text-xs text-gray-700 tracking-tight;
 }
 
 .modal hr {
@@ -218,22 +237,22 @@ body {
 }
 
 
-/* Shortcut Capture Form */
+/* Input with Buttons */
 
-.shortcut-capture {
+.extended-input {
   @apply flex flex-row;
 }
-.shortcut-capture-input {
+.extended-input input {
   @apply flex-1;
   @apply w-0;
 }
-.shortcut-capture-button {
+.extended-input button {
   @apply button-with-icon;
   @apply ml-1;
   @apply rounded;
   @apply h-8;
 }
-.shortcut-capture-button img {
+.extended-input button img {
   @apply button-icon;
 }
 

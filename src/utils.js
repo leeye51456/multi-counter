@@ -1,3 +1,6 @@
+export const NO_OP = () => {};
+
+
 export const includes = (obj, target) => {
   if (target === 'indexOf') {
     return !!obj.indexOf;
@@ -41,10 +44,21 @@ export const isTextForm = (element) => {
 };
 
 
+export const insertCommas = (integerValue) => {
+  return integerValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+export const numbersWithCommas = {
+  MAX_SAFE_INTEGER: insertCommas(Number.MAX_SAFE_INTEGER),
+  MIN_SAFE_INTEGER: insertCommas(Number.MIN_SAFE_INTEGER),
+};
+
+
 const utils = {
+  NO_OP,
   includes,
   initializeOrGetArrayProperty,
   isMacOs,
   isTextForm,
+  insertCommas, numbersWithCommas,
 };
 export default utils;
