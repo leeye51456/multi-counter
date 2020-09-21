@@ -213,6 +213,12 @@ class EditCountersModal extends React.Component {
     const valueMinWithCommas = insertCommas(valueMin);
     const valueMaxWithCommas = insertCommas(valueMax);
 
+    const valueConstraintString = (
+      valueMin <= valueMax
+      ? `${valueMinWithCommas} ... ${valueMaxWithCommas}`
+      : 'Unchangeable (Leave blank)'
+    );
+
     return (
       <ReactModal
         isOpen={this.props.isOpen}
@@ -254,7 +260,7 @@ class EditCountersModal extends React.Component {
               onReset={this.handleValueReset}
             />
             <p className="modal-input-constraint">
-              {valueMinWithCommas} ... {valueMaxWithCommas}
+              {valueConstraintString}
             </p>
           </li>
           <li>
@@ -272,7 +278,7 @@ class EditCountersModal extends React.Component {
               onReset={this.handleInitialReset}
             />
             <p className="modal-input-constraint">
-              {valueMinWithCommas} ... {valueMaxWithCommas}
+              {valueConstraintString}
             </p>
           </li>
           <li>
