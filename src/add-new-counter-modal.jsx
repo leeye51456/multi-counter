@@ -22,7 +22,6 @@ const defaultState = {
   step: '1',
   countUpShortcut: Shortcut.NONE,
   countDownShortcut: Shortcut.NONE,
-  nameValidity: true,
 };
 
 class AddNewCounterModal extends React.Component {
@@ -32,6 +31,7 @@ class AddNewCounterModal extends React.Component {
     this.bindNumberInputEventHandler(['initial', 'min', 'max'], ['change', 'invert']);
     this.bindNumberInputEventHandler(['step'], ['change']);
 
+    this.nameRef = React.createRef();
     this.initialRef = React.createRef();
     this.minRef = React.createRef();
     this.maxRef = React.createRef();
@@ -68,12 +68,12 @@ class AddNewCounterModal extends React.Component {
   handleNameChange = (event) => {
     this.setState({
       name: event.target.value,
-      nameValidity: event.target.validity.valid,
     });
   }
 
   handleNumberInputChange = (stateName, event) => {
-    this.setState({ [stateName]: event.target.value });
+    const validity = event.target.validity;
+    this.setState({ [stateName]: event.target.value }, () => console.log(stateName, validity));
   }
   handleNumberInputInvert = (stateName) => {
     this.setState((state) => {
@@ -99,7 +99,7 @@ class AddNewCounterModal extends React.Component {
     event.preventDefault();
 
     const rejectionReasons = [];
-    if (!this.state.nameValidity) {
+    if (!this.nameRef.current.validity.valid) {
       rejectionReasons.push(REJECTION_REASON.name);
     }
     const rangeValidity = (
@@ -156,6 +156,7 @@ class AddNewCounterModal extends React.Component {
               Name
             </label>
             <input
+              ref={this.nameRef}
               type="text"
               required={true}
               pattern={this.state.namePattern}
@@ -169,6 +170,7 @@ class AddNewCounterModal extends React.Component {
             </label>
             <NumberInput
               ref={this.initialRef}
+              required={true}
               min={this.state.min}
               max={this.state.max}
               step={1}
@@ -186,6 +188,7 @@ class AddNewCounterModal extends React.Component {
             </label>
             <NumberInput
               ref={this.minRef}
+              required={true}
               min={Number.MIN_SAFE_INTEGER}
               max={this.state.initial}
               step={1}
@@ -203,6 +206,7 @@ class AddNewCounterModal extends React.Component {
             </label>
             <NumberInput
               ref={this.maxRef}
+              required={true}
               min={this.state.initial}
               max={Number.MAX_SAFE_INTEGER}
               step={1}
@@ -220,6 +224,7 @@ class AddNewCounterModal extends React.Component {
             </label>
             <NumberInput
               ref={this.stepRef}
+              required={true}
               min={1}
               max={Number.MAX_SAFE_INTEGER}
               step={1}
