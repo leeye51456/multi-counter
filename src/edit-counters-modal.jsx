@@ -8,7 +8,7 @@ import ShortcutCollection from './shortcut-collection';
 import { insertCommas, numbersWithCommas } from './utils';
 import icons from './icons';
 
-const REJECTION_REASON = {
+const rejectionReasonString = {
   value: '- "Value" should be a safe integer within the correct range.',
   initial: '- "Initial value" should be a safe integer within the correct range.',
   min: '- "Minimum value" should be a safe integer within the correct range.',
@@ -101,7 +101,7 @@ class EditCountersModal extends React.Component {
         maxPropLowerBound = Math.max(maxPropLowerBound, currentCounter.initial, currentCounter.value);
         rangeLowerBound = Math.max(rangeLowerBound, currentCounter.min);
         rangeUpperBound = Math.min(rangeUpperBound, currentCounter.max);
-        for (const counterProp of CounterData.MANIPULATOR_PROPS) {
+        for (const counterProp of CounterData.manipulatorProps) {
           if (commonCounter[counterProp] !== currentCounter[counterProp]) {
             commonCounter[counterProp] = '';
           }
@@ -150,19 +150,19 @@ class EditCountersModal extends React.Component {
 
     const rejectionReasons = [];
     if (!this.valueRef.current.validity.valid) {
-      rejectionReasons.push(REJECTION_REASON.value);
+      rejectionReasons.push(rejectionReasonString.value);
     }
     if (!this.initialRef.current.validity.valid) {
-      rejectionReasons.push(REJECTION_REASON.initial);
+      rejectionReasons.push(rejectionReasonString.initial);
     }
     if (!this.minRef.current.validity.valid) {
-      rejectionReasons.push(REJECTION_REASON.min);
+      rejectionReasons.push(rejectionReasonString.min);
     }
     if (!this.maxRef.current.validity.valid) {
-      rejectionReasons.push(REJECTION_REASON.max);
+      rejectionReasons.push(rejectionReasonString.max);
     }
     if (!this.stepRef.current.validity.valid) {
-      rejectionReasons.push(REJECTION_REASON.step);
+      rejectionReasons.push(rejectionReasonString.step);
     }
 
     if (rejectionReasons.length > 0) {
@@ -180,7 +180,7 @@ class EditCountersModal extends React.Component {
     };
 
     let isAllSafeInteger = true;
-    for (const counterProp of CounterData.MANIPULATOR_PROPS) {
+    for (const counterProp of CounterData.manipulatorProps) {
       if (submitArgument[counterProp] === '') {
         delete submitArgument[counterProp];
       } else {

@@ -3,7 +3,7 @@ import Shortcut from './shortcut';
 import ShortcutCollection from './shortcut-collection';
 
 
-const ITEM_NAMES = {
+const itemNames = {
   COUNTER_ORDER: 'counterOrder',
   COUNTER_PREFIX: 'counter_',
   _STORAGE_TEST: '__storage_test__',
@@ -11,14 +11,14 @@ const ITEM_NAMES = {
 
 
 const getCounterItemName = (name) => {
-  return ITEM_NAMES.COUNTER_PREFIX + name;
+  return itemNames.COUNTER_PREFIX + name;
 };
 
 
 export const available = (() => {
   try {
-    localStorage.setItem(ITEM_NAMES._STORAGE_TEST, ITEM_NAMES._STORAGE_TEST);
-    localStorage.removeItem(ITEM_NAMES._STORAGE_TEST);
+    localStorage.setItem(itemNames._STORAGE_TEST, itemNames._STORAGE_TEST);
+    localStorage.removeItem(itemNames._STORAGE_TEST);
     return true;
   } catch (e) {
     return false;
@@ -44,7 +44,7 @@ export const getCounterOrder = (isSecondTrial) => {
     return null;
   }
 
-  const counterOrderString = localStorage.getItem(ITEM_NAMES.COUNTER_ORDER);
+  const counterOrderString = localStorage.getItem(itemNames.COUNTER_ORDER);
   const counterOrder = JSON.parse(counterOrderString);
 
   if (counterOrder && counterOrder.constructor === Array) {
@@ -63,7 +63,7 @@ export const setCounterOrder = (counterOrder) => {
     return null;
   }
 
-  localStorage.setItem(ITEM_NAMES.COUNTER_ORDER, JSON.stringify(counterOrder));
+  localStorage.setItem(itemNames.COUNTER_ORDER, JSON.stringify(counterOrder));
   return true;
 };
 
@@ -80,7 +80,7 @@ export const getCounterData = (name) => {
   }
 
   if (counterData.shortcuts) {
-    for (const shortcutName of ShortcutCollection.SHORTCUT_NAMES) {
+    for (const shortcutName of ShortcutCollection.shortcutNames) {
       counterData.shortcuts[shortcutName] = (
         counterData.shortcuts[shortcutName]
         ? new Shortcut(counterData.shortcuts[shortcutName])
@@ -93,7 +93,7 @@ export const getCounterData = (name) => {
   return new CounterData(counterData);
 };
 
-const STORED_COUNTER_PROPERTIES = ['name', 'value', 'initial', 'min', 'max', 'step', 'shortcuts'];
+const storedCounterProperties = ['name', 'value', 'initial', 'min', 'max', 'step', 'shortcuts'];
 
 export const setCounterData = (counterData) => {
   if (!available) {
@@ -101,7 +101,7 @@ export const setCounterData = (counterData) => {
   }
 
   const storedCounterData = {};
-  for (const property of STORED_COUNTER_PROPERTIES) {
+  for (const property of storedCounterProperties) {
     storedCounterData[property] = counterData[property];
   }
 
