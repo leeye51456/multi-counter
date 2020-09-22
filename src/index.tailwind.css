@@ -65,6 +65,11 @@ body {
   @apply h-16;
   @apply p-2;
   @apply overflow-x-auto overflow-y-hidden whitespace-no-wrap;
+  scrollbar-width: none; /* For Firefox */
+}
+/* For other browsers */
+.header-item-group::-webkit-scrollbar {
+  @apply hidden;
 }
 
 .header-item {
