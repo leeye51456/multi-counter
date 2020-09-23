@@ -1,11 +1,15 @@
 import React from 'react';
+import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { NO_OP } from './utils';
 import icons from './icons';
 
 
-const customProps = ['initial', 'onInvert', 'onReset'];
+const numberInputProps = [
+  'autocomplete', 'autofocus', 'disabled', 'form', 'list', 'max', 'min',
+  'name', 'placeholder', 'readonly', 'required', 'step', 'value'
+];
 
 class NumberInput extends React.Component {
   constructor(props) {
@@ -38,10 +42,12 @@ class NumberInput extends React.Component {
   }
 
   render = () => {
-    const inputProps = { ...this.props };
-    for (const customProp of customProps) {
-      if (inputProps.hasOwnProperty(customProp)) {
-        delete inputProps[customProp];
+    const { t } = this.props;
+
+    const inputProps = {};
+    for (const propName of numberInputProps) {
+      if (this.props.hasOwnProperty(propName)) {
+        inputProps[propName] = this.props[propName];
       }
     }
 
@@ -59,14 +65,14 @@ class NumberInput extends React.Component {
           onClick={this.handleInvertClick}
           className={classNames({ 'force-hidden': this.props.onInvert === NO_OP })}
         >
-          <img src={icons.invert} alt="Invert sign of this value" />
+          <img src={icons.invert} alt={t('number-input.invert')} />
         </button>
         <button
           type="button"
           onClick={this.handleResetClick}
           className={classNames({ 'force-hidden': this.props.onReset === NO_OP })}
         >
-          <img src={icons.reset} alt="Reset this value" />
+          <img src={icons.reset} alt={t('number-input.reset')} />
         </button>
       </div>
     );
@@ -89,4 +95,4 @@ NumberInput.defaultProps = {
   onReset: NO_OP,
 };
 
-export default NumberInput;
+export default withTranslation([], { withRef: true })(NumberInput);

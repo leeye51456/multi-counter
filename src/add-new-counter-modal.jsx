@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactModal from 'react-modal';
+import { withTranslation } from 'react-i18next';
 import escapeStringRegexp from 'escape-string-regexp';
 import NumberInput from './number-input';
 import ShortcutCaptureForm from './shortcut-capture-form';
@@ -7,12 +8,6 @@ import Shortcut from './shortcut';
 import ShortcutCollection from './shortcut-collection';
 import { insertCommas, numbersWithCommas } from './utils';
 import icons from './icons';
-
-const REJECTION_REASON = {
-  name: '- "Name" should not be empty or duplicated.',
-  range: '- "Initial/Maximum/Minimum value" should be safe integers, where (Minimum value) <= (Initial value) <= (Maximum value).',
-  step: '- "Counter step" should be a positive safe integer.',
-};
 
 const defaultState = {
   name: '',
@@ -97,9 +92,10 @@ class AddNewCounterModal extends React.Component {
   handleSubmitClick = (event) => {
     event.preventDefault();
 
-    const rejectionReasons = [];
+    const { t } = this.props;
+    const rejectionReasons = [t('modal.rejection.notice')];
     if (!this.nameRef.current.validity.valid) {
-      rejectionReasons.push(REJECTION_REASON.name);
+      rejectionReasons.push(t('modal.rejection.name'));
     }
     const rangeValidity = (
       this.initialRef.current.validity.valid
@@ -107,14 +103,14 @@ class AddNewCounterModal extends React.Component {
       && this.maxRef.current.validity.valid
     );
     if (!rangeValidity) {
-      rejectionReasons.push(REJECTION_REASON.range);
+      rejectionReasons.push(t('modal.rejection.range'));
     }
     if (!this.stepRef.current.validity.valid) {
-      rejectionReasons.push(REJECTION_REASON.step);
+      rejectionReasons.push(t('modal.rejection.step'));
     }
 
-    if (rejectionReasons.length > 0) {
-      window.alert('Some values are invalid!\n' + rejectionReasons.join('\n'));
+    if (rejectionReasons.length > 1) {
+      window.alert(rejectionReasons.join('\n- '));
       return;
     }
 
@@ -132,19 +128,22 @@ class AddNewCounterModal extends React.Component {
   }
 
   render = () => {
+    const { t } = this.props;
+    const modalTitle = t('modal.title.add-new-counter');
+
     return (
       <ReactModal
         isOpen={this.props.isOpen}
         onAfterOpen={this.handleModalAfterOpen}
         onRequestClose={this.props.onCancel}
-        contentLabel="Add New Counter"
+        contentLabel={modalTitle}
         shouldCloseOnOverlayClick={true}
         shouldCloseOnEsc={true}
         className="modal"
         overlayClassName="modal-overlay"
       >
         <h1>
-          Add New Counter
+          {modalTitle}
         </h1>
 
         <hr />
@@ -152,7 +151,7 @@ class AddNewCounterModal extends React.Component {
         <ul>
           <li>
             <label>
-              Name
+              {t('modal.name')}
             </label>
             <input
               ref={this.nameRef}
@@ -165,7 +164,7 @@ class AddNewCounterModal extends React.Component {
           </li>
           <li>
             <label>
-              Initial value (Integer)
+              {t('modal.initial')} ({t('modal.integer')})
             </label>
             <NumberInput
               ref={this.initialRef}
@@ -183,7 +182,7 @@ class AddNewCounterModal extends React.Component {
           </li>
           <li>
             <label>
-              Minimum value (Integer)
+              {t('modal.min')} ({t('modal.integer')})
             </label>
             <NumberInput
               ref={this.minRef}
@@ -201,7 +200,7 @@ class AddNewCounterModal extends React.Component {
           </li>
           <li>
             <label>
-              Maximum value (Integer)
+              {t('modal.max')} ({t('modal.integer')})
             </label>
             <NumberInput
               ref={this.maxRef}
@@ -219,7 +218,7 @@ class AddNewCounterModal extends React.Component {
           </li>
           <li>
             <label>
-              Count step (Positive integer)
+              {t('modal.step')} ({t('modal.positive-integer')})
             </label>
             <NumberInput
               ref={this.stepRef}
@@ -238,11 +237,13 @@ class AddNewCounterModal extends React.Component {
 
         <hr />
 
-        <h2>Shortcuts</h2>
+        <h2>
+          {t('modal.shortcuts')}
+        </h2>
         <ul>
           <li>
             <label>
-              Count Up
+              {t('modal.count-up')}
             </label>
             <ShortcutCaptureForm
               shortcut={this.state.countUpShortcut}
@@ -251,7 +252,7 @@ class AddNewCounterModal extends React.Component {
           </li>
           <li>
             <label>
-              Count Down
+              {t('modal.count-down')}
             </label>
             <ShortcutCaptureForm
               shortcut={this.state.countDownShortcut}
@@ -269,7 +270,7 @@ class AddNewCounterModal extends React.Component {
               onClick={this.handleCancelClick}
               className="action-button button-negative"
             >
-              <img src={icons.close} alt="Cancel" />
+              <img src={icons.close} alt={t('modal.cancel')} />
             </button>
           </li>
           <li>
@@ -278,7 +279,7 @@ class AddNewCounterModal extends React.Component {
               onClick={this.handleSubmitClick}
               className="action-button button-positive"
             >
-              <img src={icons.check} alt="Add" />
+              <img src={icons.check} alt={t('modal.apply')} />
             </button>
           </li>
         </ul>
@@ -288,4 +289,4 @@ class AddNewCounterModal extends React.Component {
   }
 }
 
-export default AddNewCounterModal;
+export default withTranslation([], { withRef: true })(AddNewCounterModal);

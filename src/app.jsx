@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactModal from 'react-modal';
+import { withTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import Counter from './counter';
 import AddNewCounterModal from './add-new-counter-modal';
@@ -311,7 +312,8 @@ class App extends React.Component {
 
   handleClearClick = (event) => {
     event.preventDefault();
-    if (window.confirm('All counters will be removed if you click ‘OK’ button.')) {
+    const message = this.props.t('header.confirm-clear');
+    if (window.confirm(message)) {
       localStorageManager.initialize();
       window.location.reload();
     }
@@ -404,6 +406,8 @@ class App extends React.Component {
   }
 
   render = () => {
+    const { t } = this.props;
+
     const isEditModeEnabled = this.state.isEditModeEnabled;
     const classes = {
       headerItem: {
@@ -445,7 +449,9 @@ class App extends React.Component {
                   className="button-with-icon-text"
                 >
                   <img src={icons.checkAll} alt="" />
-                  <span>Select All</span>
+                  <span>
+                    {t('header.select-all')}
+                  </span>
                 </button>
               </li>
 
@@ -456,7 +462,9 @@ class App extends React.Component {
                   className="button-with-icon-text"
                 >
                   <img src={icons.edit} alt="" />
-                  <span>Edit</span>
+                  <span>
+                    {t('header.edit')}
+                  </span>
                 </button>
               </li>
 
@@ -467,7 +475,9 @@ class App extends React.Component {
                   className="button-with-icon-text button-negative"
                 >
                   <img src={icons.reset} alt="" />
-                  <span>Reset</span>
+                  <span>
+                    {t('header.reset')}
+                  </span>
                 </button>
               </li>
 
@@ -478,7 +488,9 @@ class App extends React.Component {
                   className="button-with-icon-text button-negative"
                 >
                   <img src={icons.remove} alt="" />
-                  <span>Remove</span>
+                  <span>
+                    {t('header.remove')}
+                  </span>
                 </button>
               </li>
 
@@ -489,7 +501,9 @@ class App extends React.Component {
                   className="button-with-icon-text button-negative"
                 >
                   <img src={icons.clear} alt="" />
-                  <span>Clear All</span>
+                  <span>
+                    {t('header.clear')}
+                  </span>
                 </button>
               </li>
             </ul>
@@ -503,8 +517,8 @@ class App extends React.Component {
                 >
                   {
                     isEditModeEnabled
-                    ? <img src={icons.close} alt="Exit Edit Mode" />
-                    : <img src={icons.menu} alt="Edit Counter List" />
+                    ? <img src={icons.close} alt={t('header.exit-edit-mode')} />
+                    : <img src={icons.menu} alt={t('header.edit-counter-list')} />
                   }
                 </button>
               </li>
@@ -526,7 +540,7 @@ class App extends React.Component {
                 onClick={this.handleNewCounterClick}
                 className={classes.addNewCounterButton}
               >
-                <img src={icons.add} alt="Add New Counter" />
+                <img src={icons.add} alt={t('main.add-new-counter')} />
               </button>
             </div>
           </main>
@@ -551,4 +565,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default withTranslation()(App);

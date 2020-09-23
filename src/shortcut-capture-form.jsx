@@ -1,4 +1,5 @@
 import React from 'react';
+import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import Shortcut from './shortcut';
 import { NO_OP } from './utils';
@@ -26,13 +27,13 @@ class ShortcutCaptureForm extends React.Component {
   }
 
   getShortcutString = () => {
-    const { shortcut } = this.props;
+    const { t, shortcut } = this.props;
     if (shortcut === Shortcut.NONE) {
-      return '(None)';
+      return `(${t('shortcut-capture-form.shortcut.none')})`;
     } else if (shortcut === Shortcut.JUMBLED) {
-      return '(Multiple values)';
+      return `(${t('shortcut-capture-form.shortcut.multiple')})`;
     } else if (shortcut === Shortcut.NO_CHANGE) {
-      return '(No change)';
+      return `(${t('shortcut-capture-form.shortcut.no-change')})`;
     }
     return shortcut.getStringToDisplay();
   }
@@ -48,6 +49,8 @@ class ShortcutCaptureForm extends React.Component {
   }
 
   render = () => {
+    const { t } = this.props;
+
     return (
       <div className="extended-input">
         <input
@@ -60,13 +63,13 @@ class ShortcutCaptureForm extends React.Component {
           type="button"
           onClick={this.handleCancelClick}
         >
-          <img src={icons.reset} alt="Cancel modifying this shortcut binding" />
+          <img src={icons.reset} alt={t('shortcut-capture-form.cancel')} />
         </button>
         <button
           type="button"
           onClick={this.handleRemoveClick}
         >
-          <img src={icons.remove} alt="Remove this shortcut binding" />
+          <img src={icons.remove} alt={t('shortcut-capture-form.remove')} />
         </button>
       </div>
     );
@@ -85,4 +88,4 @@ ShortcutCaptureForm.defaultProps = {
   onChange: NO_OP,
 };
 
-export default ShortcutCaptureForm;
+export default withTranslation()(ShortcutCaptureForm);
