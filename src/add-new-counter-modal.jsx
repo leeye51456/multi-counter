@@ -72,8 +72,7 @@ class AddNewCounterModal extends React.Component {
   }
 
   handleNumberInputChange = (stateName, event) => {
-    const validity = event.target.validity;
-    this.setState({ [stateName]: event.target.value }, () => console.log(stateName, validity));
+    this.setState({ [stateName]: event.target.value });
   }
   handleNumberInputInvert = (stateName) => {
     this.setState((state) => {
