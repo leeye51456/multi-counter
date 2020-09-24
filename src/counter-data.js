@@ -19,6 +19,10 @@ export class CounterData {
     this.shortcuts = shortcuts ? shortcuts : ShortcutCollection.EMPTY;
   }
 
+  static get DEFAULT() {
+    return defaultCounter;
+  }
+
   static get manipulatorProps() {
     return manipulatorProps;
   }
@@ -57,6 +61,15 @@ export class CounterData {
     return result;
   }
 }
+
+const defaultCounter = new CounterData({
+  name: 'Sample Counter',
+  value: 0,
+  initial: 0,
+  min: 0,
+  max: Number.MAX_SAFE_INTEGER,
+  step: 1,
+});
 
 const manipulatorProps = ['value', 'initial', 'min', 'max', 'step'];
 

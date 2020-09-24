@@ -32,14 +32,13 @@ export const initialize = () => {
   }
 
   clear();
-  const INITIAL_COUNTER_NAME = 'Sample Counter';
-  setCounterOrder([INITIAL_COUNTER_NAME]);
-  setCounterData(new CounterData({ name: INITIAL_COUNTER_NAME }));
+  setCounterOrder([CounterData.DEFAULT.name]);
+  setCounterData(CounterData.DEFAULT);
   return true;
 };
 
 
-export const getCounterOrder = (isSecondTrial) => {
+export const getCounterOrder = (preventMoreTrial) => {
   if (!available) {
     return null;
   }
@@ -51,7 +50,7 @@ export const getCounterOrder = (isSecondTrial) => {
     return counterOrder;
   }
 
-  if (isSecondTrial) {
+  if (preventMoreTrial) {
     return null;
   }
   initialize();
@@ -125,7 +124,14 @@ export const clear = () => {
     return null;
   }
 
-  localStorage.clear();
+  const counterOrder = getCounterOrder(true);
+  if (counterOrder !== null) {
+    for (const name of counterOrder) {
+      localStorage.removeItem(getCounterItemName(name));
+    }
+  }
+  localStorage.removeItem(itemNames.COUNTER_ORDER);
+
   return true;
 };
 
