@@ -13,8 +13,8 @@
     "add-new-counter": "Add new counter"
   },
   "counter": {
-    "count-down": "Count down",
     "count-up": "Count up",
+    "count-down": "Count down",
     "edit": "Edit"
   },
   "number-input": {
