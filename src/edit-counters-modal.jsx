@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactModal from 'react-modal';
+import { withTranslation } from 'react-i18next';
 import ShortcutCaptureForm from './shortcut-capture-form';
 import CounterData from './counter-data';
 import NumberInput from './number-input';
@@ -7,14 +8,6 @@ import Shortcut from './shortcut';
 import ShortcutCollection from './shortcut-collection';
 import { insertCommas, numbersWithCommas } from './utils';
 import icons from './icons';
-
-const rejectionReasonString = {
-  value: '- "Value" should be a safe integer within the correct range.',
-  initial: '- "Initial value" should be a safe integer within the correct range.',
-  min: '- "Minimum value" should be a safe integer within the correct range.',
-  max: '- "Maximum value" should be a safe integer within the correct range.',
-  step: '- "Counter step" should be a positive safe integer.',
-};
 
 class EditCountersModal extends React.Component {
   constructor(props) {
@@ -148,25 +141,26 @@ class EditCountersModal extends React.Component {
   handleSubmitClick = (event) => {
     event.preventDefault();
 
-    const rejectionReasons = [];
+    const { t } = this.props;
+    const rejectionReasons = [t('modal.rejection.notice')];
     if (!this.valueRef.current.validity.valid) {
-      rejectionReasons.push(rejectionReasonString.value);
+      rejectionReasons.push(t('modal.rejection.value'));
     }
     if (!this.initialRef.current.validity.valid) {
-      rejectionReasons.push(rejectionReasonString.initial);
+      rejectionReasons.push(t('modal.rejection.initial'));
     }
     if (!this.minRef.current.validity.valid) {
-      rejectionReasons.push(rejectionReasonString.min);
+      rejectionReasons.push(t('modal.rejection.min'));
     }
     if (!this.maxRef.current.validity.valid) {
-      rejectionReasons.push(rejectionReasonString.max);
+      rejectionReasons.push(t('modal.rejection.max'));
     }
     if (!this.stepRef.current.validity.valid) {
-      rejectionReasons.push(rejectionReasonString.step);
+      rejectionReasons.push(t('modal.rejection.step'));
     }
 
-    if (rejectionReasons.length > 0) {
-      window.alert('Some values are invalid!\n' + rejectionReasons.join('\n'));
+    if (rejectionReasons.length > 1) {
+      window.alert(rejectionReasons.join('\n- '));
       return;
     }
 
@@ -205,6 +199,8 @@ class EditCountersModal extends React.Component {
   }
 
   render = () => {
+    const { t } = this.props;
+
     const counterNames = this.props.names.map((name) => (
       <li key={name}>
         {name}
@@ -219,10 +215,11 @@ class EditCountersModal extends React.Component {
     const valueMinWithCommas = insertCommas(valueMin);
     const valueMaxWithCommas = insertCommas(valueMax);
 
+    const modalTitle = t('modal.title.edit-counters');
     const valueConstraintString = (
       valueMin <= valueMax
       ? `${valueMinWithCommas} ... ${valueMaxWithCommas}`
-      : 'Unchangeable (Leave blank)'
+      : t('modal.unchangeable')
     );
 
     return (
@@ -230,14 +227,14 @@ class EditCountersModal extends React.Component {
         isOpen={this.props.isOpen}
         onAfterOpen={this.handleModalAfterOpen}
         onRequestClose={this.props.onCancel}
-        contentLabel="Edit Counters"
+        contentLabel={modalTitle}
         shouldCloseOnOverlayClick={true}
         shouldCloseOnEsc={true}
         className="modal"
         overlayClassName="modal-overlay"
       >
         <h1>
-          Edit Counters
+          {modalTitle}
         </h1>
 
         <hr />
@@ -245,7 +242,7 @@ class EditCountersModal extends React.Component {
         <ul>
           <li>
             <label>
-              Name
+              {t('modal.name')}
             </label>
             <ul className="modal-counter-names">
               {counterNames}
@@ -253,7 +250,7 @@ class EditCountersModal extends React.Component {
           </li>
           <li>
             <label>
-              Value (Integer)
+              {t('modal.value')} ({t('modal.integer')})
             </label>
             <NumberInput
               ref={this.valueRef}
@@ -271,7 +268,7 @@ class EditCountersModal extends React.Component {
           </li>
           <li>
             <label>
-              Initial value (Integer)
+              {t('modal.initial')} ({t('modal.integer')})
             </label>
             <NumberInput
               ref={this.initialRef}
@@ -289,7 +286,7 @@ class EditCountersModal extends React.Component {
           </li>
           <li>
             <label>
-              Minimum value (Integer)
+              {t('modal.min')} ({t('modal.integer')})
             </label>
             <NumberInput
               ref={this.minRef}
@@ -307,7 +304,7 @@ class EditCountersModal extends React.Component {
           </li>
           <li>
             <label>
-              Maximum value (Integer)
+              {t('modal.max')} ({t('modal.integer')})
             </label>
             <NumberInput
               ref={this.maxRef}
@@ -325,7 +322,7 @@ class EditCountersModal extends React.Component {
           </li>
           <li>
             <label>
-              Count step (Positive integer)
+              {t('modal.step')} ({t('modal.positive-integer')})
             </label>
             <NumberInput
               ref={this.stepRef}
@@ -344,11 +341,13 @@ class EditCountersModal extends React.Component {
 
         <hr />
 
-        <h2>Shortcuts</h2>
+        <h2>
+          {t('modal.shortcuts')}
+        </h2>
         <ul>
           <li>
             <label>
-              Count Up
+              {t('modal.count-up')}
             </label>
             <ShortcutCaptureForm
               shortcut={this.state.countUpShortcut}
@@ -357,7 +356,7 @@ class EditCountersModal extends React.Component {
           </li>
           <li>
             <label>
-              Count Down
+              {t('modal.count-down')}
             </label>
             <ShortcutCaptureForm
               shortcut={this.state.countDownShortcut}
@@ -375,7 +374,7 @@ class EditCountersModal extends React.Component {
               onClick={this.handleCancelClick}
               className="action-button button-negative"
             >
-              <img src={icons.close} alt="Cancel" />
+              <img src={icons.close} alt={t('modal.cancel')} />
             </button>
           </li>
           <li>
@@ -384,7 +383,7 @@ class EditCountersModal extends React.Component {
               onClick={this.handleSubmitClick}
               className="action-button button-positive"
             >
-              <img src={icons.check} alt="Apply" />
+              <img src={icons.check} alt={t('modal.apply')} />
             </button>
           </li>
         </ul>
@@ -394,4 +393,4 @@ class EditCountersModal extends React.Component {
   }
 }
 
-export default EditCountersModal;
+export default withTranslation([], { withRef: true })(EditCountersModal);

@@ -1,0 +1,63 @@
+{
+  "header": {
+    "select-all": "Select all",
+    "edit": "Edit",
+    "reset": "Reset",
+    "remove": "Remove",
+    "clear": "Clear all",
+    "edit-counter-list": "Edit counter list",
+    "exit-edit-mode": "Exit edit mode",
+    "confirm-clear": "All counters will be removed if you click ‘OK’ button."
+  },
+  "main": {
+    "add-new-counter": "Add new counter"
+  },
+  "counter": {
+    "count-up": "Count up",
+    "count-down": "Count down",
+    "edit": "Edit"
+  },
+  "number-input": {
+    "invert": "Invert sign",
+    "reset": "Reset"
+  },
+  "shortcut-capture-form": {
+    "shortcut": {
+      "none": "None",
+      "multiple": "Multiple values",
+      "no-change": "No change"
+    },
+    "cancel": "Cancel change",
+    "remove": "Remove"
+  },
+  "modal": {
+    "rejection": {
+      "notice": "Some values are invalid.",
+      "name": "\"Name\" should not be empty or duplicated.",
+      "range": "\"Initial/Maximum/Minimum value\" should be safe integers, where (Minimum value) <= (Initial value) <= (Maximum value).",
+      "value": "\"Value\" should be a safe integer within the correct range.",
+      "initial": "\"Initial value\" should be a safe integer within the correct range.",
+      "min": "\"Minimum value\" should be a safe integer within the correct range.",
+      "max": "\"Maximum value\" should be a safe integer within the correct range.",
+      "step": "\"Counter step\" should be a positive safe integer."
+    },
+    "title": {
+      "add-new-counter": "Add New Counter",
+      "edit-counters": "Edit Counters"
+    },
+    "name": "Name",
+    "value": "Value",
+    "initial": "Initial value",
+    "min": "Minimum value",
+    "max": "Maximum value",
+    "step": "Counter step",
+    "integer": "Integer",
+    "positive-integer": "Positive integer",
+    "unchangeable": "Unchangeable (Leave blank)",
+    "shortcuts": "Shortcuts",
+    "count-up": "Count up",
+    "count-down": "Count down",
+    "cancel": "Cancel",
+    "apply": "Apply"
+  }
+}

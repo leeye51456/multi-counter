@@ -1,0 +1,63 @@
+{
+  "header": {
+    "select-all": "전체 선택",
+    "edit": "편집",
+    "reset": "리셋",
+    "remove": "삭제",
+    "clear": "전체 삭제",
+    "edit-counter-list": "카운터 목록 편집",
+    "exit-edit-mode": "편집 모드 나가기",
+    "confirm-clear": "'확인' 버튼을 누르면 모든 카운터가 삭제됩니다."
+  },
+  "main": {
+    "add-new-counter": "새 카운터 추가"
+  },
+  "counter": {
+    "count-up": "값 증가",
+    "count-down": "값 감소",
+    "edit": "편집"
+  },
+  "number-input": {
+    "invert": "부호 반전",
+    "reset": "초기화"
+  },
+  "shortcut-capture-form": {
+    "shortcut": {
+      "none": "없음",
+      "multiple": "다중 값",
+      "no-change": "변경하지 않음"
+    },
+    "cancel": "변경 취소",
+    "remove": "제거"
+  },
+  "modal": {
+    "rejection": {
+      "notice": "일부 값이 올바르지 않습니다.",
+      "name": "\"이름\"은 비거나 중복되지 않아야 합니다.",
+      "range": "\"초깃값/최솟값/최댓값\"은 (최솟값) <= (초깃값) <= (최댓값)을 만족하는 범위 내의 정수이어야 합니다.",
+      "value": "\"값\"은 올바른 범위 내의 정수이어야 합니다.",
+      "initial": "\"초깃값\"은 올바른 범위 내의 정수이어야 합니다.",
+      "min": "\"최솟값\"은 올바른 범위 내의 정수이어야 합니다.",
+      "max": "\"최댓값\"은 올바른 범위 내의 정수이어야 합니다.",
+      "step": "\"증감량\"은 올바른 범위 내의 양의 정수이어야 합니다."
+    },
+    "title": {
+      "add-new-counter": "새 카운터 추가",
+      "edit-counters": "카운터 편집"
+    },
+    "name": "이름",
+    "value": "값",
+    "initial": "초깃값",
+    "min": "최솟값",
+    "max": "최댓값",
+    "step": "증감량",
+    "integer": "정수",
+    "positive-integer": "양의 정수",
+    "unchangeable": "변경 불가 (빈칸으로 유지)",
+    "shortcuts": "단축키",
+    "count-up": "값 증가",
+    "count-down": "값 감소",
+    "cancel": "취소",
+    "apply": "적용"
+  }
+}

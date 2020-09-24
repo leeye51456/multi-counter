@@ -1,4 +1,5 @@
 import React from 'react';
+import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { GlobalEditModeContext } from './contexts';
@@ -71,6 +72,7 @@ export class Counter extends React.Component {
 
   render = () => {
     const isGlobalEditModeEnabled = this.context;
+    const { t } = this.props;
 
     const classes = {
       counter: classNames('counter', { 'counter-checked': this.props.checked }),
@@ -103,7 +105,7 @@ export class Counter extends React.Component {
               onClick={this.handleCountDownClick}
               className={classes.normalCounterButton}
             >
-              <img src={icons.subtract} alt="Count down" />
+              <img src={icons.subtract} alt={t('counter.count-down')} />
             </button>
 
             <button
@@ -111,7 +113,7 @@ export class Counter extends React.Component {
               onClick={this.handleCountUpClick}
               className={classes.normalCounterButton}
             >
-              <img src={icons.add} alt="Count up" />
+              <img src={icons.add} alt={t('counter.count-up')} />
             </button>
 
             <button
@@ -120,7 +122,9 @@ export class Counter extends React.Component {
               className={classes.editCounterButton}
             >
               <img src={icons.edit} alt="" />
-              <span>Edit</span>
+              <span>
+                {t('counter.edit')}
+              </span>
             </button>
           </li>
         </ul>
@@ -155,4 +159,4 @@ Counter.defaultProps = {
   onEditClick: NO_OP,
 };
 
-export default Counter;
+export default withTranslation()(Counter);

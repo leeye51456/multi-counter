@@ -48,6 +48,8 @@ function checkVersion() {
     }
   }
 
+  printError(`Version \`${packageVersion}\` is deployable.`);
+
   return 0;
 }
 
