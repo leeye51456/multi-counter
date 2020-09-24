@@ -2,6 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import translationEn from './locales/en.json';
+import translationKo from './locales/ko.json';
 
 const languageDetectorOptions = {
   order: ['querystring', 'navigator'],
@@ -11,6 +12,9 @@ const languageDetectorOptions = {
 const resources = {
   en: {
     translation: translationEn,
+  },
+  ko: {
+    translation: translationKo,
   },
 };
 
