@@ -124,7 +124,14 @@ export const clear = () => {
     return null;
   }
 
-  localStorage.clear();
+  const counterOrder = getCounterOrder(true);
+  if (counterOrder !== null) {
+    for (const name of counterOrder) {
+      localStorage.removeItem(getCounterItemName(name));
+    }
+  }
+  localStorage.removeItem(itemNames.COUNTER_ORDER);
+
   return true;
 };
 
