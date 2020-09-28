@@ -86,6 +86,9 @@ body {
 .group-left .header-item:last-child {
   @apply mr-0;
 }
+.group-right {
+  @apply flex-none;
+}
 
 .app-title {
   @apply inline-block;
