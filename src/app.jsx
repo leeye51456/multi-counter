@@ -443,7 +443,7 @@ class App extends React.Component {
             <ul className="header-item-group group-left">
               <li className={classes.headerItem.normalOnly}>
                 <h1 className="app-title">
-                  MultiCounter
+                  {t('header.title')}
                 </h1>
               </li>
 

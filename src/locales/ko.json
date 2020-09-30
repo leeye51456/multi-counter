@@ -1,5 +1,6 @@
 {
   "header": {
+    "title": "멀티카운터",
     "select-all": "전체 선택",
     "edit": "편집",
     "reset": "리셋",
