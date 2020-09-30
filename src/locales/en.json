@@ -1,5 +1,6 @@
 {
   "header": {
+    "title": "MultiCounter",
     "select-all": "Select all",
     "edit": "Edit",
     "reset": "Reset",
@@ -43,8 +44,10 @@
     },
     "title": {
       "add-new-counter": "Add New Counter",
-      "edit-counters": "Edit Counters"
+      "edit-counters": "Edit Counters",
+      "languages": "Languages"
     },
+    "languages-error": "Cannot apply language setting.",
     "name": "Name",
     "value": "Value",
     "initial": "Initial value",

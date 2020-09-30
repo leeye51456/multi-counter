@@ -1,5 +1,6 @@
 {
   "header": {
+    "title": "멀티카운터",
     "select-all": "전체 선택",
     "edit": "편집",
     "reset": "리셋",
@@ -43,8 +44,10 @@
     },
     "title": {
       "add-new-counter": "새 카운터 추가",
-      "edit-counters": "카운터 편집"
+      "edit-counters": "카운터 편집",
+      "languages": "Languages (언어)"
     },
+    "languages-error": "언어 설정을 적용할 수 없습니다.\nCannot apply language setting.",
     "name": "이름",
     "value": "값",
     "initial": "초깃값",

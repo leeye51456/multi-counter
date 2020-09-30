@@ -86,6 +86,9 @@ body {
 .group-left .header-item:last-child {
   @apply mr-0;
 }
+.group-right {
+  @apply flex-none;
+}
 
 .app-title {
   @apply inline-block;
@@ -105,12 +108,16 @@ body {
 
 .main-additional {
   @apply mx-4 mt-8 mb-16;
+  @apply leading-none;
 }
-.button-add {
+.main-additional li {
+  @apply mb-4;
+}
+.main-additional-button {
   @apply button-with-icon;
   @apply w-full;
 }
-.button-add img {
+.main-additional-button img {
   @apply button-icon;
 }
 
@@ -222,6 +229,14 @@ body {
   @apply text-xs text-gray-700 tracking-tight;
 }
 
+.modal .language-list {
+  @apply h-12;
+}
+.modal .language-list .language-button {
+  @apply button-with-text;
+  @apply text-xl;
+}
+
 .modal hr {
   @apply mt-5 mb-3;
 }
@@ -283,4 +298,8 @@ body {
 }
 .modal .button-negative {
   @apply button-negative;
+}
+
+button:disabled {
+  @apply opacity-25;
 }
