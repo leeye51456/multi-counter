@@ -1,0 +1,16 @@
+[
+  {
+    "code": "en-US",
+    "name": {
+      "english": "English",
+      "native": "English"
+    }
+  },
+  {
+    "code": "ko-KR",
+    "name": {
+      "english": "Korean",
+      "native": "한국어"
+    }
+  }
+]
