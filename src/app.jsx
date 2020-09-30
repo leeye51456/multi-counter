@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import Counter from './counter';
 import AddNewCounterModal from './add-new-counter-modal';
 import EditCountersModal from './edit-counters-modal';
+import LanguagesModal from './languages-modal';
 import { GlobalEditModeContext } from './contexts';
 import CounterAction from './counter-action';
 import CounterData from './counter-data';
@@ -377,6 +378,11 @@ class App extends React.Component {
     }));
   }
 
+  handleLanguagesClick = (event) => {
+    event.preventDefault();
+    this.openOrCloseModal(true, 'LanguagesModal');
+  }
+
   handleModalCancel = () => {
     this.openOrCloseModal(false);
     this.setState({ singleCounterToEdit: null });
@@ -414,7 +420,7 @@ class App extends React.Component {
         normalOnly: classNames('header-item', { 'force-hidden': isEditModeEnabled }),
         editModeOnly: classNames('header-item', { 'force-hidden': !isEditModeEnabled }),
       },
-      addNewCounterButton: classNames('button-add', 'button-positive', { 'invisible': isEditModeEnabled }),
+      addNewCounterButton: classNames('main-additional-button', 'button-positive', { 'invisible': isEditModeEnabled }),
     };
 
     const counterComponents = this.state.counterOrder.slice().map((name) => {
@@ -534,15 +540,27 @@ class App extends React.Component {
               {counterComponents}
             </GlobalEditModeContext.Provider>
 
-            <div className="main-additional">
-              <button
-                type="button"
-                onClick={this.handleNewCounterClick}
-                className={classes.addNewCounterButton}
-              >
-                <img src={icons.add} alt={t('main.add-new-counter')} />
-              </button>
-            </div>
+            <ul className="main-additional">
+              <li>
+                <button
+                  type="button"
+                  onClick={this.handleNewCounterClick}
+                  className={classes.addNewCounterButton}
+                >
+                  <img src={icons.add} alt={t('main.add-new-counter')} />
+                </button>
+              </li>
+
+              <li>
+                <button
+                  type="button"
+                  onClick={this.handleLanguagesClick}
+                  className={'main-additional-button'}
+                >
+                  <img src={icons.language} alt={t('main.change-language')} />
+                </button>
+              </li>
+            </ul>
           </main>
         </div>
 
@@ -558,6 +576,11 @@ class App extends React.Component {
           names={editCountersModalProps.names}
           isOpen={this.state.modal === 'EditCountersModal'}
           onSubmit={this.handleEditCountersModalSubmit}
+          onCancel={this.handleModalCancel}
+        />
+
+        <LanguagesModal
+          isOpen={this.state.modal === 'LanguagesModal'}
           onCancel={this.handleModalCancel}
         />
       </div>

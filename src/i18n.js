@@ -5,8 +5,9 @@ import translationEn from './locales/en.json';
 import translationKo from './locales/ko.json';
 
 const languageDetectorOptions = {
-  order: ['querystring', 'navigator'],
+  order: ['querystring', 'localStorage', 'navigator'],
   lookupQuerystring: 'lang',
+  caches: ['localStorage'],
 };
 
 const resources = {

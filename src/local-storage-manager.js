@@ -108,6 +108,15 @@ export const setCounterData = (counterData) => {
   return true;
 };
 
+export const setLanguage = (language) => {
+  if (!available) {
+    return null;
+  }
+
+  localStorage.setItem('i18nextLng', language);
+  return true;
+};
+
 
 export const removeCounterData = (name) => {
   if (!available) {
@@ -141,6 +150,7 @@ const localStorageManager = {
   initialize,
   getCounterOrder, setCounterOrder,
   getCounterData, setCounterData, removeCounterData,
+  setLanguage,
   clear,
 };
 export default localStorageManager;

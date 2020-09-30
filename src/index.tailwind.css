@@ -108,12 +108,16 @@ body {
 
 .main-additional {
   @apply mx-4 mt-8 mb-16;
+  @apply leading-none;
 }
-.button-add {
+.main-additional li {
+  @apply mb-4;
+}
+.main-additional-button {
   @apply button-with-icon;
   @apply w-full;
 }
-.button-add img {
+.main-additional-button img {
   @apply button-icon;
 }
 
@@ -223,6 +227,14 @@ body {
   @apply px-1;
   @apply leading-tight;
   @apply text-xs text-gray-700 tracking-tight;
+}
+
+.modal .language-list {
+  @apply h-12;
+}
+.modal .language-list .language-button {
+  @apply button-with-text;
+  @apply text-xl;
 }
 
 .modal hr {
