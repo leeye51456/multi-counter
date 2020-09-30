@@ -225,6 +225,14 @@ body {
   @apply text-xs text-gray-700 tracking-tight;
 }
 
+.modal .language-list {
+  @apply h-12;
+}
+.modal .language-list .language-button {
+  @apply button-with-text;
+  @apply text-xl;
+}
+
 .modal hr {
   @apply mt-5 mb-3;
 }

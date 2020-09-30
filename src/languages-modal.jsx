@@ -31,11 +31,13 @@ class LanguagesModal extends React.Component {
     const languageListElements = languages.map((lang) => (
       <li
         key={lang.code}
+        className="language-list"
       >
         <button
           type="button"
           data-lang={lang.code}
           onClick={this.handleLanguageButtonClick}
+          className="language-button"
         >
           {
             lang.name.english === lang.name.native
