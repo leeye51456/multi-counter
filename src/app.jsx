@@ -419,8 +419,7 @@ class App extends React.Component {
       headerItem: {
         normalOnly: classNames('header-item', { 'force-hidden': isEditModeEnabled }),
         editModeOnly: classNames('header-item', { 'force-hidden': !isEditModeEnabled }),
-      },
-      addNewCounterButton: classNames('main-additional-button', 'button-positive', { 'invisible': isEditModeEnabled }),
+      }
     };
 
     const counterComponents = this.state.counterOrder.slice().map((name) => {
@@ -544,8 +543,9 @@ class App extends React.Component {
               <li>
                 <button
                   type="button"
+                  disabled={isEditModeEnabled}
                   onClick={this.handleNewCounterClick}
-                  className={classes.addNewCounterButton}
+                  className="main-additional-button button-positive"
                 >
                   <img src={icons.add} alt={t('main.add-new-counter')} />
                 </button>
@@ -555,7 +555,7 @@ class App extends React.Component {
                 <button
                   type="button"
                   onClick={this.handleLanguagesClick}
-                  className={'main-additional-button'}
+                  className="main-additional-button"
                 >
                   <img src={icons.language} alt={t('main.change-language')} />
                 </button>

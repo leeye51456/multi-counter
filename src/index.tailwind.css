@@ -299,3 +299,7 @@ body {
 .modal .button-negative {
   @apply button-negative;
 }
+
+button:disabled {
+  @apply opacity-25;
+}
