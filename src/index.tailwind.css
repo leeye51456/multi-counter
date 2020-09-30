@@ -108,12 +108,16 @@ body {
 
 .main-additional {
   @apply mx-4 mt-8 mb-16;
+  @apply leading-none;
 }
-.button-add {
+.main-additional li {
+  @apply mb-4;
+}
+.main-additional-button {
   @apply button-with-icon;
   @apply w-full;
 }
-.button-add img {
+.main-additional-button img {
   @apply button-icon;
 }
 
