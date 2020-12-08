@@ -152,7 +152,7 @@ body {
 }
 .counter-value {
   @apply counter-element-fill;
-  @apply bg-transparent;
+  @apply self-center;
   @apply w-0;
   @apply text-2xl font-mono;
 }

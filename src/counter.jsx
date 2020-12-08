@@ -87,18 +87,15 @@ export class Counter extends React.Component {
       >
         <ul>
           <li className="counter-row">
-            <label className="counter-label">
+            <span className="counter-label">
               {this.props.name}
-            </label>
+            </span>
           </li>
 
           <li className="counter-row">
-            <input
-              type="text"
-              value={this.props.value}
-              readOnly={true}
-              className="counter-value"
-            />
+            <span className="counter-value">
+              {this.props.value}
+            </span>
 
             <button
               type="button"
