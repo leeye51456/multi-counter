@@ -63,13 +63,23 @@ class ShortcutCaptureForm extends React.Component {
           type="button"
           onClick={this.handleCancelClick}
         >
-          <img src={icons.reset} alt={t('shortcut-capture-form.cancel')} />
+          <img
+            src={icons.reset}
+            alt={t('shortcut-capture-form.cancel')}
+            width={24}
+            height={24}
+          />
         </button>
         <button
           type="button"
           onClick={this.handleRemoveClick}
         >
-          <img src={icons.remove} alt={t('shortcut-capture-form.remove')} />
+          <img
+            src={icons.remove}
+            alt={t('shortcut-capture-form.remove')}
+            width={24}
+            height={24}
+          />
         </button>
       </div>
     );

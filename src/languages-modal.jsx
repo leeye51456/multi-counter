@@ -77,7 +77,12 @@ class LanguagesModal extends React.Component {
               onClick={this.handleCancelClick}
               className="action-button button-negative"
             >
-              <img src={icons.close} alt={t('modal.cancel')} />
+              <img
+                src={icons.close}
+                alt={t('modal.cancel')}
+                width={24}
+                height={24}
+              />
             </button>
           </li>
         </ul>
