@@ -22,15 +22,20 @@ const resources = {
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
-  .init({
-    resources,
+  .init(
+    {
+      resources,
 
-    fallbackLng: 'en',
-    detection: languageDetectorOptions,
+      fallbackLng: 'en',
+      detection: languageDetectorOptions,
 
-    interpolation: {
-      escapeValue: false,
+      interpolation: {
+        escapeValue: false,
+      },
     },
-  });
+    () => {
+      document.documentElement.lang = i18n.language || 'en';
+    },
+  );
 
 export default i18n;

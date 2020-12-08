@@ -87,25 +87,27 @@ export class Counter extends React.Component {
       >
         <ul>
           <li className="counter-row">
-            <label className="counter-label">
+            <span className="counter-label">
               {this.props.name}
-            </label>
+            </span>
           </li>
 
           <li className="counter-row">
-            <input
-              type="text"
-              value={this.props.value}
-              readOnly={true}
-              className="counter-value"
-            />
+            <span className="counter-value">
+              {this.props.value}
+            </span>
 
             <button
               type="button"
               onClick={this.handleCountDownClick}
               className={classes.normalCounterButton}
             >
-              <img src={icons.subtract} alt={t('counter.count-down')} />
+              <img
+                src={icons.subtract}
+                alt={t('counter.count-down')}
+                width={24}
+                height={24}
+              />
             </button>
 
             <button
@@ -113,7 +115,12 @@ export class Counter extends React.Component {
               onClick={this.handleCountUpClick}
               className={classes.normalCounterButton}
             >
-              <img src={icons.add} alt={t('counter.count-up')} />
+              <img
+                src={icons.add}
+                alt={t('counter.count-up')}
+                width={24}
+                height={24}
+              />
             </button>
 
             <button
@@ -121,7 +128,12 @@ export class Counter extends React.Component {
               onClick={this.handleEditClick}
               className={classes.editCounterButton}
             >
-              <img src={icons.edit} alt="" />
+              <img
+                src={icons.edit}
+                alt=""
+                width={24}
+                height={24}
+              />
               <span>
                 {t('counter.edit')}
               </span>

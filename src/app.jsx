@@ -453,7 +453,12 @@ class App extends React.Component {
                   onClick={this.handleSelectAllClick}
                   className="button-with-icon-text"
                 >
-                  <img src={icons.checkAll} alt="" />
+                  <img
+                    src={icons.checkAll}
+                    alt=""
+                    width={24}
+                    height={24}
+                  />
                   <span>
                     {t('header.select-all')}
                   </span>
@@ -466,7 +471,12 @@ class App extends React.Component {
                   onClick={this.handleEditCountersClick}
                   className="button-with-icon-text"
                 >
-                  <img src={icons.edit} alt="" />
+                  <img
+                    src={icons.edit}
+                    alt=""
+                    width={24}
+                    height={24}
+                  />
                   <span>
                     {t('header.edit')}
                   </span>
@@ -479,7 +489,12 @@ class App extends React.Component {
                   onClick={this.handleResetClick}
                   className="button-with-icon-text button-negative"
                 >
-                  <img src={icons.reset} alt="" />
+                  <img
+                    src={icons.reset}
+                    alt=""
+                    width={24}
+                    height={24}
+                  />
                   <span>
                     {t('header.reset')}
                   </span>
@@ -492,7 +507,12 @@ class App extends React.Component {
                   onClick={this.handleRemoveClick}
                   className="button-with-icon-text button-negative"
                 >
-                  <img src={icons.remove} alt="" />
+                  <img
+                    src={icons.remove}
+                    alt=""
+                    width={24}
+                    height={24}
+                  />
                   <span>
                     {t('header.remove')}
                   </span>
@@ -505,7 +525,12 @@ class App extends React.Component {
                   onClick={this.handleClearClick}
                   className="button-with-icon-text button-negative"
                 >
-                  <img src={icons.clear} alt="" />
+                  <img
+                    src={icons.clear}
+                    alt=""
+                    width={24}
+                    height={24}
+                  />
                   <span>
                     {t('header.clear')}
                   </span>
@@ -522,8 +547,22 @@ class App extends React.Component {
                 >
                   {
                     isEditModeEnabled
-                    ? <img src={icons.close} alt={t('header.exit-edit-mode')} />
-                    : <img src={icons.menu} alt={t('header.edit-counter-list')} />
+                    ? (
+                        <img
+                          src={icons.close}
+                          alt={t('header.exit-edit-mode')}
+                          width={24}
+                          height={24}
+                        />
+                      )
+                    : (
+                        <img
+                          src={icons.menu}
+                          alt={t('header.edit-counter-list')}
+                          width={24}
+                          height={24}
+                        />
+                      )
                   }
                 </button>
               </li>
@@ -547,7 +586,12 @@ class App extends React.Component {
                   onClick={this.handleNewCounterClick}
                   className="main-additional-button button-positive"
                 >
-                  <img src={icons.add} alt={t('main.add-new-counter')} />
+                  <img
+                    src={icons.add}
+                    alt={t('main.add-new-counter')}
+                    width={24}
+                    height={24}
+                  />
                 </button>
               </li>
 
@@ -557,7 +601,12 @@ class App extends React.Component {
                   onClick={this.handleLanguagesClick}
                   className="main-additional-button"
                 >
-                  <img src={icons.language} alt={t('main.change-language')} />
+                  <img
+                    src={icons.language}
+                    alt={t('main.change-language')}
+                    width={24}
+                    height={24}
+                  />
                 </button>
               </li>
             </ul>

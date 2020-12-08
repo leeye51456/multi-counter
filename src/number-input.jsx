@@ -65,14 +65,24 @@ class NumberInput extends React.Component {
           onClick={this.handleInvertClick}
           className={classNames({ 'force-hidden': this.props.onInvert === NO_OP })}
         >
-          <img src={icons.invert} alt={t('number-input.invert')} />
+          <img
+            src={icons.invert}
+            alt={t('number-input.invert')}
+            width={24}
+            height={24}
+          />
         </button>
         <button
           type="button"
           onClick={this.handleResetClick}
           className={classNames({ 'force-hidden': this.props.onReset === NO_OP })}
         >
-          <img src={icons.reset} alt={t('number-input.reset')} />
+          <img
+            src={icons.reset}
+            alt={t('number-input.reset')}
+            width={24}
+            height={24}
+          />
         </button>
       </div>
     );

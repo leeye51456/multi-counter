@@ -8,7 +8,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ### Run (Development Mode)
 
-`yarn start` runs the app in the development mode. Open [http://localhost:3000](http://localhost:3000) to view it in the browser. Some features as PWA are not supported.
+`yarn start` runs the app in the development mode. Open `http://localhost:3000` to view it in the browser. Some features as PWA are not supported.
 
 ### Build for Production
 
@@ -24,4 +24,4 @@ $ mv build/* build/multi-counter/
 $ serve build
 ```
 
-After running `serve`, you can run the app [http://localhost:5000/multi-counter/](http://localhost:5000/multi-counter/). It is recommended to run the app using an incognito window to avoid confusion later.
+After running `serve`, you can run the app `http://localhost:5000/multi-counter/`. It is recommended to run the app using an incognito window to avoid confusion later.
