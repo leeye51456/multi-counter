@@ -1,5 +1,13 @@
 module.exports = {
-  purge: [],
+  purge: {
+    enabled: true,
+    mode: 'all',
+    content: [
+      './public/index.html',
+      './src/index.tailwind.css',
+      './src/**/*.jsx'
+    ]
+  },
   theme: {
     screens: {
       'sm': '480px',
